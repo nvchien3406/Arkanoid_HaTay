@@ -9,6 +9,12 @@ public class Paddle extends MovableObject{
         return speed;
     }
 
+    public Paddle() {
+        super();
+        speed = 0;
+        currentPowerUp = 0;
+    }
+
     public Paddle(double speed, double currentPowerUp) {
         super(speed, 0);
         this.speed = speed;
