@@ -88,4 +88,5 @@ http-client.private.env.json
 
 # Ignore IntelliJ IDEA project files completely
 .idea/
+.target/
 
