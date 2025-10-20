@@ -54,5 +54,48 @@ public abstract class GameObject {
     public abstract void update();
 
     public abstract void render(Graphics g);
+
+    public boolean checkCollision(GameObject other) {
+        double leftA, leftB;
+        double rightA, rightB;
+        double topA, topB;
+        double bottomA, bottomB;
+
+        //Calculate the sides of rect A
+        leftA = this.x;
+        rightA = this.x + this.width;
+        topA = this.y;
+        bottomA = this.y + this.height;
+
+        //Calculate the sides of rect B
+        leftB = other.x;
+        rightB = other.x + other.width;
+        topB = other.y;
+        bottomB = other.y + other.height;
+
+        //If any of the sides from A are outside of B
+        if( bottomA <= topB )
+        {
+            return false;
+        }
+
+        if( topA >= bottomB )
+        {
+            return false;
+        }
+
+        if( rightA <= leftB )
+        {
+            return false;
+        }
+
+        if( leftA >= rightB )
+        {
+            return false;
+        }
+
+        //If none of the sides from A are outside B
+        return true;
+    }
 }
 

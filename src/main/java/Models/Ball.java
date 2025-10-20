@@ -6,6 +6,7 @@ public class Ball extends MovableObject {
     private double speed, directionX, directionY;
 
     public Ball () {
+        super();
         this.speed = 0;
         this.directionX = 0;
         this.directionY = 0;
@@ -17,48 +18,6 @@ public class Ball extends MovableObject {
         this.directionY = directionY;
     }
 
-    public boolean checkCollision(GameObject other) {
-        double leftA, leftB;
-        double rightA, rightB;
-        double topA, topB;
-        double bottomA, bottomB;
-
-        //Calculate the sides of rect A
-        leftA = this.x;
-        rightA = this.x + this.width;
-        topA = this.y;
-        bottomA = this.y + this.height;
-
-        //Calculate the sides of rect B
-        leftB = other.x;
-        rightB = other.x + other.width;
-        topB = other.y;
-        bottomB = other.y + other.height;
-
-        //If any of the sides from A are outside of B
-        if( bottomA <= topB )
-        {
-            return false;
-        }
-
-        if( topA >= bottomB )
-        {
-            return false;
-        }
-
-        if( rightA <= leftB )
-        {
-            return false;
-        }
-
-        if( leftA >= rightB )
-        {
-            return false;
-        }
-
-        //If none of the sides from A are outside B
-        return true;
-    }
 
     public void bounceOff(GameObject other) {
         if (!checkCollision(other)) return;
