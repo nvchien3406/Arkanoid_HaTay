@@ -1,4 +1,4 @@
-package org.example.demo;
+/*package org.example.demo;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    /* public static void main(String[] args) {
         launch();
     }
 }
