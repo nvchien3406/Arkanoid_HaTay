@@ -57,7 +57,6 @@ out/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
-<<<<<<< HEAD
 
 # Cursive Clojure plugin
 .idea/replstate.xml
@@ -86,29 +85,3 @@ http-client.private.env.json
 # Ignore IntelliJ IDEA project files completely
 .idea/
 
-=======
-
-# Cursive Clojure plugin
-.idea/replstate.xml
-
-# SonarLint plugin
-.idea/sonarlint/
-.idea/sonarlint.xml # see https://community.sonarsource.com/t/is-the-file-idea-idea-idea-sonarlint-xml-intended-to-be-under-source-control/121119
-
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
-# Editor-based HTTP Client
-.idea/httpRequests
-http-client.private.env.json
-
-# Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
-
-# Apifox Helper cache
-.idea/.cache/.Apifox_Helper
-.idea/ApifoxUploaderProjectSetting.xml
->>>>>>> origin/master
