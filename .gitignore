@@ -83,6 +83,6 @@ http-client.private.env.json
 .idea/ApifoxUploaderProjectSetting.xml
 
 # Ignore IntelliJ IDEA project files completely
-.idea/
+idea/
 target/
 
