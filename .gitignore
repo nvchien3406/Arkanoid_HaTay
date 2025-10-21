@@ -33,10 +33,6 @@
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
-# .idea/misc.xml
-# .idea/vcs.xml
-# .idea/encodings.xml
-# .idea/workspace.xml
 # .idea/jarRepositories.xml
 # .idea/modules.xml
 # .idea/*.iml
@@ -87,6 +83,5 @@ http-client.private.env.json
 .idea/ApifoxUploaderProjectSetting.xml
 
 # Ignore IntelliJ IDEA project files completely
-.idea/
-.target/
-
+idea/
+target/
