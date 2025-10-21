@@ -3,10 +3,13 @@ package Models;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
+    private double dx, dy;
+    private Circle circle;
 
     public Ball () {
         super();
@@ -60,6 +63,11 @@ public class Ball extends MovableObject {
                 setY(other.getY() - getHeight());
             }
         }
+    }
+
+    public void update() {
+        setX(getX() + dx);
+        setY(getY() + dy);
     }
 
     public void render(GraphicsContext g) {
