@@ -1,6 +1,5 @@
 package Models;
 
-import java.awt.*;
 
 public abstract class PowerUp extends GameObject{
     protected String type;

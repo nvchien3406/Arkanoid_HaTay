@@ -1,6 +1,7 @@
 package Models;
 
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public abstract class GameObject {
     protected double x, y, width, height;
@@ -53,7 +54,7 @@ public abstract class GameObject {
 
     public abstract void update();
 
-    public abstract void render(Graphics g);
+    public abstract void render(GraphicsContext g);
 
     public boolean checkCollision(GameObject other) {
         double leftA, leftB;
