@@ -1,6 +1,7 @@
 package Models;
 
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public class FastBallPowerUp extends PowerUp {
     public FastBallPowerUp() {
@@ -24,7 +25,7 @@ public class FastBallPowerUp extends PowerUp {
     }
 
     @Override
-    public void render(Graphics g){
+    public void render(GraphicsContext g){
 
     }
 }

@@ -1,6 +1,9 @@
 package Models;
 
-import java.awt.*;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
@@ -59,8 +62,7 @@ public class Ball extends MovableObject {
         }
     }
 
-
-    public void render(Graphics g) {
+    public void render(GraphicsContext g) {
 
     }
 }
