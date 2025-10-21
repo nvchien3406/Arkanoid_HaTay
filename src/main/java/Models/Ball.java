@@ -2,6 +2,8 @@ package Models;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 
@@ -15,7 +17,8 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double speed, double directionX, double directionY) {
+    public Ball(double x, double y, double width, double height , Image image , ImageView imageView, double speed, double directionX, double directionY) {
+        super(x , y , width , height , 0 , 0 , image , imageView);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;

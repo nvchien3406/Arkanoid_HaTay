@@ -1,5 +1,8 @@
 package Models;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public abstract class MovableObject extends GameObject {
     protected double dx,dy;   //velocity
 
@@ -9,13 +12,13 @@ public abstract class MovableObject extends GameObject {
         this.dy = 0;
     }
 
-    public MovableObject(double dx, double dy) {
-        this.dx = dx;
-        this.dy = dy;
-    }
+//    public MovableObject(double dx, double dy) {
+//        this.dx = dx;
+//        this.dy = dy;
+//    }
 
-    public MovableObject(double x, double y, double width, double height, double dx, double dy) {
-        super(x, y, width, height);
+    public MovableObject(double x, double y, double width, double height, double dx, double dy , Image image , ImageView imageView) {
+        super(x, y, width, height, image , imageView);
         this.dx = dx;
         this.dy = dy;
     }

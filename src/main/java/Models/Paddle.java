@@ -1,6 +1,9 @@
 package Models;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 
 
 public class Paddle extends MovableObject{
@@ -16,14 +19,14 @@ public class Paddle extends MovableObject{
         currentPowerUp = 0;
     }
 
-    public Paddle(double speed, double currentPowerUp) {
-        super(speed, 0);
-        this.speed = speed;
-        this.currentPowerUp = currentPowerUp;
-    }
+//    public Paddle(double speed, double currentPowerUp) {
+//        super(speed, 0);
+//        this.speed = speed;
+//        this.currentPowerUp = currentPowerUp;
+//    }
 
-    public Paddle(double x, double y, double width, double height, double speed, double currentPowerUp) {
-        super(x, y, width, height, speed, 0);
+    public Paddle(double x, double y, double width, double height, double speed, double currentPowerUp , Image image , ImageView imageView) {
+        super(x, y, width, height, 0, 0, image , imageView);
         this.speed = speed;
         this.currentPowerUp = currentPowerUp;
     }

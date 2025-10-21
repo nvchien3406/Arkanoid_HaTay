@@ -69,12 +69,13 @@ public class GameManager {
         this.gameState = gameState;
     }
 
-    public void startGame(){
-        paddle = new Paddle();
-        ball = new Ball();
+    public void startGame(StartGameController controller){
         score = 0;
         lives = 0;
         gameState = true;
+        controller.LoadBrick(listBricks);
+        controller.LoadPaddle(paddle);
+        controller.LoadBall(ball);
     }
 
     public void updateGame(){

@@ -1,6 +1,8 @@
 package Models;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 public abstract class Brick extends GameObject {
@@ -14,8 +16,8 @@ public abstract class Brick extends GameObject {
         this.type = "";
     }
 
-    public Brick(double x, double y, double width, double height, int hitPoints, String type) {
-        super(x, y, width, height);
+    public Brick(double x, double y, double width, double height, int hitPoints, String type , Image image , ImageView imageView) {
+        super(x, y, width, height , image , imageView);
         this.hitPoints = hitPoints;
         this.type = type;
     }

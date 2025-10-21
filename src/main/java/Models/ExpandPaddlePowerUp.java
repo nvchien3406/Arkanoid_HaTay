@@ -8,9 +8,9 @@ public class ExpandPaddlePowerUp extends PowerUp {
         super();
     }
 
-    public ExpandPaddlePowerUp(double x, double y, double width, double height, Double duration) {
-        super(x, y, width, height, "ExpandPaddlePowerUp", duration);
-    }
+//    public ExpandPaddlePowerUp(double x, double y, double width, double height, Double duration) {
+//        super(x, y, width, height, "ExpandPaddlePowerUp", duration);
+//    }
 
     public void applyEffect(Paddle paddle){
 
