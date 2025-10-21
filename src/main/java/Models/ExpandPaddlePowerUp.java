@@ -1,6 +1,7 @@
 package Models;
 
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public class ExpandPaddlePowerUp extends PowerUp {
     public ExpandPaddlePowerUp() {
@@ -25,7 +26,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     @Override
-    public void render(Graphics g){
+    public void render(GraphicsContext g){
 
     }
 

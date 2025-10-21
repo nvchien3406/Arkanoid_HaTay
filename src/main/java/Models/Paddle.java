@@ -1,6 +1,7 @@
 package Models;
 
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public class Paddle extends MovableObject{
     private double speed, currentPowerUp;
@@ -59,7 +60,7 @@ public class Paddle extends MovableObject{
         }
     }
 
-    public void render(Graphics g) {
+    public void render(GraphicsContext g) {
 
     }
 }

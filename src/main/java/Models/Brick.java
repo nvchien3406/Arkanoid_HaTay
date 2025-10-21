@@ -1,6 +1,7 @@
 package Models;
 
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public abstract class Brick extends GameObject {
     protected int hitPoints;
@@ -32,7 +33,7 @@ public abstract class Brick extends GameObject {
 
     }
 
-    public void render(Graphics g) {
+    public void render(GraphicsContext g) {
 
     }
 }
