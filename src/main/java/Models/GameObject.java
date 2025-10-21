@@ -1,10 +1,14 @@
 package Models;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 public abstract class GameObject {
     protected double x, y, width, height;
+    protected Image image;
+    protected ImageView  imageView;
 
     public GameObject() {
         x = 0;
@@ -13,7 +17,7 @@ public abstract class GameObject {
         height = 0;
     }
 
-    public GameObject(double x, double y, double width, double height) {
+    public GameObject(double x, double y, double width, double height , Image image , ImageView  imageView) {
         this.x = x;
         this.y = y;
         this.width = width;
