@@ -1,15 +1,13 @@
 package Models;
 
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
 
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
-    private double dx, dy;
-    private Circle circle;
 
     public Ball () {
         super();
@@ -26,6 +24,8 @@ public class Ball extends MovableObject {
 
 
     public void bounceOff(GameObject other) {
+        final double EPS = 0.5;
+
         if (!checkCollision(other)) return;
 
         double ballCenterX = this.getX() + this.getWidth() / 2;
@@ -43,13 +43,13 @@ public class Ball extends MovableObject {
         if (overlapX < overlapY) {
             // Va chạm theo trục X → đổi hướng X
             directionX *= -1;
-            setDx(directionX * speed);
+            syncVelocity();
 
             // Đẩy ra khỏi vật để tránh dính
             if (dxDistance > 0) {
-                setX(other.getX() + other.getWidth());
+                setX(other.getX() + other.getWidth() + EPS);
             } else {
-                setX(other.getX() - getWidth());
+                setX(other.getX() - getWidth() - EPS);
             }
         } else {
             // Va chạm theo trục Y → đổi hướng Y
@@ -58,19 +58,26 @@ public class Ball extends MovableObject {
 
             // Đẩy ra khỏi vật để tránh dính
             if (dyDistance > 0) {
-                setY(other.getY() + other.getHeight());
+                setY(other.getY() + other.getHeight() + EPS);
             } else {
-                setY(other.getY() - getHeight());
+                setY(other.getY() - getHeight() - EPS);
             }
         }
     }
 
     public void update() {
+        syncVelocity();
         setX(getX() + dx);
         setY(getY() + dy);
     }
 
-    public void render(GraphicsContext g) {
-
+    private void syncVelocity() {
+        setDx(directionX * speed);
+        setDy(directionY * speed);
     }
+
+
+    public void invertDirX() { this.directionX *= -1; }
+    public void invertDirY() { this.directionY *= -1; }
+
 }

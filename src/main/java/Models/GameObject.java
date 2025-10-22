@@ -1,10 +1,10 @@
 package Models;
 
-import javafx.scene.canvas.GraphicsContext;
-
+import javafx.scene.image.Image;
 
 public abstract class GameObject {
     protected double x, y, width, height;
+    protected Image image;
 
     public GameObject() {
         x = 0;
@@ -18,6 +18,14 @@ public abstract class GameObject {
         this.y = y;
         this.width = width;
         this.height = height;
+    }
+
+    public GameObject(double x, double y, double width, double height, Image image) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.image = image;
     }
 
     public double getX() {
@@ -53,8 +61,6 @@ public abstract class GameObject {
     }
 
     public abstract void update();
-
-    public abstract void render(GraphicsContext g);
 
     public boolean checkCollision(GameObject other) {
         double leftA, leftB;

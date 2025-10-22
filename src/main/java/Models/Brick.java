@@ -1,75 +1,99 @@
 package Models;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import javafx.scene.image.ImageView;
-
-
-
 public class Brick extends GameObject {
-    protected int hitPoints, maxHitPoints;
-    protected ImageView  imageView;
-    protected double frameWidth, frameHeight;
-    protected String type;
+    private final int maxHitPoints;
+    private int hitPoints;
+    private final String type;
+    private final Image image;
+    private final int frameCount;
 
-    public Brick() {
-        super();
-        this.hitPoints = 0;
-        this.type = "";
-    }
+    private final double frameWidth;
+    private final double frameHeight;
 
-    public Brick(double x, double y, double width, double height, int hitPoints, String type, String path) {
-        super(x, y, width, height);
+    // ---- Breaking animation (frames 6..11 i.e. index 5..10) ----
+    private final int breakStartFrame;         // = maxHitPoints (0-based index 5)
+    private final int breakEndFrame;           // = frameCount - 1 (index 10)
+    private boolean breaking = false;
+    private boolean breakDone = false;
+
+    private int currentFrameIndex = 0;
+
+    // Tổng thời gian "tan biến" (ms) => chỉnh để nhanh/chậm
+    private final double breakTotalMs = 500;   // ~0.2 giây
+    private double breakElapsedMs = 0;
+    private double breakOpacity = 1.0;         // 1→0 trong lúc tan
+
+    public Brick(double x, double y, double w, double h,
+                 int hitPoints, String type, String path, int frameCount) {
+        super(x, y, w, h);
         this.hitPoints = hitPoints;
         this.maxHitPoints = hitPoints;
-        this.frameWidth = width;
-        this.frameHeight = height;
+        this.type = type;
 
-        Image sprite = new Image(getClass().getResourceAsStream(path));
-        imageView = new ImageView(sprite);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        imageView.setViewport(new Rectangle2D(0, 0, width, height));
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
+        var stream = getClass().getResourceAsStream(path);
+        if (stream == null) throw new IllegalArgumentException("Image not found: " + path);
+        this.image = new Image(stream);
 
-        updateFrame();
+        this.frameCount = Math.max(1, frameCount);
+        this.frameWidth  = image.getWidth() / this.frameCount;
+        this.frameHeight = image.getHeight();
+
+        this.breakStartFrame = Math.min(this.maxHitPoints, this.frameCount - 1); // 5
+        this.breakEndFrame   = this.frameCount - 1;                              // 10
     }
 
-    public void takeHit() {
-        if (hitPoints > 0) {
-            hitPoints--;
-            updateFrame();
-        }
-    }
+    /** Gạch bị đánh. Trả true nếu vừa bắt đầu breaking. */
+    public boolean takeHit() {
+        if (breaking || breakDone) return false;
+        if (hitPoints > 0) hitPoints--;
 
-    public boolean isDestroyed() {
-        return hitPoints == 0;
-    }
-
-    public void updateFrame() {
-        int currentFrame = maxHitPoints - hitPoints;
-        double xViewport = currentFrame * frameWidth;
-        imageView.setViewport(new Rectangle2D(xViewport, 0, frameWidth, frameHeight));
-
-        // Khi hết máu thì ẩn luôn viên gạch
         if (hitPoints <= 0) {
-            imageView.setVisible(false);
+            // bắt đầu tan: nhảy ngay tới frame 6 (index 5)
+            breaking = true;
+            breakElapsedMs = 0;
+            breakOpacity = 1.0;
+            currentFrameIndex = breakStartFrame;
+            return true;
+        } else {
+            // sứt mẻ dần: dùng frame 0..(start-1)
+            int used = maxHitPoints - hitPoints; // 1..4
+            currentFrameIndex = Math.min(used, breakStartFrame - 1);
+            return false;
         }
     }
 
-    @Override
-    public void update() {
+    /** Gọi mỗi tick với dt (ms) để nội suy frame + fade. */
+    public void update(double dtMs) {
+        if (!breaking || breakDone) return;
 
+        breakElapsedMs += dtMs;
+        double t = Math.min(1.0, breakElapsedMs / breakTotalMs); // 0→1
+        breakOpacity = 1.0 - t;
+
+        // Nội suy frame từ breakStartFrame → breakEndFrame theo t
+        int span = breakEndFrame - breakStartFrame;              // vd: 5
+        currentFrameIndex = breakStartFrame + (int)Math.floor(t * (span + 1));
+        if (currentFrameIndex > breakEndFrame) currentFrameIndex = breakEndFrame;
+
+        if (t >= 1.0) {
+            breakDone = true;
+            breaking = false;
+        }
     }
 
-    public void render(GraphicsContext g) {
+    public boolean isDestroyed() { return hitPoints == 0; }
+    public boolean isBreaking()  { return breaking; }
+    public boolean isBreakDone() { return breakDone; }
 
-    }
+    public int getFrameIndex()   { return currentFrameIndex; }
+    public double getOpacity()   { return breakOpacity; } // dùng khi vẽ
 
-    public ImageView getImageView() {
-        return imageView;
-    }
+    public Image getImage()      { return image; }
+    public double getFrameWidth(){ return frameWidth; }
+    public double getFrameHeight(){ return frameHeight; }
+    public String getType()      { return type; }
+
+    @Override public void update() { /* để trống; dùng update(dtMs) ở Controller */ }
 }

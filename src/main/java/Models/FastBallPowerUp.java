@@ -23,9 +23,4 @@ public class FastBallPowerUp extends PowerUp {
     public void update(){
 
     }
-
-    @Override
-    public void render(GraphicsContext g){
-
-    }
 }
