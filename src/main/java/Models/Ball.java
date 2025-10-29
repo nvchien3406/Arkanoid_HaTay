@@ -68,9 +68,14 @@ public class Ball extends MovableObject {
     }
 
     public void moveBall() {
-        move();
+//        move();
+//        imageView.setLayoutX(x);
+//        imageView.setLayoutY(y);
+        x += directionX * speed;
+        y += directionY * speed;
         imageView.setLayoutX(x);
         imageView.setLayoutY(y);
+        System.out.println("Ball moving: x=" + x + ", y=" + y + ", dirX=" + directionX + ", dirY=" + directionY + ", speed=" + speed);
     }
 
     public void render(GraphicsContext g) {
@@ -108,21 +113,21 @@ public class Ball extends MovableObject {
 //        }
 //    }
 //
-//    private void checkPaddleCollision() {
-//        if (ball.checkCollision(paddle)) {
-//            ball.bounceOff(paddle);
-//
-//            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
-//            double hitPos = (ball.getX() + ball.getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
-//
-//            ball.setDirectionX(hitPos);
-//            ball.setDirectionY(-Math.abs(ball.getDirectionY()));
-//
-//            double length = Math.sqrt(ball.getDirectionX() * ball.getDirectionX() + ball.getDirectionY() * ball.getDirectionY());
-//            ball.setDirectionX(ball.getDirectionX() / length);
-//            ball.setDirectionY(ball.getDirectionY() / length);
-//        }
-//    }
+    public void checkPaddleCollision(Paddle paddle) {
+        if (checkCollision(paddle)) {
+            bounceOff(paddle);
+
+            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+            double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+
+            setDirectionX(hitPos);
+            setDirectionY(-Math.abs(directionY));
+
+            double length = Math.sqrt(directionX * directionX + directionY * directionY);
+            setDirectionX(directionX / length);
+            setDirectionY(directionY / length);
+        }
+    }
 
     public void setDirectionY(double directionY) {
         this.directionY = directionY;

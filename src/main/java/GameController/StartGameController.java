@@ -6,10 +6,12 @@ import Models.Paddle;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 
@@ -19,7 +21,7 @@ import java.util.Random;
 
 public class StartGameController {
     @FXML
-    private AnchorPane StartGame;
+    private AnchorPane startGame;
     //private Button button;
 
     public static final int ROWS = 10;
@@ -59,7 +61,7 @@ public class StartGameController {
                 Brick brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
-                StartGame.getChildren().add(brick.getImageView());
+                startGame.getChildren().add(brick.getImageView());
             }
         }
     }
@@ -80,7 +82,7 @@ public class StartGameController {
 
         paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
 
-        StartGame.getChildren().add(paddle.getImageView());
+        startGame.getChildren().add(paddle.getImageView());
     }
 
     @FXML
@@ -97,7 +99,30 @@ public class StartGameController {
 //        imageView.setLayoutX(startX);
 //        imageView.setLayoutY(startY);
 
-        ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,15 ,1 , 1 );
-        StartGame.getChildren().add(ball.getImageView());
+        //ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,15 ,1 , 1 );
+        startGame.getChildren().add(ball.getImageView());
+    }
+
+//    public void movePaddle(Paddle paddle) {
+//        startGame.sceneProperty().addListener((obs, oldScene, newScene) -> {
+//            if (newScene != null) {
+//                Scene scene = newScene;
+//                scene.setOnKeyPressed(event -> {
+//                    if (event.getCode() == KeyCode.LEFT) paddle.moveLeft();
+//                    if (event.getCode() == KeyCode.RIGHT) paddle.moveRight();
+//                    //if (event.getCode() == KeyCode.SPACE) togglePause();
+//                });
+//                scene.setOnKeyReleased(event -> {
+//                    if (event.getCode() == KeyCode.LEFT) paddle.moveLeft();
+//                    if (event.getCode() == KeyCode.RIGHT) paddle.moveRight();
+//                });
+//                // request focus để nhận phím
+//                startGame.requestFocus();
+//            }
+//        });
+//    }
+
+    public AnchorPane getStartGame() {
+        return startGame;
     }
 }
