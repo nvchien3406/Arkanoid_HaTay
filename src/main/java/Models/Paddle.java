@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 
 public class Paddle extends MovableObject{
     private double speed, currentPowerUp;
+    public boolean moveL = false;
+    public boolean moveR = false;
 
     public double getSpeed() {
         return speed;
@@ -40,13 +42,27 @@ public class Paddle extends MovableObject{
     }
 
     public void moveLeft() {
-        this.setDx(-speed);
+        setX(Math.max(0, getX() - getSpeed()));
         this.setDy(0);
+        imageView.setLayoutX(getX());
+        imageView.setLayoutY(getY());
     }
 
     public void moveRight() {
-        this.setDx(speed);
+        double maxX = 1200 - getWidth();
+        setX(Math.min(maxX, getX() + getSpeed()));
         this.setDy(0);
+        imageView.setLayoutX(getX());
+        imageView.setLayoutY(getY());
+    }
+
+    public void movePaddle() {
+        if (moveL) {
+            moveLeft();
+        }
+        if (moveR) {
+            moveRight();
+        }
     }
 
     public void applyPowerUp() {
@@ -62,6 +78,5 @@ public class Paddle extends MovableObject{
     public void render(GraphicsContext g) {
 
     }
-
 
 }
