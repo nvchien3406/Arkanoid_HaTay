@@ -17,8 +17,8 @@ public abstract class MovableObject extends GameObject {
         this.dy = dy;
     }
 
-    public MovableObject(double x, double y, double width, double height, Image image, double dx, double dy) {
-        super(x, y, width, height, image);
+    public MovableObject(double x, double y, double width, double height, String path, double dx, double dy) {
+        super(x, y, width, height, path);
         this.dx = dx;
         this.dy = dy;
     }

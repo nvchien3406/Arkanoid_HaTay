@@ -6,15 +6,14 @@ public class Brick extends GameObject {
     private final int maxHitPoints;
     private int hitPoints;
     private final String type;
-    private final Image image;
     private final int frameCount;
 
     private final double frameWidth;
     private final double frameHeight;
 
-    // ---- Breaking animation (frames 6..11 i.e. index 5..10) ----
-    private final int breakStartFrame;         // = maxHitPoints (0-based index 5)
-    private final int breakEndFrame;           // = frameCount - 1 (index 10)
+
+    private final int breakStartFrame;
+    private final int breakEndFrame;
     private boolean breaking = false;
     private boolean breakDone = false;
 
@@ -27,14 +26,10 @@ public class Brick extends GameObject {
 
     public Brick(double x, double y, double w, double h,
                  int hitPoints, String type, String path, int frameCount) {
-        super(x, y, w, h);
+        super(x, y, w, h, path);
         this.hitPoints = hitPoints;
         this.maxHitPoints = hitPoints;
         this.type = type;
-
-        var stream = getClass().getResourceAsStream(path);
-        if (stream == null) throw new IllegalArgumentException("Image not found: " + path);
-        this.image = new Image(stream);
 
         this.frameCount = Math.max(1, frameCount);
         this.frameWidth  = image.getWidth() / this.frameCount;
@@ -44,7 +39,7 @@ public class Brick extends GameObject {
         this.breakEndFrame   = this.frameCount - 1;                              // 10
     }
 
-    /** Gạch bị đánh. Trả true nếu vừa bắt đầu breaking. */
+
     public boolean takeHit() {
         if (breaking || breakDone) return false;
         if (hitPoints > 0) hitPoints--;

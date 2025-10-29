@@ -1,10 +1,12 @@
 package Models;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public abstract class GameObject {
     protected double x, y, width, height;
     protected Image image;
+    protected ImageView imageView;
 
     public GameObject() {
         x = 0;
@@ -20,12 +22,13 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    public GameObject(double x, double y, double width, double height, Image image) {
+    public GameObject(double x, double y, double width, double height, String path) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.image = image;
+        this.image = new Image(getClass().getResourceAsStream(path));
+        imageView = new ImageView(image);
     }
 
     public double getX() {

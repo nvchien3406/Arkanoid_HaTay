@@ -16,7 +16,8 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double speed, double directionX, double directionY) {
+    public Ball(double x, double y, double width, double height, String path, double speed, double directionX, double directionY) {
+        super(x, y,width, height, path, speed * directionX, speed * directionY );
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
