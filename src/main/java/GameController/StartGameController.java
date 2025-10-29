@@ -55,20 +55,11 @@ public class StartGameController {
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[random.nextInt(brickImages.length)];
-                Image image = new Image(getClass().getResourceAsStream(imgPath));
 
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(BRICK_WIDTH);
-                imageView.setFitHeight(BRICK_HEIGHT);
-                imageView.setLayoutX(x);
-                imageView.setLayoutY(y);
-
-                imageView.setViewport(new Rectangle2D(0, 0, BRICK_WIDTH, BRICK_HEIGHT));
-
-                Brick brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, image, imageView);
+                Brick brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
-                StartGame.getChildren().add(imageView);
+                StartGame.getChildren().add(brick.getImageView());
             }
         }
     }
@@ -79,17 +70,17 @@ public class StartGameController {
         double height = 20;
         double startX = 550;   // giữa màn hình
         double startY = 600;   // gần đáy
+//
+//        Image image = new Image(getClass().getResourceAsStream(paddleImages[0]));
+//        ImageView imageView = new ImageView(image);
+//        imageView.setFitWidth(width);
+//        imageView.setFitHeight(height);
+//        imageView.setLayoutX(startX);
+//        imageView.setLayoutY(startY);
 
-        Image image = new Image(getClass().getResourceAsStream(paddleImages[0]));
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        imageView.setLayoutX(startX);
-        imageView.setLayoutY(startY);
+        paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
 
-        paddle = new Paddle(startX, startY, width, height, 10, 0, image, imageView);
-
-        StartGame.getChildren().add(imageView);
+        StartGame.getChildren().add(paddle.getImageView());
     }
 
     @FXML
@@ -99,14 +90,14 @@ public class StartGameController {
         double startX = 550;   // ngay trên paddle
         double startY = 500;
 
-        Image image = new Image(getClass().getResourceAsStream(BallImages[0]));
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(size);
-        imageView.setFitHeight(size);
-        imageView.setLayoutX(startX);
-        imageView.setLayoutY(startY);
+//        Image image = new Image(getClass().getResourceAsStream(BallImages[0]));
+//        ImageView imageView = new ImageView(image);
+//        imageView.setFitWidth(size);
+//        imageView.setFitHeight(size);
+//        imageView.setLayoutX(startX);
+//        imageView.setLayoutY(startY);
 
-        ball = new Ball(startX , startY , 20 , 20 , image , imageView ,15 ,1 , 1 );
-        StartGame.getChildren().add(imageView);
+        ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,15 ,1 , 1 );
+        StartGame.getChildren().add(ball.getImageView());
     }
 }

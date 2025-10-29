@@ -9,7 +9,7 @@ public class NormalBrick extends Brick {
         super();
     }
 
-    public NormalBrick(double x, double y, double width, double height , Image image , ImageView imageView) {
-        super(x, y, width, height,1,"NormalBrick" ,image , imageView );
+    public NormalBrick(double x, double y, double width, double height, String path) {
+        super(x, y, width, height,1,"NormalBrick" , path);
     }
 }
