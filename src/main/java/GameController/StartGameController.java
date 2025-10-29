@@ -44,7 +44,8 @@ public class StartGameController {
     };
 
     @FXML
-    public void LoadBrick(List<Brick> bricks) {
+    public List<Brick> LoadBrick() {
+        List<Brick> bricks = new ArrayList();
         Random random = new Random();
 
         for (int row = 0; row < ROWS; row++) {
@@ -64,10 +65,11 @@ public class StartGameController {
                 startGame.getChildren().add(brick.getImageView());
             }
         }
+        return bricks;
     }
 
     @FXML
-    public void LoadPaddle(Paddle paddle) {
+    public Paddle LoadPaddle() {
         double width = 100;
         double height = 20;
         double startX = 550;   // giữa màn hình
@@ -79,14 +81,14 @@ public class StartGameController {
 //        imageView.setFitHeight(height);
 //        imageView.setLayoutX(startX);
 //        imageView.setLayoutY(startY);
-
-        paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
+        Paddle paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
 
         startGame.getChildren().add(paddle.getImageView());
+        return paddle;
     }
 
     @FXML
-    public void LoadBall(Ball ball) {
+    public Ball LoadBall() {
         double size = 20;
 
         double startX = 550;   // ngay trên paddle
@@ -99,8 +101,9 @@ public class StartGameController {
 //        imageView.setLayoutX(startX);
 //        imageView.setLayoutY(startY);
 
-        //ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,15 ,1 , 1 );
+        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,5 ,1 , 1 );
         startGame.getChildren().add(ball.getImageView());
+        return ball;
     }
 
 //    public void movePaddle(Paddle paddle) {

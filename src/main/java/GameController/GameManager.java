@@ -11,8 +11,8 @@ import java.util.List;
 public class GameManager {
     private Paddle paddle;
     private Ball ball;
-    private List<Brick> listBricks= new ArrayList();
-    private List<PowerUp> listPowerUps= new ArrayList();
+    private List<Brick> listBricks;
+    private List<PowerUp> listPowerUps;
     private AnimationTimer gameTimer;
     private int score ;
     private int lives;
@@ -84,9 +84,9 @@ public class GameManager {
         ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 3, 1, -1);
 
         // 🔹 Load đối tượng lên màn
-        controller.LoadBrick(listBricks);
-        controller.LoadPaddle(paddle);
-        controller.LoadBall(ball);
+        this.listBricks = controller.LoadBrick();
+        this.paddle = controller.LoadPaddle();
+        this.ball = controller.LoadBall();
 
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGame().getScene();
@@ -123,6 +123,8 @@ public class GameManager {
         ball.moveBall();
         ball.checkCollision(paddle);
         ball.checkWallCollision();
+
+        paddle.movePaddle();
     }
 
     public void handelInput(){
