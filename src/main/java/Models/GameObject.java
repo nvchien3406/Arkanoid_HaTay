@@ -17,11 +17,17 @@ public abstract class GameObject {
         height = 0;
     }
 
-    public GameObject(double x, double y, double width, double height , Image image , ImageView  imageView) {
+    public GameObject(double x, double y, double width, double height , String path) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        image = new Image(getClass().getResourceAsStream(path));
+        imageView = new ImageView(image);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
     }
 
     public double getX() {
@@ -59,6 +65,10 @@ public abstract class GameObject {
     public abstract void update();
 
     public abstract void render(GraphicsContext g);
+
+    public ImageView getImageView() {
+        return imageView;
+    }
 
     public boolean checkCollision(GameObject other) {
         double leftA, leftB;

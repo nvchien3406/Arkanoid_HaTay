@@ -17,11 +17,13 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double x, double y, double width, double height , Image image , ImageView imageView, double speed, double directionX, double directionY) {
-        super(x , y , width , height , 0 , 0 , image , imageView);
+    public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
+        super(x , y , width , height, path);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
+        this.dx = directionX * speed;
+        this.dy = directionY * speed;
     }
 
 
@@ -65,7 +67,68 @@ public class Ball extends MovableObject {
         }
     }
 
+    public void moveBall() {
+        move();
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
+    }
+
     public void render(GraphicsContext g) {
 
+    }
+
+    public void checkWallCollision() {
+        double paneWidth = 1200;
+        double paneHeight = 800;
+
+        if (x <= 0 || x + width >= paneWidth) {
+            setDirectionX(directionX * -1);
+        }
+        if (y <= 0) {
+            setDirectionY(directionY * -1);
+        }
+        if (y + height >= paneHeight) {
+            // rơi xuống -> reset ball lên paddle
+            setDirectionY(directionY * -1);
+        }
+    }
+//    private void checkBrickCollision() {
+//        for (Brick brick : bricks) {
+//            if (brick instanceof BasicBrick b && !b.isDestroyed() && ball.checkCollision(brick)) {
+//                // Bóng bật lại theo logic hiện tại
+//                ball.bounceOff(brick);
+//
+//                // Ghi nhận hit rồi cộng điểm
+//                brick.takeHit();
+//                addScore(POINTS_PER_HIT);
+//
+//                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+//                break; // chỉ xử lý 1 gạch mỗi frame
+//            }
+//        }
+//    }
+//
+//    private void checkPaddleCollision() {
+//        if (ball.checkCollision(paddle)) {
+//            ball.bounceOff(paddle);
+//
+//            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+//            double hitPos = (ball.getX() + ball.getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+//
+//            ball.setDirectionX(hitPos);
+//            ball.setDirectionY(-Math.abs(ball.getDirectionY()));
+//
+//            double length = Math.sqrt(ball.getDirectionX() * ball.getDirectionX() + ball.getDirectionY() * ball.getDirectionY());
+//            ball.setDirectionX(ball.getDirectionX() / length);
+//            ball.setDirectionY(ball.getDirectionY() / length);
+//        }
+//    }
+
+    public void setDirectionY(double directionY) {
+        this.directionY = directionY;
+    }
+
+    public void setDirectionX(double directionX) {
+        this.directionX = directionX;
     }
 }

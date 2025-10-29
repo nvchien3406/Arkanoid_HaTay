@@ -17,8 +17,14 @@ public abstract class MovableObject extends GameObject {
 //        this.dy = dy;
 //    }
 
-    public MovableObject(double x, double y, double width, double height, double dx, double dy , Image image , ImageView imageView) {
-        super(x, y, width, height, image , imageView);
+    public MovableObject(double x, double y, double width, double height, double dx, double dy, String path) {
+        super(x, y, width, height, path);
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    public MovableObject(double x, double y, double width, double height, String path) {
+        super(x, y, width, height, path);
         this.dx = dx;
         this.dy = dy;
     }
@@ -43,6 +49,18 @@ public abstract class MovableObject extends GameObject {
     public void update() {
         move();
     }
+
+
+    public void setX(double x) {
+        this.x = x;
+        if (imageView != null) imageView.setLayoutX(x);
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        if (imageView != null) imageView.setLayoutY(y);
+    }
+
 
     public void move () {
         this.setX(this.getX() + dx);
