@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
@@ -98,22 +100,22 @@ public class Ball extends MovableObject {
             resetBall(paddle);
         }
     }
-//    private void checkBrickCollision() {
-//        for (Brick brick : bricks) {
-//            if (brick instanceof BasicBrick b && !b.isDestroyed() && ball.checkCollision(brick)) {
-//                // Bóng bật lại theo logic hiện tại
-//                ball.bounceOff(brick);
-//
-//                // Ghi nhận hit rồi cộng điểm
-//                brick.takeHit();
-//                addScore(POINTS_PER_HIT);
-//
-//                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-//                break; // chỉ xử lý 1 gạch mỗi frame
-//            }
-//        }
-//    }
-//
+    public void checkBrickCollision(List<Brick> bricks) {
+        for (Brick brick : bricks) {
+            if (brick instanceof Brick b && !b.isDestroyed() && this.checkCollision(brick)) {
+                // Bóng bật lại theo logic hiện tại
+                this.bounceOff(brick);
+
+                // Ghi nhận hit rồi cộng điểm
+                brick.takeHit();
+                //addScore(POINTS_PER_HIT);
+
+                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+                break; // chỉ xử lý 1 gạch mỗi frame
+            }
+        }
+    }
+
     public void checkPaddleCollision(Paddle paddle) {
         if (dy == 0) return;
         if (checkCollision(paddle)) {

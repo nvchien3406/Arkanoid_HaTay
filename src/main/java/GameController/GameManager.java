@@ -125,6 +125,7 @@ public class GameManager {
         //ball.checkCollision(paddle);
         ball.checkPaddleCollision(paddle);
         ball.checkWallCollision(paddle);
+        ball.checkBrickCollision(listBricks);
     }
 
     public void handelInput(){
