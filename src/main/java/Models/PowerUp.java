@@ -11,11 +11,11 @@ public abstract class PowerUp extends GameObject{
         this.duration = 0.0;
     }
 
-    public PowerUp(double x, double y, double width, double height, String type, Double duration) {
-        super(x, y, width, height);
-        this.type = type;
-        this.duration = duration;
-    }
+//    public PowerUp(double x, double y, double width, double height, String type, Double duration) {
+//        super(x, y, width, height);
+//        this.type = type;
+//        this.duration = duration;
+//    }
 
     public abstract void applyEffect(Paddle paddle);
 

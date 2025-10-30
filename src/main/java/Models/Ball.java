@@ -2,11 +2,16 @@ package Models;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
+    private boolean isStanding = true;
 
     public Ball () {
         super();
@@ -15,10 +20,13 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double speed, double directionX, double directionY) {
+    public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
+        super(x , y , width , height, path);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
+        this.dx = directionX * speed;
+        this.dy = directionY * speed;
     }
 
 
@@ -62,7 +70,104 @@ public class Ball extends MovableObject {
         }
     }
 
+    public void moveBall() {
+//        move();
+//        imageView.setLayoutX(x);
+//        imageView.setLayoutY(y);
+        x += directionX * speed;
+        y += directionY * speed;
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
+    }
+
     public void render(GraphicsContext g) {
 
     }
+
+    public void checkWallCollision(Paddle paddle) {
+        double paneWidth = 1200;
+        double paneHeight = 800;
+
+        if (x <= 0 || x + width >= paneWidth) {
+            setDirectionX(directionX * -1);
+        }
+        if (y <= 0) {
+            setDirectionY(directionY * -1);
+        }
+        if (y + height >= paneHeight) {
+            // rơi xuống -> reset ball lên paddle
+            resetBall(paddle);
+        }
+    }
+    public void checkBrickCollision(List<Brick> bricks) {
+        for (Brick brick : bricks) {
+            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+                // Bóng bật lại theo logic hiện tại
+                bounceOff(brick);
+
+                // Ghi nhận hit rồi cộng điểm
+                brick.takeHit();
+
+                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+                break; // chỉ xử lý 1 gạch mỗi frame
+            }
+        }
+    }
+//
+    public void checkPaddleCollision(Paddle paddle) {
+        if (dy == 0) return;
+        if (checkCollision(paddle)) {
+            if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
+                bounceOff(paddle);
+
+                double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+                double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+
+                setDirectionX(hitPos);
+                setDirectionY(-Math.abs(directionY));
+
+                double length = Math.sqrt(directionX * directionX + directionY * directionY);
+                setDirectionX(directionX / length);
+                setDirectionY(directionY / length);
+            }
+        }
+    }
+
+    public void resetBall(Paddle paddle) {
+        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+        y = paddle.getY() - height;
+        directionY = -1;
+        directionX = 0.7;
+        isStanding = true;
+    }
+
+    public void setDirectionY(double directionY) {
+        this.directionY = directionY;
+    }
+
+    public void setDirectionX(double directionX) {
+        this.directionX = directionX;
+    }
+
+    public boolean isStanding() {
+        return isStanding;
+    }
+
+    public void setStanding(boolean standing) {
+        isStanding = standing;
+    }
+
+    public void moveBallWithPaddle(Paddle paddle) {
+        if (isStanding) {
+            x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+            y = paddle.getY() - height;
+            imageView.setLayoutX(x);
+            imageView.setLayoutY(y);
+        } else {
+//            directionY = -1;
+//            directionX = 0.7;
+            moveBall();
+        }
+    }
+
 }
