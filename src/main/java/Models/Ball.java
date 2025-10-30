@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
+    private boolean stand;
 
     public Ball () {
         super();
@@ -82,7 +83,7 @@ public class Ball extends MovableObject {
 
     }
 
-    public void checkWallCollision() {
+    public void checkWallCollision(Paddle paddle) {
         double paneWidth = 1200;
         double paneHeight = 800;
 
@@ -94,7 +95,7 @@ public class Ball extends MovableObject {
         }
         if (y + height >= paneHeight) {
             // rơi xuống -> reset ball lên paddle
-            setDirectionY(directionY * -1);
+            resetBall(paddle);
         }
     }
 //    private void checkBrickCollision() {
@@ -114,6 +115,7 @@ public class Ball extends MovableObject {
 //    }
 //
     public void checkPaddleCollision(Paddle paddle) {
+        if (dy == 0) return;
         if (checkCollision(paddle)) {
             bounceOff(paddle);
 
@@ -127,6 +129,13 @@ public class Ball extends MovableObject {
             setDirectionX(directionX / length);
             setDirectionY(directionY / length);
         }
+    }
+
+    public void resetBall(Paddle paddle) {
+        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+        y = paddle.getY() - 20;
+        directionY = -1;
+        directionX = Math.random();
     }
 
     public void setDirectionY(double directionY) {
