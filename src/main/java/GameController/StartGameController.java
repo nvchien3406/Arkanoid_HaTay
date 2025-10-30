@@ -20,7 +20,8 @@ import java.util.Random;
 public class StartGameController {
     @FXML
     private AnchorPane startGame;
-    //private Button button;
+    private LevelGame level;
+    private int currentLevel = 1;
 
     public static final int ROWS = 14;
     public static final int COLS = 18;
