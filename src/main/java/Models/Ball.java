@@ -101,7 +101,7 @@ public class Ball extends MovableObject {
     }
     public void checkBrickCollision(List<Brick> bricks) {
         for (Brick brick : bricks) {
-            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+            if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
                 bounceOff(brick);
 
@@ -164,8 +164,8 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
-//            directionY = -1;
-//            directionX = 0.7;
+            directionY = -1;
+            directionX = 0.7;
             moveBall();
         }
     }
