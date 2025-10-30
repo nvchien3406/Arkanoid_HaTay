@@ -25,7 +25,7 @@ public class StartGameController {
     //private Button button;
 
     public static final int ROWS = 10;
-    public static final int COLS = 20;
+    public static final int COLS = 18;
     public static final int BRICK_WIDTH = 32;
     public static final int BRICK_HEIGHT = 16;
     public static final String[] brickImages = {
@@ -101,7 +101,7 @@ public class StartGameController {
 //        imageView.setLayoutX(startX);
 //        imageView.setLayoutY(startY);
 
-        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,6 ,1 , 1 );
         startGame.getChildren().add(ball.getImageView());
         return ball;
     }

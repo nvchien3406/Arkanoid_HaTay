@@ -2,6 +2,8 @@ package GameController;
 import Models.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -9,6 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
+    private static GameManager instance; // singleton
+    public static GameManager getInstance() { return instance; }
+
+    public GameManager() {
+        instance = this;
+        listPowerUps = new ArrayList<>();
+    }
+
+
     private Paddle paddle;
     private Ball ball;
     private List<Brick> listBricks;
@@ -87,6 +98,20 @@ public class GameManager {
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
         this.ball = controller.LoadBall();
+
+        // 🔹 Load ảnh surround brick
+        Image surroundImage = new Image(getClass().getResourceAsStream("/image/SurroundBrick.png"));
+        ImageView surroundView = new ImageView(surroundImage);
+        // 🔹 Đặt kích thước & vị trí
+        surroundView.setFitWidth(603);
+        surroundView.setFitHeight(800);
+        surroundView.setLayoutX(287);  // ví dụ: tọa độ X giữa màn hình
+        surroundView.setLayoutY(32);  // ví dụ: tọa độ Y giữa màn hình
+
+        // 🔹 Thêm lên AnchorPane
+        controller.getStartGame().getChildren().add(surroundView);
+
+
 
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGame().getScene();

@@ -88,7 +88,7 @@ public class Ball extends MovableObject {
         double paneWidth = 1200;
         double paneHeight = 800;
 
-        if (x <= 0 || x + width >= paneWidth) {
+        if (x <= 287 || x + width >= 890 ) {
             setDirectionX(directionX * -1);
         }
         if (y <= 0) {
@@ -102,18 +102,21 @@ public class Ball extends MovableObject {
     public void checkBrickCollision(List<Brick> bricks) {
         for (Brick brick : bricks) {
             if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
-                // Bóng bật lại theo logic hiện tại
                 bounceOff(brick);
-
-                // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
 
-                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-                break; // chỉ xử lý 1 gạch mỗi frame
+                // 🔹 Xác suất sinh PowerUp sau khi brick bị phá
+                /*if (Math.random() < 0.2) { // 20% rơi powerup
+                    FastBallPowerUp powerUp = new FastBallPowerUp(brick.getX(), brick.getY(), 20, 20, 5.0);
+                    GameManager.spawnPowerUp(powerUp);
+                }*/
+
+                break;
             }
         }
     }
-//
+
+    //
     public void checkPaddleCollision(Paddle paddle) {
         if (dy == 0) return;
         if (checkCollision(paddle)) {

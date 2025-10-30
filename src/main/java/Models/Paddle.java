@@ -57,10 +57,14 @@ public class Paddle extends MovableObject{
     }
 
     public void movePaddle() {
-        if (moveL) {
+        double paneWidth = 1200;
+        double leftLimit  = 0.25 * paneWidth;
+        double rightLimit = 890;
+
+        if (moveL && x > leftLimit) {
             moveLeft();
         }
-        if (moveR) {
+        if (moveR && x + width + 15.5 < rightLimit) {
             moveRight();
         }
     }
