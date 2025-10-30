@@ -80,8 +80,8 @@ public class GameManager {
         gameState = true;
 
         // 🔹 Khởi tạo paddle & ball
-        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
-        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 1, 1, -1);
+//        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
+//        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 0.1, 1, -1);
 
         // 🔹 Load đối tượng lên màn
         this.listBricks = controller.LoadBrick();
@@ -124,6 +124,7 @@ public class GameManager {
         paddle.movePaddle();
         //ball.checkCollision(paddle);
         ball.checkPaddleCollision(paddle);
+        ball.checkBrickCollision(listBricks);
         ball.checkWallCollision(paddle);
     }
 

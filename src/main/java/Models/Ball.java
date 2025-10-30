@@ -6,10 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
-    private boolean stand;
+    private boolean isStanding;
 
     public Ball () {
         super();
@@ -98,36 +100,37 @@ public class Ball extends MovableObject {
             resetBall(paddle);
         }
     }
-//    private void checkBrickCollision() {
-//        for (Brick brick : bricks) {
-//            if (brick instanceof BasicBrick b && !b.isDestroyed() && ball.checkCollision(brick)) {
-//                // Bóng bật lại theo logic hiện tại
-//                ball.bounceOff(brick);
-//
-//                // Ghi nhận hit rồi cộng điểm
-//                brick.takeHit();
-//                addScore(POINTS_PER_HIT);
-//
-//                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-//                break; // chỉ xử lý 1 gạch mỗi frame
-//            }
-//        }
-//    }
+    public void checkBrickCollision(List<Brick> bricks) {
+        for (Brick brick : bricks) {
+            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+                // Bóng bật lại theo logic hiện tại
+                bounceOff(brick);
+
+                // Ghi nhận hit rồi cộng điểm
+                brick.takeHit();
+
+                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+                break; // chỉ xử lý 1 gạch mỗi frame
+            }
+        }
+    }
 //
     public void checkPaddleCollision(Paddle paddle) {
         if (dy == 0) return;
         if (checkCollision(paddle)) {
-            bounceOff(paddle);
+            if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
+                bounceOff(paddle);
 
-            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
-            double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+                double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+                double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
 
-            setDirectionX(hitPos);
-            setDirectionY(-Math.abs(directionY));
+                setDirectionX(hitPos);
+                setDirectionY(-Math.abs(directionY));
 
-            double length = Math.sqrt(directionX * directionX + directionY * directionY);
-            setDirectionX(directionX / length);
-            setDirectionY(directionY / length);
+                double length = Math.sqrt(directionX * directionX + directionY * directionY);
+                setDirectionX(directionX / length);
+                setDirectionY(directionY / length);
+            }
         }
     }
 
