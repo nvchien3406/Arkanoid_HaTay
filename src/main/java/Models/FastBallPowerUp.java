@@ -8,7 +8,7 @@ public class FastBallPowerUp extends PowerUp {
         super();
     }
 
-//    public FastBallPowerUp(double x, double y, double width, double height, Double duration) {
+    //    public FastBallPowerUp(double x, double y, double width, double height, Double duration) {
 //        super(x, y, width, height, "FastBallPowerUp", duration);
 //    }
     public void applyEffect(Paddle paddle){
