@@ -1,12 +1,14 @@
 package Models;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 
 public abstract class GameObject {
     protected double x, y, width, height;
     protected Image image;
-    protected ImageView imageView;
+    protected ImageView  imageView;
 
     public GameObject() {
         x = 0;
@@ -15,20 +17,17 @@ public abstract class GameObject {
         height = 0;
     }
 
-    public GameObject(double x, double y, double width, double height) {
+    public GameObject(double x, double y, double width, double height , String path) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-    }
-
-    public GameObject(double x, double y, double width, double height, String path) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.image = new Image(getClass().getResourceAsStream(path));
+        image = new Image(getClass().getResourceAsStream(path));
         imageView = new ImageView(image);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
     }
 
     public double getX() {
@@ -64,6 +63,12 @@ public abstract class GameObject {
     }
 
     public abstract void update();
+
+    public abstract void render(GraphicsContext g);
+
+    public ImageView getImageView() {
+        return imageView;
+    }
 
     public boolean checkCollision(GameObject other) {
         double leftA, leftB;
@@ -108,4 +113,3 @@ public abstract class GameObject {
         return true;
     }
 }
-

@@ -8,9 +8,9 @@ public class FastBallPowerUp extends PowerUp {
         super();
     }
 
-    public FastBallPowerUp(double x, double y, double width, double height, Double duration) {
-        super(x, y, width, height, "FastBallPowerUp", duration);
-    }
+    //    public FastBallPowerUp(double x, double y, double width, double height, Double duration) {
+//        super(x, y, width, height, "FastBallPowerUp", duration);
+//    }
     public void applyEffect(Paddle paddle){
 
     }
@@ -21,6 +21,11 @@ public class FastBallPowerUp extends PowerUp {
 
     @Override
     public void update(){
+
+    }
+
+    @Override
+    public void render(GraphicsContext g){
 
     }
 }

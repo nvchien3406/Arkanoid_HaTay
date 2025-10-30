@@ -1,13 +1,15 @@
 package Models;
 
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
+    private boolean stand;
 
     public Ball () {
         super();
@@ -16,17 +18,17 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double x, double y, double width, double height, String path, double speed, double directionX, double directionY) {
-        super(x, y,width, height, path, speed * directionX, speed * directionY );
+    public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
+        super(x , y , width , height, path);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
+        this.dx = directionX * speed;
+        this.dy = directionY * speed;
     }
 
 
     public void bounceOff(GameObject other) {
-        final double EPS = 0.5;
-
         if (!checkCollision(other)) return;
 
         double ballCenterX = this.getX() + this.getWidth() / 2;
@@ -44,13 +46,13 @@ public class Ball extends MovableObject {
         if (overlapX < overlapY) {
             // Va chạm theo trục X → đổi hướng X
             directionX *= -1;
-            syncVelocity();
+            setDx(directionX * speed);
 
             // Đẩy ra khỏi vật để tránh dính
             if (dxDistance > 0) {
-                setX(other.getX() + other.getWidth() + EPS);
+                setX(other.getX() + other.getWidth());
             } else {
-                setX(other.getX() - getWidth() - EPS);
+                setX(other.getX() - getWidth());
             }
         } else {
             // Va chạm theo trục Y → đổi hướng Y
@@ -59,26 +61,88 @@ public class Ball extends MovableObject {
 
             // Đẩy ra khỏi vật để tránh dính
             if (dyDistance > 0) {
-                setY(other.getY() + other.getHeight() + EPS);
+                setY(other.getY() + other.getHeight());
             } else {
-                setY(other.getY() - getHeight() - EPS);
+                setY(other.getY() - getHeight());
             }
         }
     }
 
-    public void update() {
-        syncVelocity();
-        setX(getX() + dx);
-        setY(getY() + dy);
+    public void moveBall() {
+//        move();
+//        imageView.setLayoutX(x);
+//        imageView.setLayoutY(y);
+        x += directionX * speed;
+        y += directionY * speed;
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
+        System.out.println("Ball moving: x=" + x + ", y=" + y + ", dirX=" + directionX + ", dirY=" + directionY + ", speed=" + speed);
     }
 
-    private void syncVelocity() {
-        setDx(directionX * speed);
-        setDy(directionY * speed);
+    public void render(GraphicsContext g) {
+
     }
 
+    public void checkWallCollision(Paddle paddle) {
+        double paneWidth = 1200;
+        double paneHeight = 800;
 
-    public void invertDirX() { this.directionX *= -1; }
-    public void invertDirY() { this.directionY *= -1; }
+        if (x <= 0 || x + width >= paneWidth) {
+            setDirectionX(directionX * -1);
+        }
+        if (y <= 0) {
+            setDirectionY(directionY * -1);
+        }
+        if (y + height >= paneHeight) {
+            // rơi xuống -> reset ball lên paddle
+            resetBall(paddle);
+        }
+    }
+//    private void checkBrickCollision() {
+//        for (Brick brick : bricks) {
+//            if (brick instanceof BasicBrick b && !b.isDestroyed() && ball.checkCollision(brick)) {
+//                // Bóng bật lại theo logic hiện tại
+//                ball.bounceOff(brick);
+//
+//                // Ghi nhận hit rồi cộng điểm
+//                brick.takeHit();
+//                addScore(POINTS_PER_HIT);
+//
+//                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+//                break; // chỉ xử lý 1 gạch mỗi frame
+//            }
+//        }
+//    }
+//
+    public void checkPaddleCollision(Paddle paddle) {
+        if (dy == 0) return;
+        if (checkCollision(paddle)) {
+            bounceOff(paddle);
 
+            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+            double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+
+            setDirectionX(hitPos);
+            setDirectionY(-Math.abs(directionY));
+
+            double length = Math.sqrt(directionX * directionX + directionY * directionY);
+            setDirectionX(directionX / length);
+            setDirectionY(directionY / length);
+        }
+    }
+
+    public void resetBall(Paddle paddle) {
+        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+        y = paddle.getY() - 20;
+        directionY = -1;
+        directionX = Math.random();
+    }
+
+    public void setDirectionY(double directionY) {
+        this.directionY = directionY;
+    }
+
+    public void setDirectionX(double directionX) {
+        this.directionX = directionX;
+    }
 }
