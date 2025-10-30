@@ -107,6 +107,7 @@ public class GameManager {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) paddle.moveL = true;
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = true;
+            if (event.getCode() == KeyCode.SPACE) ball.setStanding(false);
         });
 
         scene.setOnKeyReleased(event -> {
@@ -120,7 +121,7 @@ public class GameManager {
 
 
     public void updateGame(){
-        ball.moveBall();
+        ball.moveBallWithPaddle(paddle);
         paddle.movePaddle();
         //ball.checkCollision(paddle);
         ball.checkPaddleCollision(paddle);

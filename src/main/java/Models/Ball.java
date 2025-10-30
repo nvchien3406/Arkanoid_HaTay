@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
-    private boolean isStanding;
+    private boolean isStanding = true;
 
     public Ball () {
         super();
@@ -78,7 +78,6 @@ public class Ball extends MovableObject {
         y += directionY * speed;
         imageView.setLayoutX(x);
         imageView.setLayoutY(y);
-        System.out.println("Ball moving: x=" + x + ", y=" + y + ", dirX=" + directionX + ", dirY=" + directionY + ", speed=" + speed);
     }
 
     public void render(GraphicsContext g) {
@@ -136,9 +135,10 @@ public class Ball extends MovableObject {
 
     public void resetBall(Paddle paddle) {
         x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
-        y = paddle.getY() - 20;
+        y = paddle.getY() - height;
         directionY = -1;
-        directionX = Math.random();
+        directionX = 0.7;
+        isStanding = true;
     }
 
     public void setDirectionY(double directionY) {
@@ -148,4 +148,26 @@ public class Ball extends MovableObject {
     public void setDirectionX(double directionX) {
         this.directionX = directionX;
     }
+
+    public boolean isStanding() {
+        return isStanding;
+    }
+
+    public void setStanding(boolean standing) {
+        isStanding = standing;
+    }
+
+    public void moveBallWithPaddle(Paddle paddle) {
+        if (isStanding) {
+            x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+            y = paddle.getY() - height;
+            imageView.setLayoutX(x);
+            imageView.setLayoutY(y);
+        } else {
+//            directionY = -1;
+//            directionX = 0.7;
+            moveBall();
+        }
+    }
+
 }
