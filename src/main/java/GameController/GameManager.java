@@ -107,7 +107,14 @@ public class GameManager {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) paddle.moveL = true;
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = true;
-            if (event.getCode() == KeyCode.SPACE) ball.setStanding(false);
+            if (event.getCode() == KeyCode.SPACE) {
+                if (ball.isStanding()) {
+                    ball.setStanding(false);
+                    ball.setDirectionX((Math.random() < 0.5 ? -(0.4 + Math.random() * 0.6) : 0.4 + Math.random() * 0.));
+                    ball.setDirectionY(-1);
+                }
+
+            };
         });
 
         scene.setOnKeyReleased(event -> {

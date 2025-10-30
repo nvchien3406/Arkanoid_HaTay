@@ -164,8 +164,6 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
-            directionY = -1;
-            directionX = 0.7;
             moveBall();
         }
     }
