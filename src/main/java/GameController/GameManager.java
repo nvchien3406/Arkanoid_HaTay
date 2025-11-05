@@ -92,7 +92,7 @@ public class GameManager {
 
 
     public void startGame(StartGameController controller) {
-        player = new Player("Bao" ,0 , 3) ;
+        player = new Player("Bao" ,0 , 10);
         scoreDAO = new ScoreDAO();
         gameState = true;
 

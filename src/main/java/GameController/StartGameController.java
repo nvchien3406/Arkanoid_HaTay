@@ -82,7 +82,7 @@ public class StartGameController {
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 300;
+                double x = col * BRICK_WIDTH + 50;
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[pattern[row][col]].getKey();
@@ -108,7 +108,7 @@ public class StartGameController {
         double startX = 550;
         double startY = 600;
         Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
-                10, false, false);
+                5, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());
         return paddle;

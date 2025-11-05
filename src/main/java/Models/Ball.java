@@ -108,7 +108,7 @@ public class Ball extends MovableObject {
     }
     public void checkBrickCollision(List<Brick> bricks , Player player) {
         for (Brick brick : bricks) {
-            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+            if (brick instanceof Brick && !brick.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
                 bounceOff(brick);
 
