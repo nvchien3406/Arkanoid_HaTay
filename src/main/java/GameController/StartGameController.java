@@ -1,4 +1,5 @@
 package GameController;
+
 import Models.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -6,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -13,15 +15,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class StartGameController {
     @FXML
-    private AnchorPane startGame;
-    private LevelGame level;
-    private int currentLevel = 1;
+    private AnchorPane startGamePane;
+    @FXML
+    private ListView<String> scoreBoard;
+    @FXML
+    private Label Score, TopScore, Level;
+    @FXML
+    private Button Pause;
 
     public static final int ROWS = 14;
     public static final int COLS = 18;
@@ -42,6 +49,9 @@ public class StartGameController {
     public static final String[] BallImages = {
             "/image/Ball.png"
     };
+    public static final String[] powerUpImages = {
+            "/image/ExpandPaddlePowerUp.png"
+    };
 
     @FXML
     public List<Brick> LoadBrick() {
@@ -49,20 +59,20 @@ public class StartGameController {
         Random random = new Random();
 
         int[][] pattern = {
-                {5,6,5,6,5,6,5,6,5,6,5,6,5,6,5,6,5,6},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,4,4,1,1,4,4,1,1,1,1,3,3,1,1,3,3,1},
-                {1,1,1,4,4,1,1,1,1,1,1,1,1,3,3,1,1,1},
-                {1,1,4,4,4,4,1,1,1,1,1,1,3,3,3,3,1,1},
-                {1,4,6,4,4,6,4,1,1,1,1,3,6,3,3,6,3,1},
-                {4,4,4,4,4,4,4,4,1,1,3,3,3,3,3,3,3,3},
-                {4,1,4,4,4,4,1,4,1,1,3,1,3,3,3,3,1,3},
-                {1,1,4,4,4,4,1,1,1,1,1,1,3,3,3,3,1,1},
-                {1,1,4,1,1,4,1,1,1,1,1,1,3,1,1,3,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2}
+                {5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 4, 1, 1, 4, 4, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1},
+                {1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1},
+                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
+                {1, 4, 6, 4, 4, 6, 4, 1, 1, 1, 1, 3, 6, 3, 3, 6, 3, 1},
+                {4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3},
+                {4, 1, 4, 4, 4, 4, 1, 4, 1, 1, 3, 1, 3, 3, 3, 3, 1, 3},
+                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
+                {1, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2}
 
         };
 
@@ -72,7 +82,7 @@ public class StartGameController {
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 300;
+                double x = col * BRICK_WIDTH + 50;
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[pattern[row][col]].getKey();
@@ -80,15 +90,12 @@ public class StartGameController {
                 Brick brick;
                 if (brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
                     brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                }
-
-                else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
+                } else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
                     brick = new StrongBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                }
-                else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
+                } else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
-                startGame.getChildren().add(brick.getImageView());
+                startGamePane.getChildren().add(brick.getImageView());
             }
         }
         return bricks;
@@ -100,9 +107,10 @@ public class StartGameController {
         double height = 20;
         double startX = 550;
         double startY = 600;
-        Paddle paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
+        Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
+                5, false, false);
 
-        startGame.getChildren().add(paddle.getImageView());
+        startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
     }
 
@@ -114,11 +122,31 @@ public class StartGameController {
         double startY = 500;
 
         Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
-        startGame.getChildren().add(ball.getImageView());
+        startGamePane.getChildren().add(ball.getImageView());
+//        Image image = new Image(getClass().getResourceAsStream(BallImages[0]));
+//        ImageView imageView = new ImageView(image);
+//        imageView.setFitWidth(size);
+//        imageView.setFitHeight(size);
+//        imageView.setLayoutX(startX);
+//        imageView.setLayoutY(startY);
         return ball;
     }
 
+    public AnchorPane getStartGamePane() {
+        return startGamePane;
+    }
+
+    // Cập nhật điểm hiện tại
+    public void updateCurrentScore(int score) {
+        Score.setText(String.valueOf(score));
+    }
+
+    // Hiển thị danh sách top 10
+    public void updateHighScores(List<String> topScores) {
+        scoreBoard.getItems().setAll(topScores);
+    }
+
     public AnchorPane getStartGame() {
-        return startGame;
+        return startGamePane;
     }
 }

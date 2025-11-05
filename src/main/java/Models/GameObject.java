@@ -4,11 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.Objects;
+
 
 public abstract class GameObject {
     protected double x, y, width, height;
     protected Image image;
-    protected ImageView  imageView;
+    protected ImageView imageView;
 
     public GameObject() {
         x = 0;
@@ -17,12 +19,12 @@ public abstract class GameObject {
         height = 0;
     }
 
-    public GameObject(double x, double y, double width, double height , String path) {
+    public GameObject(double x, double y, double width, double height, String path) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        image = new Image(getClass().getResourceAsStream(path));
+        image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
         imageView = new ImageView(image);
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
@@ -36,6 +38,7 @@ public abstract class GameObject {
 
     public void setX(double x) {
         this.x = x;
+        if (imageView != null) imageView.setLayoutX(x);
     }
 
     public double getY() {
@@ -44,6 +47,7 @@ public abstract class GameObject {
 
     public void setY(double y) {
         this.y = y;
+        if (imageView != null) imageView.setLayoutY(y);
     }
 
     public double getWidth() {
@@ -62,13 +66,21 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    public abstract void update();
+    public Image getImage() { return this.image; }
 
-    public abstract void render(GraphicsContext g);
+    public void setImage(String path) {
+        this.image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+    }
 
     public ImageView getImageView() {
         return imageView;
     }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public abstract void update();
 
     public boolean checkCollision(GameObject other) {
         double leftA, leftB;
@@ -76,40 +88,28 @@ public abstract class GameObject {
         double topA, topB;
         double bottomA, bottomB;
 
-        //Calculate the sides of rect A
         leftA = this.x;
         rightA = this.x + this.width;
         topA = this.y;
         bottomA = this.y + this.height;
 
-        //Calculate the sides of rect B
         leftB = other.x;
         rightB = other.x + other.width;
         topB = other.y;
         bottomB = other.y + other.height;
 
-        //If any of the sides from A are outside of B
-        if( bottomA <= topB )
-        {
+        if (bottomA <= topB) {
             return false;
         }
 
-        if( topA >= bottomB )
-        {
+        if (topA >= bottomB) {
             return false;
         }
 
-        if( rightA <= leftB )
-        {
+        if (rightA <= leftB) {
             return false;
         }
 
-        if( leftA >= rightB )
-        {
-            return false;
-        }
-
-        //If none of the sides from A are outside B
-        return true;
+        return !(leftA >= rightB);
     }
 }

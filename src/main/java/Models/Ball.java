@@ -1,9 +1,11 @@
 package Models;
 
 
+import GameController.GameManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -20,13 +22,27 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
+    public Ball(double speed, double directionX, double directionY, boolean isStanding) {
+        this.speed = speed;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.isStanding = isStanding;
+    }
+
     public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
-        super(x , y , width , height, path);
+        super(x , y , width , height, path, 0 , 0);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
         this.dx = directionX * speed;
         this.dy = directionY * speed;
+    }
+
+    public void moveBall() {
+        x += directionX * speed;
+        y += directionY * speed;
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
     }
 
 
@@ -70,23 +86,13 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void moveBall() {
-//        move();
-//        imageView.setLayoutX(x);
-//        imageView.setLayoutY(y);
-        x += directionX * speed;
-        y += directionY * speed;
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
-    }
-
     public void render(GraphicsContext g) {
 
     }
 
-    public void checkWallCollision(Paddle paddle) {
-        double paneWidth = 1200;
-        double paneHeight = 800;
+    public void checkWallCollision(Paddle paddle , Player player) {
+        double paneWidth = 700;
+        double paneHeight = 700;
 
         if (x <= 0 || x + width >= paneWidth) {
             setDirectionX(directionX * -1);
@@ -97,9 +103,10 @@ public class Ball extends MovableObject {
         if (y + height >= paneHeight) {
             // rơi xuống -> reset ball lên paddle
             resetBall(paddle);
+            player.setLives(player.getLives() - 1);
         }
     }
-    public void checkBrickCollision(List<Brick> bricks) {
+    public void checkBrickCollision(List<Brick> bricks , Player player) {
         for (Brick brick : bricks) {
             if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
@@ -107,9 +114,31 @@ public class Ball extends MovableObject {
 
                 // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
-
+                player.setScore(player.getScore() + 10);
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-                break; // chỉ xử lý 1 gạch mỗi frame
+
+                // Nếu gạch bị phá hoàn toàn
+                if (brick.isDestroyed()) {
+                    // Xác suất tạo PowerUp
+                    if (Math.random() < 0.3) {
+
+                        ExpandPaddlePowerUp powerUp = new ExpandPaddlePowerUp(
+                                brick.getX() + brick.getWidth() / 2 - 15,
+                                brick.getY() + brick.getHeight() / 2 - 15
+                        );
+
+                        // Thêm PowerUp vào danh sách quản lý
+                        GameManager.getInstance().getListPowerUps().add(powerUp);
+
+                        // Thêm hình ảnh vào AnchorPane
+                        AnchorPane pane = (AnchorPane) GameManager.getInstance().getPaddle().getImageView().getParent();
+                        pane.getChildren().add(powerUp.getImageView());
+
+                    }
+                }
+
+                // Dừng vòng lặp để tránh xử lý 2 viên gạch cùng lúc
+                break;
             }
         }
     }
@@ -164,6 +193,8 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
+//            directionY = -1;
+//            directionX = 0.7;
             moveBall();
         }
     }

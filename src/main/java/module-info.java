@@ -3,6 +3,7 @@ module GameController {
     requires javafx.fxml;
     requires java.desktop;
     requires javafx.graphics;
+    requires java.sql;
 
 
     opens GameController to javafx.fxml;
