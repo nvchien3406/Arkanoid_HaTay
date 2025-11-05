@@ -30,7 +30,7 @@ public class Ball extends MovableObject {
     }
 
     public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
-        super(x , y , width , height, path);
+        super(x , y , width , height, path, 0 , 0);
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
@@ -116,7 +116,6 @@ public class Ball extends MovableObject {
                 brick.takeHit();
                 player.setScore(player.getScore() + 10);
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-                break; // chỉ xử lý 1 gạch mỗi frame
 
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {

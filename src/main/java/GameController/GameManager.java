@@ -101,17 +101,17 @@ public class GameManager {
         this.paddle = controller.LoadPaddle();
         this.ball = controller.LoadBall();
 
-        // 🔹 Load ảnh surround brick
-        Image surroundImage = new Image(getClass().getResourceAsStream("/image/SurroundBrick.png"));
-        ImageView surroundView = new ImageView(surroundImage);
-        // 🔹 Đặt kích thước & vị trí
-        surroundView.setFitWidth(603);
-        surroundView.setFitHeight(800);
-        surroundView.setLayoutX(287);  // ví dụ: tọa độ X giữa màn hình
-        surroundView.setLayoutY(32);  // ví dụ: tọa độ Y giữa màn hình
-
-        // 🔹 Thêm lên AnchorPane
-        controller.getStartGame().getChildren().add(surroundView);
+//        // 🔹 Load ảnh surround brick
+//        Image surroundImage = new Image(getClass().getResourceAsStream("/image/SurroundBrick.png"));
+//        ImageView surroundView = new ImageView(surroundImage);
+//        // 🔹 Đặt kích thước & vị trí
+//        surroundView.setFitWidth(603);
+//        surroundView.setFitHeight(800);
+//        surroundView.setLayoutX(287);  // ví dụ: tọa độ X giữa màn hình
+//        surroundView.setLayoutY(32);  // ví dụ: tọa độ Y giữa màn hình
+//
+//        // 🔹 Thêm lên AnchorPane
+//        controller.getStartGame().getChildren().add(surroundView);
 
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGamePane().getScene();
