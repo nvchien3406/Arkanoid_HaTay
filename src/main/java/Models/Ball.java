@@ -108,7 +108,7 @@ public class Ball extends MovableObject {
     }
     public void checkBrickCollision(List<Brick> bricks , Player player) {
         for (Brick brick : bricks) {
-            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+            if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
                 bounceOff(brick);
 
@@ -120,7 +120,7 @@ public class Ball extends MovableObject {
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {
                     // Xác suất tạo PowerUp
-                    if (Math.random() < 1.0) {
+                    if (Math.random() < 0.3) {
 
                         ExpandPaddlePowerUp powerUp = new ExpandPaddlePowerUp(
                                 brick.getX() + brick.getWidth() / 2 - 15,
