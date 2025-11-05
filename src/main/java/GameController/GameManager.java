@@ -14,8 +14,8 @@ public class GameManager {
     private List<Brick> listBricks;
     private List<PowerUp> listPowerUps;
     private AnimationTimer gameTimer;
-    private int score ;
-    private int lives;
+    private Player player ;
+    private ScoreDAO scoreDAO;
     private boolean gameState;
 
     public Paddle getPaddle() {
@@ -50,22 +50,6 @@ public class GameManager {
         this.listPowerUps = listPowerUps;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getLives() {
-        return lives;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
     public boolean isGameState() {
         return gameState;
     }
@@ -75,13 +59,13 @@ public class GameManager {
     }
 
     public void startGame(StartGameController controller) {
-        score = 0;
-        lives = 3;
+        player = new Player("Bao" ,0 , 3) ;
+        scoreDAO = new ScoreDAO();
         gameState = true;
 
         // 🔹 Khởi tạo paddle & ball
-        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
-        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 1, 1, -1);
+//        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
+//        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 0.1, 1, -1);
 
         // 🔹 Load đối tượng lên màn
         this.listBricks = controller.LoadBrick();
@@ -89,24 +73,25 @@ public class GameManager {
         this.ball = controller.LoadBall();
 
         // 🔹 Lấy Scene để bắt phím
-        Scene scene = controller.getStartGame().getScene();
+        Scene scene = controller.getStartGamePane().getScene();
         if (scene != null) {
             setupKeyControls(scene);
         } else {
             // Nếu Scene chưa sẵn sàng (gặp khi load FXML), gắn listener
-            controller.getStartGame().sceneProperty().addListener((obs, oldScene, newScene) -> {
+            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
                 if (newScene != null) setupKeyControls(newScene);
             });
         }
 
         // 🔹 Bắt đầu vòng lặp game
-        startGameLoop();
+        startGameLoop(controller);
     }
 
-    private void setupKeyControls(Scene scene) {
+    public void setupKeyControls(Scene scene) {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) paddle.moveL = true;
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = true;
+            if (event.getCode() == KeyCode.SPACE) ball.setStanding(false);
         });
 
         scene.setOnKeyReleased(event -> {
@@ -118,36 +103,53 @@ public class GameManager {
         scene.getRoot().requestFocus();
     }
 
+    public void disableKeyControls(Scene scene) {
+        scene.setOnKeyPressed(null);
+        scene.setOnKeyReleased(null);
+    }
 
-    public void updateGame(){
-        ball.moveBall();
-        paddle.movePaddle();
-        //ball.checkCollision(paddle);
-        ball.checkPaddleCollision(paddle);
-        ball.checkWallCollision(paddle);
+
+    public void updateGame(StartGameController controller){
+        checkCollisions();
+        ball.moveBallWithPaddle(paddle);
+        paddle.movePaddle(controller);
+        controller.updateCurrentScore(player.getScore());
+        List<String> topscores = scoreDAO.getHighScores();
+        controller.updateHighScores(topscores);
     }
 
     public void handelInput(){
 
     }
 
-    public boolean checkCollisions(){
-        return true;
+    public void checkCollisions(){
+        ball.checkPaddleCollision(paddle);
+        ball.checkBrickCollision(listBricks , player);
+        ball.checkWallCollision(paddle , player);
     }
 
-    public void gameOver(){
+    public void gameOver(StartGameController controller){
         paddle = null;
         ball = null;
-        score = 0;
-        lives = 0;
         gameState = false;
+        gameTimer.stop();
+        disableKeyControls(controller.getStartGamePane().getScene());
+        scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
+        List<String> topscores = scoreDAO.getHighScores();
+        controller.updateHighScores(topscores);
+        player = null;
     }
 
-    private void startGameLoop() {
+    private void startGameLoop(StartGameController controller) {
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                updateGame();
+                if(player.playerIsAlive()){
+                    updateGame(controller);
+                }
+                else{
+                    gameOver(controller);
+                }
             }
         };
         gameTimer.start();

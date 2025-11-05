@@ -6,10 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
-    private boolean stand;
+    private boolean isStanding = true;
 
     public Ball () {
         super();
@@ -76,16 +78,15 @@ public class Ball extends MovableObject {
         y += directionY * speed;
         imageView.setLayoutX(x);
         imageView.setLayoutY(y);
-        System.out.println("Ball moving: x=" + x + ", y=" + y + ", dirX=" + directionX + ", dirY=" + directionY + ", speed=" + speed);
     }
 
     public void render(GraphicsContext g) {
 
     }
 
-    public void checkWallCollision(Paddle paddle) {
-        double paneWidth = 1200;
-        double paneHeight = 800;
+    public void checkWallCollision(Paddle paddle , Player player) {
+        double paneWidth = 700;
+        double paneHeight = 700;
 
         if (x <= 0 || x + width >= paneWidth) {
             setDirectionX(directionX * -1);
@@ -96,46 +97,49 @@ public class Ball extends MovableObject {
         if (y + height >= paneHeight) {
             // rơi xuống -> reset ball lên paddle
             resetBall(paddle);
+            player.setLives(player.getLives() - 1);
         }
     }
-//    private void checkBrickCollision() {
-//        for (Brick brick : bricks) {
-//            if (brick instanceof BasicBrick b && !b.isDestroyed() && ball.checkCollision(brick)) {
-//                // Bóng bật lại theo logic hiện tại
-//                ball.bounceOff(brick);
-//
-//                // Ghi nhận hit rồi cộng điểm
-//                brick.takeHit();
-//                addScore(POINTS_PER_HIT);
-//
-//                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-//                break; // chỉ xử lý 1 gạch mỗi frame
-//            }
-//        }
-//    }
+    public void checkBrickCollision(List<Brick> bricks , Player player) {
+        for (Brick brick : bricks) {
+            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+                // Bóng bật lại theo logic hiện tại
+                bounceOff(brick);
+
+                // Ghi nhận hit rồi cộng điểm
+                brick.takeHit();
+                player.setScore(player.getScore() + 10);
+                // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+                break; // chỉ xử lý 1 gạch mỗi frame
+            }
+        }
+    }
 //
     public void checkPaddleCollision(Paddle paddle) {
         if (dy == 0) return;
         if (checkCollision(paddle)) {
-            bounceOff(paddle);
+            if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
+                bounceOff(paddle);
 
-            double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
-            double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
+                double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+                double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
 
-            setDirectionX(hitPos);
-            setDirectionY(-Math.abs(directionY));
+                setDirectionX(hitPos);
+                setDirectionY(-Math.abs(directionY));
 
-            double length = Math.sqrt(directionX * directionX + directionY * directionY);
-            setDirectionX(directionX / length);
-            setDirectionY(directionY / length);
+                double length = Math.sqrt(directionX * directionX + directionY * directionY);
+                setDirectionX(directionX / length);
+                setDirectionY(directionY / length);
+            }
         }
     }
 
     public void resetBall(Paddle paddle) {
         x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
-        y = paddle.getY() - 20;
+        y = paddle.getY() - height;
         directionY = -1;
-        directionX = Math.random();
+        directionX = 0.7;
+        isStanding = true;
     }
 
     public void setDirectionY(double directionY) {
@@ -145,4 +149,26 @@ public class Ball extends MovableObject {
     public void setDirectionX(double directionX) {
         this.directionX = directionX;
     }
+
+    public boolean isStanding() {
+        return isStanding;
+    }
+
+    public void setStanding(boolean standing) {
+        isStanding = standing;
+    }
+
+    public void moveBallWithPaddle(Paddle paddle) {
+        if (isStanding) {
+            x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+            y = paddle.getY() - height;
+            imageView.setLayoutX(x);
+            imageView.setLayoutY(y);
+        } else {
+//            directionY = -1;
+//            directionX = 0.7;
+            moveBall();
+        }
+    }
+
 }

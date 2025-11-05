@@ -1,5 +1,6 @@
 package Models;
 
+import GameController.StartGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,27 +42,27 @@ public class Paddle extends MovableObject{
         this.currentPowerUp = currentPowerUp;
     }
 
-    public void moveLeft() {
+    public void moveLeft(StartGameController controller) {
         setX(Math.max(0, getX() - getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());
         imageView.setLayoutY(getY());
     }
 
-    public void moveRight() {
-        double maxX = 1200 - getWidth();
+    public void moveRight(StartGameController controller) {
+        double maxX = controller.getStartGamePane().getWidth() - getWidth();
         setX(Math.min(maxX, getX() + getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());
         imageView.setLayoutY(getY());
     }
 
-    public void movePaddle() {
+    public void movePaddle(StartGameController controller) {
         if (moveL) {
-            moveLeft();
+            moveLeft(controller);
         }
         if (moveR) {
-            moveRight();
+            moveRight(controller);
         }
     }
 
