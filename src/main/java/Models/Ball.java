@@ -1,9 +1,11 @@
 package Models;
 
 
+import GameController.GameManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -20,15 +22,35 @@ public class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
-        super(x , y , width , height, path);
+    public Ball(double speed, double directionX, double directionY, boolean isStanding) {
         this.speed = speed;
         this.directionX = directionX;
         this.directionY = directionY;
-        this.dx = directionX * speed;
-        this.dy = directionY * speed;
+        this.isStanding = isStanding;
     }
 
+    public Ball(double x, double y, double width, double height, String path, double dx, double dy, double speed, double directionX, double directionY, boolean isStanding) {
+        super(x, y, width, height, path, dx, dy);
+        this.speed = speed;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.isStanding = isStanding;
+    }
+
+    public void moveBall() {
+        x += directionX * speed;
+        y += directionY * speed;
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
+    }
+
+    public void resetBall(Paddle paddle) {
+        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
+        y = paddle.getY() - height;
+        directionY = -1;
+        directionX = 0.7;
+        isStanding = true;
+    }
 
     public void bounceOff(GameObject other) {
         if (!checkCollision(other)) return;
@@ -70,20 +92,6 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void moveBall() {
-//        move();
-//        imageView.setLayoutX(x);
-//        imageView.setLayoutY(y);
-        x += directionX * speed;
-        y += directionY * speed;
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
-    }
-
-    public void render(GraphicsContext g) {
-
-    }
-
     public void checkWallCollision(Paddle paddle) {
         double paneWidth = 1200;
         double paneHeight = 800;
@@ -99,18 +107,39 @@ public class Ball extends MovableObject {
             resetBall(paddle);
         }
     }
+
     public void checkBrickCollision(List<Brick> bricks) {
         for (Brick brick : bricks) {
-            if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
+            // Chỉ xử lý nếu gạch còn sống và va chạm với bóng
+            if (!brick.isDestroyed() && checkCollision(brick)) {
+
+                // Bóng nảy ngược
                 bounceOff(brick);
+
+                // Gạch bị vỡ dần
                 brick.takeHit();
 
-                // 🔹 Xác suất sinh PowerUp sau khi brick bị phá
-                /*if (Math.random() < 0.2) { // 20% rơi powerup
-                    FastBallPowerUp powerUp = new FastBallPowerUp(brick.getX(), brick.getY(), 20, 20, 5.0);
-                    GameManager.spawnPowerUp(powerUp);
-                }*/
+                // Nếu gạch bị phá hoàn toàn
+                if (brick.isDestroyed()) {
+                    // Xác suất tạo PowerUp
+                    if (Math.random() < 1.0) {
 
+                        ExpandPaddlePowerUp powerUp = new ExpandPaddlePowerUp(
+                                brick.getX() + brick.getWidth() / 2 - 15,
+                                brick.getY() + brick.getHeight() / 2 - 15
+                        );
+
+                        // Thêm PowerUp vào danh sách quản lý
+                        GameManager.getInstance().getListPowerUps().add(powerUp);
+
+                        // Thêm hình ảnh vào AnchorPane
+                        AnchorPane pane = (AnchorPane) GameManager.getInstance().getPaddle().getImageView().getParent();
+                        pane.getChildren().add(powerUp.getImageView());
+
+                    }
+                }
+
+                // Dừng vòng lặp để tránh xử lý 2 viên gạch cùng lúc
                 break;
             }
         }
@@ -136,14 +165,6 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void resetBall(Paddle paddle) {
-        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
-        y = paddle.getY() - height;
-        directionY = -1;
-        directionX = 0.7;
-        isStanding = true;
-    }
-
     public void setDirectionY(double directionY) {
         this.directionY = directionY;
     }
@@ -167,8 +188,6 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
-//            directionY = -1;
-//            directionX = 0.7;
             moveBall();
         }
     }

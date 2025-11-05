@@ -11,15 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static GameManager instance; // singleton
-    public static GameManager getInstance() { return instance; }
-
-    public GameManager() {
-        instance = this;
-        listPowerUps = new ArrayList<>();
-    }
-
-
+    private static GameManager instance;
     private Paddle paddle;
     private Ball ball;
     private List<Brick> listBricks;
@@ -28,6 +20,23 @@ public class GameManager {
     private int score ;
     private int lives;
     private boolean gameState;
+
+
+    // 🔒 Constructor private: chỉ cho phép tạo nội bộ
+    private GameManager() {
+        listPowerUps = new ArrayList<>();
+    }
+
+    // 🔹 Singleton getter
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
+
+
+
 
     public Paddle getPaddle() {
         return paddle;
@@ -85,16 +94,25 @@ public class GameManager {
         this.gameState = gameState;
     }
 
+    public void removePowerUp(PowerUp powerUp) {
+        if (listPowerUps != null && listPowerUps.contains(powerUp)) {
+            // 1. Xóa khỏi danh sách quản lý
+            listPowerUps.remove(powerUp);
+
+            // 2. Ẩn hoặc xóa hình ảnh khỏi màn hình (nếu còn hiển thị)
+            if (powerUp.getImageView() != null) {
+                powerUp.getImageView().setVisible(false);
+            }
+        }
+    }
+
+
     public void startGame(StartGameController controller) {
         score = 0;
         lives = 3;
         gameState = true;
 
-        // 🔹 Khởi tạo paddle & ball
-//        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
-//        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 0.1, 1, -1);
-
-        // 🔹 Load đối tượng lên màn
+        // Load đối tượng lên màn
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
         this.ball = controller.LoadBall();
@@ -110,8 +128,6 @@ public class GameManager {
 
         // 🔹 Thêm lên AnchorPane
         controller.getStartGame().getChildren().add(surroundView);
-
-
 
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGame().getScene();
@@ -155,11 +171,34 @@ public class GameManager {
     public void updateGame(){
         ball.moveBallWithPaddle(paddle);
         paddle.movePaddle();
-        //ball.checkCollision(paddle);
         ball.checkPaddleCollision(paddle);
         ball.checkBrickCollision(listBricks);
         ball.checkWallCollision(paddle);
+
+        // update powerups và check collision
+        if (listPowerUps != null && !listPowerUps.isEmpty()) {
+            // update tất cả trước
+            for (PowerUp p : new ArrayList<>(listPowerUps)) {
+                p.update();                // rơi xuống
+                p.checkPaddleCollision(paddle); // ăn vật phẩm
+//                if (p.getY() > 800) {
+//                    // ẩn/đánh dấu để dọn
+//                    p.getImageView().setVisible(false);
+//                    p.setCollected(true);  // hoặc set some flag
+//                }
+            }
+
+            // sau khi update xong, dọn powerup đã expired (đã removeEffect xong)
+            List<PowerUp> toRemove = new ArrayList<>();
+            for (PowerUp p : listPowerUps) {
+                if (p.isExpired()) {
+                    toRemove.add(p);
+                }
+            }
+            listPowerUps.removeAll(toRemove);
+        }
     }
+
 
     public void handelInput(){
 

@@ -1,4 +1,5 @@
 package GameController;
+
 import Models.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -42,6 +43,9 @@ public class StartGameController {
     public static final String[] BallImages = {
             "/image/Ball.png"
     };
+    public static final String[] powerUpImages = {
+            "/image/ExpandPaddlePowerUp.png"
+    };
 
     @FXML
     public List<Brick> LoadBrick() {
@@ -49,20 +53,20 @@ public class StartGameController {
         Random random = new Random();
 
         int[][] pattern = {
-                {5,6,5,6,5,6,5,6,5,6,5,6,5,6,5,6,5,6},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,4,4,1,1,4,4,1,1,1,1,3,3,1,1,3,3,1},
-                {1,1,1,4,4,1,1,1,1,1,1,1,1,3,3,1,1,1},
-                {1,1,4,4,4,4,1,1,1,1,1,1,3,3,3,3,1,1},
-                {1,4,6,4,4,6,4,1,1,1,1,3,6,3,3,6,3,1},
-                {4,4,4,4,4,4,4,4,1,1,3,3,3,3,3,3,3,3},
-                {4,1,4,4,4,4,1,4,1,1,3,1,3,3,3,3,1,3},
-                {1,1,4,4,4,4,1,1,1,1,1,1,3,3,3,3,1,1},
-                {1,1,4,1,1,4,1,1,1,1,1,1,3,1,1,3,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2}
+                {5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 4, 4, 1, 1, 4, 4, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1},
+                {1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1},
+                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
+                {1, 4, 6, 4, 4, 6, 4, 1, 1, 1, 1, 3, 6, 3, 3, 6, 3, 1},
+                {4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3},
+                {4, 1, 4, 4, 4, 4, 1, 4, 1, 1, 3, 1, 3, 3, 3, 3, 1, 3},
+                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
+                {1, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2}
 
         };
 
@@ -80,12 +84,9 @@ public class StartGameController {
                 Brick brick;
                 if (brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
                     brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                }
-
-                else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
+                } else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
                     brick = new StrongBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                }
-                else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
+                } else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
                 startGame.getChildren().add(brick.getImageView());
@@ -100,7 +101,8 @@ public class StartGameController {
         double height = 20;
         double startX = 550;
         double startY = 600;
-        Paddle paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
+        Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
+                10, false, false);
 
         startGame.getChildren().add(paddle.getImageView());
         return paddle;
@@ -113,7 +115,8 @@ public class StartGameController {
         double startX = 550;   // ngay trên paddle
         double startY = 500;
 
-        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        Ball ball = new Ball(startX, startY, 20, 20, BallImages[0],
+                0, 0, 5, 1, 1, false);
         startGame.getChildren().add(ball.getImageView());
         return ball;
     }

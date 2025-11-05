@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
         StartGameController controller = fxmlLoader.getController();
 
         // Tạo danh sách bricks rồi truyền vào LoadBrick()
-        GameManager gameManager = new GameManager();
+        GameManager gameManager = GameManager.getInstance();
         gameManager.startGame(controller);
 
         stage.setTitle("Arkanoid Game");

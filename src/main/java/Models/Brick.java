@@ -46,6 +46,7 @@ public abstract class Brick extends GameObject {
             update();
         } else {
             startBreakAnimation();
+
         }
     }
 

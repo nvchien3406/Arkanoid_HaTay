@@ -1,4 +1,4 @@
-package Models;
+/*package Models;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -28,4 +28,4 @@ public class FastBallPowerUp extends PowerUp {
     public void render(GraphicsContext g){
 
     }
-}
+}*/
