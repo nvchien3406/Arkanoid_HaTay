@@ -108,7 +108,7 @@ public class StartGameController {
         double startX = 550;
         double startY = 600;
         Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
-                10, false, false);
+                5, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
