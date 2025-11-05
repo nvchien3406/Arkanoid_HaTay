@@ -2,6 +2,8 @@ package GameController;
 import Models.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
+    private static GameManager instance;
     private Paddle paddle;
     private Ball ball;
     private List<Brick> listBricks;
@@ -17,6 +20,23 @@ public class GameManager {
     private Player player ;
     private ScoreDAO scoreDAO;
     private boolean gameState;
+
+
+    // 🔒 Constructor private: chỉ cho phép tạo nội bộ
+    private GameManager() {
+        listPowerUps = new ArrayList<>();
+    }
+
+    // 🔹 Singleton getter
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
+
+
+
 
     public Paddle getPaddle() {
         return paddle;
@@ -58,19 +78,40 @@ public class GameManager {
         this.gameState = gameState;
     }
 
+    public void removePowerUp(PowerUp powerUp) {
+        if (listPowerUps != null && listPowerUps.contains(powerUp)) {
+            // 1. Xóa khỏi danh sách quản lý
+            listPowerUps.remove(powerUp);
+
+            // 2. Ẩn hoặc xóa hình ảnh khỏi màn hình (nếu còn hiển thị)
+            if (powerUp.getImageView() != null) {
+                powerUp.getImageView().setVisible(false);
+            }
+        }
+    }
+
+
     public void startGame(StartGameController controller) {
         player = new Player("Bao" ,0 , 3) ;
         scoreDAO = new ScoreDAO();
         gameState = true;
 
-        // 🔹 Khởi tạo paddle & ball
-//        paddle = new Paddle(550, 600, 100, 20, 10, 0, StartGameController.paddleImages[0]);
-//        ball = new Ball(550, 500, 20, 20, StartGameController.BallImages[0], 0.1, 1, -1);
-
-        // 🔹 Load đối tượng lên màn
+        // Load đối tượng lên màn
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
         this.ball = controller.LoadBall();
+
+        // 🔹 Load ảnh surround brick
+        Image surroundImage = new Image(getClass().getResourceAsStream("/image/SurroundBrick.png"));
+        ImageView surroundView = new ImageView(surroundImage);
+        // 🔹 Đặt kích thước & vị trí
+        surroundView.setFitWidth(603);
+        surroundView.setFitHeight(800);
+        surroundView.setLayoutX(287);  // ví dụ: tọa độ X giữa màn hình
+        surroundView.setLayoutY(32);  // ví dụ: tọa độ Y giữa màn hình
+
+        // 🔹 Thêm lên AnchorPane
+        controller.getStartGame().getChildren().add(surroundView);
 
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGamePane().getScene();
@@ -91,7 +132,14 @@ public class GameManager {
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) paddle.moveL = true;
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = true;
-            if (event.getCode() == KeyCode.SPACE) ball.setStanding(false);
+            if (event.getCode() == KeyCode.SPACE) {
+                if (ball.isStanding()) {
+                    ball.setStanding(false);
+                    ball.setDirectionX((Math.random() < 0.5 ? -(0.4 + Math.random() * 0.6) : 0.4 + Math.random() * 0.));
+                    ball.setDirectionY(-1);
+                }
+
+            };
         });
 
         scene.setOnKeyReleased(event -> {
@@ -116,7 +164,32 @@ public class GameManager {
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
+        paddle.movePaddle(controller);
+
+        // update powerups và check collision
+        if (listPowerUps != null && !listPowerUps.isEmpty()) {
+            // update tất cả trước
+            for (PowerUp p : new ArrayList<>(listPowerUps)) {
+                p.update();                // rơi xuống
+                p.checkPaddleCollision(paddle); // ăn vật phẩm
+//                if (p.getY() > 800) {
+//                    // ẩn/đánh dấu để dọn
+//                    p.getImageView().setVisible(false);
+//                    p.setCollected(true);  // hoặc set some flag
+//                }
+            }
+
+            // sau khi update xong, dọn powerup đã expired (đã removeEffect xong)
+            List<PowerUp> toRemove = new ArrayList<>();
+            for (PowerUp p : listPowerUps) {
+                if (p.isExpired()) {
+                    toRemove.add(p);
+                }
+            }
+            listPowerUps.removeAll(toRemove);
+        }
     }
+
 
     public void handelInput(){
 
