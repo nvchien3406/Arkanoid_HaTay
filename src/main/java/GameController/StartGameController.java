@@ -101,7 +101,7 @@ public class StartGameController {
 //        imageView.setLayoutX(startX);
 //        imageView.setLayoutY(startY);
 
-        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,5 ,1 , 1 );
         startGame.getChildren().add(ball.getImageView());
         return ball;
     }
