@@ -1,5 +1,6 @@
 package Models;
 
+import GameController.StartGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -7,9 +8,10 @@ import javafx.scene.image.ImageView;
 
 
 public class Paddle extends MovableObject{
-    private double speed, currentPowerUp;
+    private double speed;
     public boolean moveL = false;
     public boolean moveR = false;
+    private double baseWidth;
 
     public double getSpeed() {
         return speed;
@@ -18,60 +20,48 @@ public class Paddle extends MovableObject{
     public Paddle() {
         super();
         speed = 0;
-        currentPowerUp = 0;
     }
 
-    public Paddle(double x, double y, double width, double height, double speed, double currentPowerUp, String path) {
-        super(x, y, width, height, 0, 0, path);
+    public Paddle(double x, double y, double width, double height, String path, double dx, double dy, double speed,
+                  boolean moveL, boolean moveR) {
+        super(x, y, width, height, path, dx, dy);
         this.speed = speed;
-        this.currentPowerUp = currentPowerUp;
+        this.moveL = moveL;
+        this.moveR = moveR;
         this.imageView.setLayoutX(x);
         this.imageView.setLayoutY(y);
+        this.baseWidth = width;
     }
 
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
-    public double getCurrentPowerUp() {
-        return currentPowerUp;
+    public double getBaseWidth() {
+        return baseWidth;
     }
 
-    public void setCurrentPowerUp(double currentPowerUp) {
-        this.currentPowerUp = currentPowerUp;
-    }
-
-    public void moveLeft() {
+    public void moveLeft(StartGameController controller) {
         setX(Math.max(0, getX() - getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());
         imageView.setLayoutY(getY());
     }
 
-    public void moveRight() {
-        double maxX = 1200 - getWidth();
+    public void moveRight(StartGameController controller) {
+        double maxX = controller.getStartGamePane().getWidth() - getWidth();
         setX(Math.min(maxX, getX() + getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());
         imageView.setLayoutY(getY());
     }
 
-    public void movePaddle() {
+    public void movePaddle(StartGameController controller) {
         if (moveL) {
-            moveLeft();
+            moveLeft(controller);
         }
         if (moveR) {
-            moveRight();
-        }
-    }
-
-    public void applyPowerUp() {
-        if (currentPowerUp == 1) {
-            // PowerUp loại 1: tăng tốc
-            speed *= 1.5;
-        } else if (currentPowerUp == 2) {
-            // PowerUp loại 2: mở rộng chiều rộng thanh đỡ
-            setWidth(getWidth() * 1.2);
+            moveRight(controller);
         }
     }
 
