@@ -84,9 +84,9 @@ public class Ball extends MovableObject {
 
     }
 
-    public void checkWallCollision(Paddle paddle) {
-        double paneWidth = 1200;
-        double paneHeight = 800;
+    public void checkWallCollision(Paddle paddle , Player player) {
+        double paneWidth = 700;
+        double paneHeight = 700;
 
         if (x <= 0 || x + width >= paneWidth) {
             setDirectionX(directionX * -1);
@@ -97,9 +97,10 @@ public class Ball extends MovableObject {
         if (y + height >= paneHeight) {
             // rơi xuống -> reset ball lên paddle
             resetBall(paddle);
+            player.setLives(player.getLives() - 1);
         }
     }
-    public void checkBrickCollision(List<Brick> bricks) {
+    public void checkBrickCollision(List<Brick> bricks , Player player) {
         for (Brick brick : bricks) {
             if (brick instanceof NormalBrick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
@@ -107,7 +108,7 @@ public class Ball extends MovableObject {
 
                 // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
-
+                player.setScore(player.getScore() + 10);
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
                 break; // chỉ xử lý 1 gạch mỗi frame
             }

@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -21,8 +22,13 @@ import java.util.Random;
 
 public class StartGameController {
     @FXML
-    private AnchorPane startGame;
-    //private Button button;
+    private AnchorPane startGamePane;
+    @FXML
+    private ListView<String> scoreBoard;
+    @FXML
+    private Label Score, TopScore, Level;
+    @FXML
+    private Button Pause;
 
     public static final int ROWS = 10;
     public static final int COLS = 20;
@@ -54,7 +60,7 @@ public class StartGameController {
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 300;
+                double x = col * BRICK_WIDTH + 50;
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[random.nextInt(brickImages.length)];
@@ -62,7 +68,7 @@ public class StartGameController {
                 Brick brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
-                startGame.getChildren().add(brick.getImageView());
+                startGamePane.getChildren().add(brick.getImageView());
             }
         }
         return bricks;
@@ -83,7 +89,7 @@ public class StartGameController {
 //        imageView.setLayoutY(startY);
         Paddle paddle = new Paddle(startX, startY, width, height, 10, 0, paddleImages[0]);
 
-        startGame.getChildren().add(paddle.getImageView());
+        startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
     }
 
@@ -102,30 +108,21 @@ public class StartGameController {
 //        imageView.setLayoutY(startY);
 
         Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
-        startGame.getChildren().add(ball.getImageView());
+        startGamePane.getChildren().add(ball.getImageView());
         return ball;
     }
 
-//    public void movePaddle(Paddle paddle) {
-//        startGame.sceneProperty().addListener((obs, oldScene, newScene) -> {
-//            if (newScene != null) {
-//                Scene scene = newScene;
-//                scene.setOnKeyPressed(event -> {
-//                    if (event.getCode() == KeyCode.LEFT) paddle.moveLeft();
-//                    if (event.getCode() == KeyCode.RIGHT) paddle.moveRight();
-//                    //if (event.getCode() == KeyCode.SPACE) togglePause();
-//                });
-//                scene.setOnKeyReleased(event -> {
-//                    if (event.getCode() == KeyCode.LEFT) paddle.moveLeft();
-//                    if (event.getCode() == KeyCode.RIGHT) paddle.moveRight();
-//                });
-//                // request focus để nhận phím
-//                startGame.requestFocus();
-//            }
-//        });
-//    }
+    public AnchorPane getStartGamePane() {
+        return startGamePane;
+    }
 
-    public AnchorPane getStartGame() {
-        return startGame;
+    // Cập nhật điểm hiện tại
+    public void updateCurrentScore(int score) {
+        Score.setText(String.valueOf(score));
+    }
+
+    // Hiển thị danh sách top 10
+    public void updateHighScores(List<String> topScores) {
+        scoreBoard.getItems().setAll(topScores);
     }
 }
