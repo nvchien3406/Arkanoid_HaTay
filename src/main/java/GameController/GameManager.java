@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ public class GameManager {
     private Player player ;
     private ScoreDAO scoreDAO;
     private boolean gameState;
+    private Line aimingArrow;
+    private static final double AIMING_ARROW_LENGTH = 80.0;
 
 
     // 🔒 Constructor private: chỉ cho phép tạo nội bộ
@@ -113,6 +117,12 @@ public class GameManager {
 //        // 🔹 Thêm lên AnchorPane
 //        controller.getStartGame().getChildren().add(surroundView);
 
+        aimingArrow = new Line();
+        aimingArrow.setStrokeWidth(3);
+        aimingArrow.setStroke(Color.CYAN);
+        aimingArrow.setVisible(false);
+        controller.getStartGamePane().getChildren().add(aimingArrow);
+
         // 🔹 Lấy Scene để bắt phím
         Scene scene = controller.getStartGamePane().getScene();
         if (scene != null) {
@@ -147,6 +157,59 @@ public class GameManager {
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = false;
         });
 
+        scene.setOnMousePressed(event -> {
+            // Chỉ ngắm khi bóng đang đứng yên
+            if (ball.isStanding()) {
+                // Tính toán tâm quả bóng (giả sử getX/getY là góc trên trái)
+                double ballCenterX = ball.getX() + ball.getWidth() / 2;
+                double ballCenterY = ball.getY() + ball.getHeight() / 2;
+
+                aimingArrow.setStartX(ballCenterX);
+                aimingArrow.setStartY(ballCenterY);
+                updateAimingArrow(event.getX(), event.getY());
+                aimingArrow.setVisible(true);
+            }
+        });
+
+        scene.setOnMouseDragged(event -> {
+            // Chỉ cập nhật khi đang ngắm (mũi tên hiển thị)
+            if (aimingArrow.isVisible()) {
+                updateAimingArrow(event.getX(), event.getY());
+            }
+        });
+
+        scene.setOnMouseReleased(event -> {
+            // Chỉ bắn khi đang ngắm
+            if (aimingArrow.isVisible()) {
+                aimingArrow.setVisible(false); // Ẩn mũi tên
+
+                // Tính toán tâm quả bóng
+                double ballCenterX = ball.getX() + ball.getWidth() / 2;
+                double ballCenterY = ball.getY() + ball.getHeight() / 2;
+
+                // Tính vector hướng
+                double deltaX = event.getX() - ballCenterX;
+                double deltaY = event.getY() - ballCenterY;
+
+                // Luôn ép bóng bay lên (deltaY phải là số âm)
+                if (deltaY >= 0) {
+                    deltaY = -0.1; // Một giá trị nhỏ để tránh lỗi, nếu chỉ click
+                }
+
+                // Tính độ dài vector (Pythagoras)
+                double magnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                // Chuẩn hóa vector (để có tốc độ không đổi)
+                double normX = deltaX / magnitude;
+                double normY = deltaY / magnitude;
+
+                // Dựa trên code cũ của bạn, có vẻ setDirectionX/Y là vector hướng
+                ball.setStanding(false);
+                ball.setDirectionX(normX);
+                ball.setDirectionY(normY);
+            }
+        });
+
         // Bảo đảm focus để nhận phím
         scene.getRoot().requestFocus();
     }
@@ -154,6 +217,9 @@ public class GameManager {
     public void disableKeyControls(Scene scene) {
         scene.setOnKeyPressed(null);
         scene.setOnKeyReleased(null);
+        scene.setOnMousePressed(null);
+        scene.setOnMouseDragged(null);
+        scene.setOnMouseReleased(null);
     }
 
 
@@ -226,5 +292,46 @@ public class GameManager {
             }
         };
         gameTimer.start();
+    }
+
+    /**
+     * Cập nhật vị trí cuối của mũi tên dựa trên vị trí chuột,
+     * nhưng giữ nguyên độ dài cố định (AIMING_ARROW_LENGTH).
+     */
+    private void updateAimingArrow(double mouseX, double mouseY) {
+        // Lấy điểm bắt đầu (tâm quả bóng)
+        double startX = aimingArrow.getStartX();
+        double startY = aimingArrow.getStartY();
+
+        // 1. Tính vector thô
+        double deltaX = mouseX - startX;
+        double deltaY = mouseY - startY;
+
+        // 2. Ép mũi tên luôn hướng lên
+        if (deltaY >= 0) {
+            deltaY = -0.1; // Một giá trị âm nhỏ để tránh lỗi chia cho 0
+            if (deltaX == 0) deltaX = 0.01; // Tránh trường hợp click ngay bên dưới
+        }
+
+        // 3. Tính độ dài (magnitude)
+        double magnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        // 4. Chuẩn hóa vector (lấy hướng)
+        double normX, normY;
+        if (magnitude == 0) {
+            normX = 0;
+            normY = -1; // Nếu không di chuyển, mặc định hướng thẳng lên
+        } else {
+            normX = deltaX / magnitude;
+            normY = deltaY / magnitude;
+        }
+
+        // 5. Tính điểm cuối mới dựa trên độ dài cố định
+        double endX = startX + normX * AIMING_ARROW_LENGTH;
+        double endY = startY + normY * AIMING_ARROW_LENGTH;
+
+        // 6. Cập nhật đường thẳng
+        aimingArrow.setEndX(endX);
+        aimingArrow.setEndY(endY);
     }
 }
