@@ -18,7 +18,7 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
     }
 
     public void moveExpandPaddlePowerUp() {
-        y += 5;
+        y += 0.5;
         imageView.setLayoutY(y);
     }
 
