@@ -49,19 +49,6 @@
     </right>
     <center>
         <AnchorPane fx:id="startGamePane" maxHeight="700.0" maxWidth="700.0" minHeight="700.0" minWidth="700.0" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #2d6a4f; -fx-border-color: #444; -fx-border-width: 5;" BorderPane.alignment="CENTER">
-<<<<<<< HEAD
-         <children>
-            <VBox fx:id="pauseMenu" spacing="15" layoutX="250.0" layoutY="250.0" prefHeight="200.0" prefWidth="200.0" visible="false">
-               <children>
-                  <Button fx:id="resume" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="RESUME" />
-                  <Button fx:id="restart" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="RESTART" />
-                  <Button fx:id="exit" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="EXIT" />
-                  <Button fx:id="setting" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="SETTING" />
-               </children>
-            </VBox>
-         </children></AnchorPane>
-   </center>
-=======
             <children>
                 <VBox fx:id="pauseMenu" spacing="15" layoutX="250.0" layoutY="250.0" prefHeight="200.0" prefWidth="200.0" visible="false">
                     <children>
@@ -73,6 +60,5 @@
                 </VBox>
             </children></AnchorPane>
     </center>
->>>>>>> d5bd168ad166939cbf013ec93ab872e63d809370
 
 </BorderPane>
