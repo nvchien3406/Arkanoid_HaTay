@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StartGameController {
+public class StartGameController implements GameConstant{
     @FXML
     private AnchorPane startGamePane;
     @FXML
@@ -101,7 +101,7 @@ public class StartGameController {
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 50;
+                double x = col * BRICK_WIDTH + 62;
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[pattern[row][col]].getKey();
@@ -217,12 +217,12 @@ public class StartGameController {
 
     @FXML
     public Paddle LoadPaddle() {
-        double width = 100;
-        double height = 20;
+        double width = PADDLE_WIDTH;
+        double height = PADDLE_HEIGHT;
         double startX = 550;
         double startY = 600;
         Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
-                5, false, false);
+                PADDLE_SPEED, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
@@ -230,9 +230,9 @@ public class StartGameController {
 
     @FXML
     public Ball LoadBall() {
-        double size = 20;
+        double size = BALL_SIZE;
 
-        double startX = 550;   // ngay trên paddle
+        double startX = 550;
         double startY = 500;
 
         Ball mainBall = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );

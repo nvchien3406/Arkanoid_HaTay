@@ -1,6 +1,7 @@
 package Models;
 
 
+import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.StartGameController;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,7 +13,7 @@ import javafx.scene.paint.Color;
 import java.util.List;
 
 
-public class Ball extends MovableObject {
+public class Ball extends MovableObject implements GameConstant {
     private double speed, directionX, directionY;
     private boolean isStanding = true;
     private boolean pierceMode = false;
@@ -97,13 +98,13 @@ public class Ball extends MovableObject {
         double paneHeight = 700;
         GameManager gm = GameManager.getInstance();
 
-        if (x <= 0 || x + width >= paneWidth) {
+        if (x <= 0 || x + width >= PANE_WIDTH) {
             setDirectionX(directionX * -1);
         }
         if (y <= 0) {
             setDirectionY(directionY * -1);
         }
-        if (y + height >= paneHeight) {
+        if (y + height >= PANE_HEIGHT) {
             // 🔹 Bóng rơi ra khỏi màn hình -> ẩn ảnh
             if (imageView != null) {
                 imageView.setVisible(false);
@@ -113,7 +114,7 @@ public class Ball extends MovableObject {
             gm.markBallForRemoval(this);
         }
     }
-    public void checkBrickCollision(List<Brick> bricks , Player player) {
+    public void checkBrickCollision(List<Brick> bricks , Player player, StartGameController controller) {
         for (Brick brick : bricks) {
             if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
@@ -123,8 +124,13 @@ public class Ball extends MovableObject {
 
                 // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
-                player.setScore(player.getScore() + 10);
+                int addScore = 10;
+                player.setScore(player.getScore() + addScore);
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+
+                double popupX = brick.getX() + brick.getWidth() / 2;
+                double popupY = brick.getY() + brick.getHeight() / 2;
+                GameManager.getInstance().showScorePopup(controller, popupX, popupY, addScore);
 
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {
@@ -143,6 +149,7 @@ public class Ball extends MovableObject {
 
                         AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
                         pane.getChildren().add(powerUp.getImageView());
+
                     }
                 }
 
@@ -222,6 +229,8 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
+//            directionY = -1;
+//            directionX = 0.7;
             moveBall();
         }
     }
