@@ -1,5 +1,6 @@
 package GameController;
 import Models.*;
+import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -90,9 +91,18 @@ public class GameManager {
         }
     }
 
+    public void pauseGame() {
+        if (gameTimer != null) gameTimer.stop();
+    }
+
+    public void resumeGame(StartGameController controller) {
+        if (gameTimer != null){
+            startGameLoop(controller);
+        }
+    }
 
     public void startGame(StartGameController controller) {
-        player = new Player("Bao" ,0 , 10);
+        player = new Player("Bao" ,0 , 3);
         scoreDAO = new ScoreDAO();
         gameState = true;
 
@@ -113,22 +123,12 @@ public class GameManager {
 //        // 🔹 Thêm lên AnchorPane
 //        controller.getStartGame().getChildren().add(surroundView);
 
-        // 🔹 Lấy Scene để bắt phím
-        Scene scene = controller.getStartGamePane().getScene();
-        if (scene != null) {
-            setupKeyControls(scene);
-        } else {
-            // Nếu Scene chưa sẵn sàng (gặp khi load FXML), gắn listener
-            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) setupKeyControls(newScene);
-            });
-        }
-
         // 🔹 Bắt đầu vòng lặp game
         startGameLoop(controller);
     }
 
     public void setupKeyControls(Scene scene) {
+
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.LEFT) paddle.moveL = true;
             if (event.getCode() == KeyCode.RIGHT) paddle.moveR = true;
@@ -210,10 +210,27 @@ public class GameManager {
         scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
+
+        EndGameController endGameController = SceneTransition.switchSceneWithController(controller.getStage(), "endGame.fxml");
+        endGameController.setFinalScore(player.getScore());
+        endGameController.setRank(scoreDAO.getRankPlayer(player));
+
         player = null;
+        scoreDAO = null;
     }
 
     private void startGameLoop(StartGameController controller) {
+        // 🔹 Lấy Scene để bắt phím
+        Scene scene = controller.getStartGamePane().getScene();
+        if (scene != null) {
+            setupKeyControls(scene);
+        } else {
+            // Nếu Scene chưa sẵn sàng (gặp khi load FXML), gắn listener
+            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) setupKeyControls(newScene);
+            });
+        }
+
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
