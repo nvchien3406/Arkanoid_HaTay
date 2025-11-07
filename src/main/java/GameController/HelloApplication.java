@@ -13,29 +13,23 @@ import java.util.List;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("startGame.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(HelloApplication.class.getResource("style.css").toExternalForm());
+        try {
+            // 🔹 Khởi động vào menu chính
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameController/menuGame.fxml"));
+            Scene scene = new Scene(loader.load());
 
-        // Lấy controller sau khi load FXML
-        StartGameController controller = fxmlLoader.getController();
+            // 🔹 Load CSS (nếu có)
+            scene.getStylesheets().add(HelloApplication.class.getResource("menuGame.css").toExternalForm());
 
-        // Tạo danh sách bricks rồi truyền vào LoadBrick()
-        GameManager gameManager = GameManager.getInstance();
-        gameManager.startGame(controller);
 
-        // 🔹 Khi người chơi tắt cửa sổ => lưu điểm
-        stage.setOnCloseRequest(event -> {
-            // Đảm bảo không gọi 2 lần nếu gameOver đã chạy
-            if (gameManager.isGameState()) {
-                gameManager.gameOver(controller);
-            }
-        });
+            stage.setTitle("Arkanoid Game");
+            stage.sizeToScene();
+            stage.setScene(scene);
+            stage.show();
 
-        stage.setTitle("Arkanoid Game");
-        stage.sizeToScene();
-        stage.setScene(scene);
-        stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

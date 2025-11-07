@@ -2,8 +2,10 @@ package GameController;
 
 import Models.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,7 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 
@@ -29,6 +34,15 @@ public class StartGameController {
     private Label Score, TopScore, Level;
     @FXML
     private Button Pause;
+
+    @FXML private VBox pauseMenu;
+    @FXML private Button resume;
+    @FXML private Button restart;
+    @FXML private Button exit;
+    @FXML private Button setting;
+
+    private Rectangle overlay;
+    private boolean isPaused = false;
 
     public static final int ROWS = 14;
     public static final int COLS = 18;
@@ -101,6 +115,85 @@ public class StartGameController {
         return bricks;
     }
 
+    public void initialize() {
+        GameManager gameManager = GameManager.getInstance();
+        gameManager.startGame(this);
+
+        createPauseMenu();
+
+        Pause.setOnAction(e -> {
+            showPauseMenu();
+            gameManager.pauseGame();
+        });
+
+        resume.setOnAction(e -> resumeGame());
+        restart.setOnAction(e -> restartGame());
+        exit.setOnAction(e -> exitToMenu());
+        setting.setOnAction(e -> settingGame());
+    }
+
+    public void createPauseMenu() {
+        // overlay mờ nền
+        overlay = new Rectangle();
+        overlay.widthProperty().bind(startGamePane.widthProperty());
+        overlay.heightProperty().bind(startGamePane.heightProperty());
+        overlay.setFill(Color.rgb(0, 0, 0, 0.5));
+        overlay.setVisible(false);
+        startGamePane.getChildren().add(overlay);
+        startGamePane.getChildren().remove(pauseMenu); // đưa pauseMenu lên trên overlay
+        startGamePane.getChildren().add(pauseMenu);
+    }
+
+    private void showPauseMenu() {
+        isPaused = true;
+        Pause.setText("RESUME");
+        overlay.setVisible(true);
+        pauseMenu.setVisible(true);
+    }
+
+    private void resumeGame() {
+        GameManager gameManager = GameManager.getInstance();
+        gameManager.resumeGame(this); // Tiếp tục game loop
+        isPaused = false;
+        Pause.setText("PAUSE");
+        overlay.setVisible(false);
+        pauseMenu.setVisible(false);
+    }
+
+    private void restartGame() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameController/startGame.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(HelloApplication.class.getResource("/GameController/startGame.css").toExternalForm());
+
+
+            Stage stage = (Stage) startGamePane.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void exitToMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameController/menuGame.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(HelloApplication.class.getResource("/GameController/menuGame.css").toExternalForm());
+
+            Stage stage = (Stage) startGamePane.getScene().getWindow();
+            stage.setScene(scene);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void settingGame() {}
+
     @FXML
     public Paddle LoadPaddle() {
         double width = 100;
@@ -148,5 +241,25 @@ public class StartGameController {
 
     public AnchorPane getStartGame() {
         return startGamePane;
+    }
+
+    private void switchScene(String fxmlFile) {
+        try {
+            Stage stage = (Stage) resume.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/GameController/" + fxmlFile));
+
+            Scene scene = new Scene(root);
+
+            // 🔹 Lấy tên CSS tương ứng với file FXML (nếu có)
+            String cssName = fxmlFile.replace(".fxml", ".css");
+            var cssUrl = getClass().getResource("/GameController/" + cssName);
+            if (cssUrl != null) {
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+            }
+
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

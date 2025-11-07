@@ -3,14 +3,14 @@
     src: url("fonts/Orbitron-VariableFont_wght.ttf");
 }
 
-/* style.css - làm đẹp ScoreBoard */
+/* startGame.css - làm đẹp ScoreBoard */
 
 .root {
     -fx-background-color: linear-gradient(to bottom, #0a0a0a, #1b1b1b);
     -fx-font-family: "Orbitron", "Segoe UI", "Arial";
 }
 
-/* 🎯 ListView bảng điểm */
+/*  ListView bảng điểm */
 .scoreboard-list {
     -fx-background-color: #121212;
     -fx-border-color: cyan;
@@ -44,3 +44,18 @@
     -fx-font-family: "Orbitron";
 }
 
+/* ===== Pause Menu ===== */
+#pauseMenu {
+    -fx-background-color: rgba(20,20,20,0.9);
+    -fx-padding: 30px;
+    -fx-background-radius: 15;
+}
+
+#pauseMenu Button {
+    -fx-pref-width: 200;
+    -fx-pref-height: 40;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+}
