@@ -130,25 +130,17 @@ public class Ball extends MovableObject {
                 if (brick.isDestroyed()) {
                     GameManager gm = GameManager.getInstance();
 
-                    // ⚡ Chỉ tạo PowerUp nếu KHÔNG có PowerUp nào đang active
-                    if (gm.getListBalls().size() == 1               // chỉ còn 1 bóng
-                            && gm.getListPowerUps().stream().noneMatch(p -> !p.isExpired()) // không có powerup còn sống
-                            && !gm.hasActivePowerUp()                   // không có powerup đang active
-                            && Math.random() < 1.0) {
-                        PowerUp powerUp;
-                        double rand = Math.random();
+                    // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện
+                    if (gm.getListBalls().size() == 1
+                            && gm.getListPowerUps().stream().noneMatch(p -> !p.isExpired())
+                            && !gm.hasActivePowerUp()) {
 
-                        if (rand < 0.25) {
-                            powerUp = new ExpandPaddlePowerUp(brick.getX() + 10, brick.getY());
-                        } else if (rand < 0.5) {
-                            powerUp = new ShrinkPaddlePowerDown(brick.getX() + 10, brick.getY());
-                        } else if (rand < 0.75) {
-                            powerUp = new PrieceBallPowerUp(brick.getX() + 10, brick.getY());
-                        } else {
-                            powerUp = new ThreeBallPowerUp(brick.getX() + 10, brick.getY());
-                        }
+                        // Factory Method
+                        PowerUpFactory factory = PowerUpFactoryProducer.getRandomFactory();
+                        PowerUp powerUp = factory.createPowerUp(brick.getX() + 10, brick.getY());
 
                         gm.getListPowerUps().add(powerUp);
+
                         AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
                         pane.getChildren().add(powerUp.getImageView());
                     }
