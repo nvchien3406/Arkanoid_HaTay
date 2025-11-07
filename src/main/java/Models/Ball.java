@@ -2,6 +2,7 @@ package Models;
 
 
 import GameController.GameManager;
+import GameController.StartGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ import java.util.List;
 public class Ball extends MovableObject {
     private double speed, directionX, directionY;
     private boolean isStanding = true;
+    private boolean pierceMode = false;
 
     public Ball () {
         super();
@@ -93,6 +95,7 @@ public class Ball extends MovableObject {
     public void checkWallCollision(Paddle paddle , Player player) {
         double paneWidth = 700;
         double paneHeight = 700;
+        GameManager gm = GameManager.getInstance();
 
         if (x <= 0 || x + width >= paneWidth) {
             setDirectionX(directionX * -1);
@@ -101,16 +104,22 @@ public class Ball extends MovableObject {
             setDirectionY(directionY * -1);
         }
         if (y + height >= paneHeight) {
-            // rơi xuống -> reset ball lên paddle
-            resetBall(paddle);
-            player.setLives(player.getLives() - 1);
+            // 🔹 Bóng rơi ra khỏi màn hình -> ẩn ảnh
+            if (imageView != null) {
+                imageView.setVisible(false);
+            }
+
+            // 🔹 Đánh dấu bóng này để GameManager dọn sau khi vòng lặp xong
+            gm.markBallForRemoval(this);
         }
     }
     public void checkBrickCollision(List<Brick> bricks , Player player) {
         for (Brick brick : bricks) {
             if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
-                bounceOff(brick);
+                if (!pierceMode) {
+                    bounceOff(brick);
+                }
 
                 // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
@@ -119,26 +128,26 @@ public class Ball extends MovableObject {
 
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {
-                    // Xác suất tạo PowerUp
-                    if (Math.random() < 0.3) {
+                    GameManager gm = GameManager.getInstance();
 
-                        ExpandPaddlePowerUp powerUp = new ExpandPaddlePowerUp(
-                                brick.getX() + brick.getWidth() / 2 - 15,
-                                brick.getY() + brick.getHeight() / 2 - 15
-                        );
+                    // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện
+                    if (gm.getListBalls().size() == 1
+                            && gm.getListPowerUps().stream().noneMatch(p -> !p.isExpired())
+                            && !gm.hasActivePowerUp()) {
 
-                        // Thêm PowerUp vào danh sách quản lý
-                        GameManager.getInstance().getListPowerUps().add(powerUp);
+                        // Factory Method
+                        PowerUpFactory factory = PowerUpFactoryProducer.getRandomFactory();
+                        PowerUp powerUp = factory.createPowerUp(brick.getX() + 10, brick.getY());
 
-                        // Thêm hình ảnh vào AnchorPane
-                        AnchorPane pane = (AnchorPane) GameManager.getInstance().getPaddle().getImageView().getParent();
+                        gm.getListPowerUps().add(powerUp);
+
+                        AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
                         pane.getChildren().add(powerUp.getImageView());
-
                     }
                 }
 
                 // Dừng vòng lặp để tránh xử lý 2 viên gạch cùng lúc
-                break;
+                if (!pierceMode) break;
             }
         }
     }
@@ -170,6 +179,22 @@ public class Ball extends MovableObject {
         isStanding = true;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getDirectionX() {
+        return directionX;
+    }
+
+    public double getDirectionY() {
+        return directionY;
+    }
+
     public void setDirectionY(double directionY) {
         this.directionY = directionY;
     }
@@ -186,6 +211,10 @@ public class Ball extends MovableObject {
         isStanding = standing;
     }
 
+    public boolean isPierceMode() { return pierceMode; }
+    public void setPierceMode(boolean pierceMode) { this.pierceMode = pierceMode; }
+
+
     public void moveBallWithPaddle(Paddle paddle) {
         if (isStanding) {
             x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
@@ -193,8 +222,6 @@ public class Ball extends MovableObject {
             imageView.setLayoutX(x);
             imageView.setLayoutY(y);
         } else {
-//            directionY = -1;
-//            directionX = 0.7;
             moveBall();
         }
     }
