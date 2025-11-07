@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StartGameController {
+public class StartGameController implements GameConstant{
     @FXML
     private AnchorPane startGamePane;
     @FXML
@@ -30,28 +30,28 @@ public class StartGameController {
     @FXML
     private Button Pause;
 
-    public static final int ROWS = 14;
-    public static final int COLS = 18;
-    public static final int BRICK_WIDTH = 32;
-    public static final int BRICK_HEIGHT = 16;
-    public static final Pair<String, String>[] brickImages = new Pair[]{
-            new Pair<>("/image/BlueBrick.png", "NormalBrick"),
-            new Pair<>("/image/GreenBrick.png", "NormalBrick"),
-            new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
-            new Pair<>("/image/PurpleBrick.png", "StrongBrick"),
-            new Pair<>("/image/RedBrick.png", "StrongBrick"),
-            new Pair<>("/image/YellowBrick.png", "StrongBrick"),
-            new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
-    };
-    public static final String[] paddleImages = {
-            "/image/Paddle.png"
-    };
-    public static final String[] BallImages = {
-            "/image/Ball.png"
-    };
-    public static final String[] powerUpImages = {
-            "/image/ExpandPaddlePowerUp.png"
-    };
+//    public static final int ROWS = 14;
+//    public static final int COLS = 18;
+//    public static final int BRICK_WIDTH = 32;
+//    public static final int BRICK_HEIGHT = 16;
+//    public static final Pair<String, String>[] brickImages = new Pair[]{
+//            new Pair<>("/image/BlueBrick.png", "NormalBrick"),
+//            new Pair<>("/image/GreenBrick.png", "NormalBrick"),
+//            new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
+//            new Pair<>("/image/PurpleBrick.png", "StrongBrick"),
+//            new Pair<>("/image/RedBrick.png", "StrongBrick"),
+//            new Pair<>("/image/YellowBrick.png", "StrongBrick"),
+//            new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
+//    };
+//    public static final String[] paddleImages = {
+//            "/image/Paddle.png"
+//    };
+//    public static final String[] BallImages = {
+//            "/image/Ball.png"
+//    };
+//    public static final String[] powerUpImages = {
+//            "/image/ExpandPaddlePowerUp.png"
+//    };
 
     @FXML
     public List<Brick> LoadBrick() {
@@ -82,7 +82,7 @@ public class StartGameController {
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 50;
+                double x = col * BRICK_WIDTH + 62;
                 double y = row * BRICK_HEIGHT + 50;
 
                 String imgPath = brickImages[pattern[row][col]].getKey();
@@ -103,12 +103,12 @@ public class StartGameController {
 
     @FXML
     public Paddle LoadPaddle() {
-        double width = 100;
-        double height = 20;
+        double width = PADDLE_WIDTH;
+        double height = PADDLE_HEIGHT;
         double startX = 550;
         double startY = 600;
         Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
-                5, false, false);
+                PADDLE_SPEED, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
@@ -116,19 +116,13 @@ public class StartGameController {
 
     @FXML
     public Ball LoadBall() {
-        double size = 20;
+        double size = BALL_SIZE;
 
-        double startX = 550;   // ngay trên paddle
+        double startX = 550;
         double startY = 500;
 
-        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,BALL_SPEED,1 , 1 );
         startGamePane.getChildren().add(ball.getImageView());
-//        Image image = new Image(getClass().getResourceAsStream(BallImages[0]));
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitWidth(size);
-//        imageView.setFitHeight(size);
-//        imageView.setLayoutX(startX);
-//        imageView.setLayoutY(startY);
         return ball;
     }
 

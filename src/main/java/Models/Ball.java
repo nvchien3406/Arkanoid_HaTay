@@ -1,6 +1,7 @@
 package Models;
 
 
+import GameController.GameConstant;
 import GameController.GameManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,7 +12,7 @@ import javafx.scene.paint.Color;
 import java.util.List;
 
 
-public class Ball extends MovableObject {
+public class Ball extends MovableObject implements GameConstant {
     private double speed, directionX, directionY;
     private boolean isStanding = true;
 
@@ -94,13 +95,13 @@ public class Ball extends MovableObject {
         double paneWidth = 700;
         double paneHeight = 700;
 
-        if (x <= 0 || x + width >= paneWidth) {
+        if (x <= 0 || x + width >= PANE_WIDTH) {
             setDirectionX(directionX * -1);
         }
         if (y <= 0) {
             setDirectionY(directionY * -1);
         }
-        if (y + height >= paneHeight) {
+        if (y + height >= PANE_HEIGHT) {
             // rơi xuống -> reset ball lên paddle
             resetBall(paddle);
             player.setLives(player.getLives() - 1);

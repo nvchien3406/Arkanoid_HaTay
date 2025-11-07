@@ -2,6 +2,7 @@ package Models;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import GameController.GameConstant;
 
 import java.util.Objects;
 

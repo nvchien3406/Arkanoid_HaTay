@@ -48,7 +48,7 @@
         </VBox>
     </right>
    <center>
-        <AnchorPane fx:id="startGamePane" maxHeight="700.0" maxWidth="700.0" minHeight="700.0" minWidth="700.0" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #2d6a4f; -fx-border-color: #444; -fx-border-width: 5;" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="startGamePane" maxHeight="700.0" maxWidth="700.0" minHeight="700.0" minWidth="700.0" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #6fa194; -fx-border-color: #444; -fx-border-width: 5;" BorderPane.alignment="CENTER">
             <!-- Bạn sẽ add Paddle, Ball, Brick ở code -->
         </AnchorPane>
    </center>
