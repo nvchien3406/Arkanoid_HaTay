@@ -18,6 +18,7 @@
         <Button fx:id="replay" prefHeight="50.0" prefWidth="161.0" styleClass="menu-button" text="Restart" />
         <Button fx:id="Menu" prefHeight="50.0" prefWidth="161.0" styleClass="menu-button" text="Main Menu" />
     </HBox>
-    <Label fx:id="rank" layoutX="545.0" layoutY="330.0" prefHeight="40.0" prefWidth="120.0" styleClass="score-label" text="Rank: 000" />
+   <Label fx:id="rank" layoutX="545.0" layoutY="330.0" prefHeight="40.0" prefWidth="120.0" styleClass="score-label" text="Rank: 000" />
+
 
 </AnchorPane>
