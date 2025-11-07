@@ -3,7 +3,11 @@
 
 .root {
     -fx-background-color: linear-gradient(to bottom, #0a0a0a, #1b1b1b);
+<<<<<<< HEAD
     //-fx-font-family: "Orbitron", "Segoe UI", "Arial";
+=======
+//-fx-font-family: "Orbitron", "Segoe UI", "Arial";
+>>>>>>> d5bd168ad166939cbf013ec93ab872e63d809370
 }
 
 /*  ListView bảng điểm */
