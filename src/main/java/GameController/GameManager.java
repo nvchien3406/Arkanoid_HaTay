@@ -1,5 +1,6 @@
 package GameController;
 import Models.*;
+import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -127,9 +128,18 @@ public class GameManager {
         }
     }
 
-    // === Game lifecycle ===
+    public void pauseGame() {
+        if (gameTimer != null) gameTimer.stop();
+    }
+
+    public void resumeGame(StartGameController controller) {
+        if (gameTimer != null){
+            startGameLoop(controller);
+        }
+    }
+
     public void startGame(StartGameController controller) {
-        player = new Player("Bao", 0, 10);
+        player = new Player("Bao" ,0 , 3);
         scoreDAO = new ScoreDAO();
         gameState = true;
 
@@ -296,6 +306,11 @@ public class GameManager {
         scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
+
+        EndGameController endGameController = SceneTransition.switchSceneWithController(controller.getStage(), "endGame.fxml");
+        endGameController.setFinalScore(player.getScore());
+        endGameController.setRank(scoreDAO.getRankPlayer(player));
+
         player = null;
     }
 
@@ -309,10 +324,21 @@ public class GameManager {
     }
 
     private void startGameLoop(StartGameController controller) {
+        // 🔹 Lấy Scene để bắt phím
+        Scene scene = controller.getStartGamePane().getScene();
+        if (scene != null) {
+            setupKeyControls(scene);
+        } else {
+            // Nếu Scene chưa sẵn sàng (gặp khi load FXML), gắn listener
+            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) setupKeyControls(newScene);
+            });
+        }
+
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if(player != null && player.playerIsAlive()){
+                if(player.playerIsAlive()){
                     updateGame(controller);
                 }
                 else{
