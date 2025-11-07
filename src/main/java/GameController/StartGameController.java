@@ -1,6 +1,9 @@
 package GameController;
 
 import Models.*;
+import Utils.SceneTransition;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -18,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 
@@ -149,47 +153,63 @@ public class StartGameController {
         Pause.setText("RESUME");
         overlay.setVisible(true);
         pauseMenu.setVisible(true);
+
+        // Ban đầu menu nhỏ và trong suốt
+        //pauseMenu.setOpacity(0);
+        pauseMenu.setScaleX(0.6);
+        pauseMenu.setScaleY(0.6);
+
+        // Hiệu ứng mờ dần
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), pauseMenu);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        // Hiệu ứng phóng to nhẹ
+        ScaleTransition zoomIn = new ScaleTransition(Duration.millis(300), pauseMenu);
+        zoomIn.setFromX(0.6);
+        zoomIn.setFromY(0.6);
+        zoomIn.setToX(1);
+        zoomIn.setToY(1);
+
+        fadeIn.play();
+        zoomIn.play();
+    }
+
+    private void hidePauseMenu() {
+        isPaused = false;
+        Pause.setText("PAUSE");
+
+        // Fade out menu
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(200), pauseMenu);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+
+        fadeOut.setOnFinished(e -> {
+            pauseMenu.setVisible(false);
+            overlay.setVisible(false);
+        });
+
+        fadeOut.play();
     }
 
     private void resumeGame() {
         GameManager gameManager = GameManager.getInstance();
         gameManager.resumeGame(this); // Tiếp tục game loop
-        isPaused = false;
-        Pause.setText("PAUSE");
-        overlay.setVisible(false);
-        pauseMenu.setVisible(false);
+        hidePauseMenu();
     }
 
     private void restartGame() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameController/startGame.fxml"));
-            Parent root = loader.load();
+        hidePauseMenu();
 
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(HelloApplication.class.getResource("/GameController/startGame.css").toExternalForm());
-
-
-            Stage stage = (Stage) startGamePane.getScene().getWindow();
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = getStage();
+        SceneTransition.switchScene(stage, "startGame.fxml");
     }
 
     private void exitToMenu() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameController/menuGame.fxml"));
-            Parent root = loader.load();
+        hidePauseMenu();
 
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(HelloApplication.class.getResource("/GameController/menuGame.css").toExternalForm());
-
-            Stage stage = (Stage) startGamePane.getScene().getWindow();
-            stage.setScene(scene);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = getStage();
+        SceneTransition.switchScene(stage, "menuGame.fxml");
     }
 
     private void settingGame() {}
@@ -243,23 +263,7 @@ public class StartGameController {
         return startGamePane;
     }
 
-    private void switchScene(String fxmlFile) {
-        try {
-            Stage stage = (Stage) resume.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/GameController/" + fxmlFile));
-
-            Scene scene = new Scene(root);
-
-            // 🔹 Lấy tên CSS tương ứng với file FXML (nếu có)
-            String cssName = fxmlFile.replace(".fxml", ".css");
-            var cssUrl = getClass().getResource("/GameController/" + cssName);
-            if (cssUrl != null) {
-                scene.getStylesheets().add(cssUrl.toExternalForm());
-            }
-
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Stage getStage() {
+        return (Stage) startGamePane.getScene().getWindow();
     }
 }

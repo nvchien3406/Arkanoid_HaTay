@@ -1,13 +1,9 @@
-@font-face {
-    font-family: "Orbitron";
-    src: url("fonts/Orbitron-VariableFont_wght.ttf");
-}
 
 /* startGame.css - làm đẹp ScoreBoard */
 
 .root {
     -fx-background-color: linear-gradient(to bottom, #0a0a0a, #1b1b1b);
-    -fx-font-family: "Orbitron", "Segoe UI", "Arial";
+//-fx-font-family: "Orbitron", "Segoe UI", "Arial";
 }
 
 /*  ListView bảng điểm */
@@ -18,12 +14,12 @@
     -fx-padding: 5;
     -fx-control-inner-background: #1e1e1e;
     -fx-font-size: 16px;
-    -fx-text-fill: white;
 }
 
 .scoreboard-list .list-cell {
-    -fx-text-fill: white;
+    -fx-text-fill: #FFD700;
     -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #FFD700, 10, 0.5, 0, 0);
 }
 
 .scoreboard-list .list-cell:hover {
@@ -41,7 +37,6 @@
     -fx-text-fill: #00ffff;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-font-family: "Orbitron";
 }
 
 /* ===== Pause Menu ===== */
@@ -52,10 +47,15 @@
 }
 
 #pauseMenu Button {
-    -fx-pref-width: 200;
-    -fx-pref-height: 40;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-background-color: #2196F3;
+    -fx-background-color: linear-gradient(#42a5f5, #1e88e5);
     -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.3, 0, 2);
+}
+
+#pauseMenu Button:hover {
+    -fx-background-color: #1976D2; /* xanh đậm hơn khi hover */
+    -fx-cursor: hand; /* đổi con trỏ thành bàn tay */
 }

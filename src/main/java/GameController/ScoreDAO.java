@@ -1,5 +1,7 @@
 package GameController;
 
+import Models.Player;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,6 +73,23 @@ public class ScoreDAO {
         }
 
         return highScores;
+    }
+
+    public String getRankPlayer(Player player) {
+        String sql = "SELECT COUNT(*) + 1 AS Rank FROM scores WHERE score > ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, player.getScore());
+            ResultSet res = pstmt.executeQuery();
+            if(res.next()) {
+                return String.valueOf(res.getInt("Rank"));
+            }
+        } catch (SQLException e) {
+            System.out.println(" Lỗi đọc rank: " + e.getMessage());
+        }
+        return "N/A";
     }
 }
 

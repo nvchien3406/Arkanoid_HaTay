@@ -1,5 +1,6 @@
 package GameController;
 import Models.*;
+import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -101,7 +102,7 @@ public class GameManager {
     }
 
     public void startGame(StartGameController controller) {
-        player = new Player("Bao" ,0 , 10);
+        player = new Player("Bao" ,0 , 3);
         scoreDAO = new ScoreDAO();
         gameState = true;
 
@@ -209,7 +210,13 @@ public class GameManager {
         scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
+
+        EndGameController endGameController = SceneTransition.switchSceneWithController(controller.getStage(), "endGame.fxml");
+        endGameController.setFinalScore(player.getScore());
+        endGameController.setRank(scoreDAO.getRankPlayer(player));
+
         player = null;
+        scoreDAO = null;
     }
 
     private void startGameLoop(StartGameController controller) {
