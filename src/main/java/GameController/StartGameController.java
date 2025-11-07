@@ -47,7 +47,8 @@ public class StartGameController {
             "/image/Paddle.png"
     };
     public static final String[] BallImages = {
-            "/image/Ball.png"
+            "/image/NormalBall.png",
+            "/image/PierceBall.png"
     };
     public static final String[] powerUpImages = {
             "/image/ExpandPaddlePowerUp.png"
@@ -121,15 +122,12 @@ public class StartGameController {
         double startX = 550;   // ngay trên paddle
         double startY = 500;
 
-        Ball ball = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
-        startGamePane.getChildren().add(ball.getImageView());
-//        Image image = new Image(getClass().getResourceAsStream(BallImages[0]));
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitWidth(size);
-//        imageView.setFitHeight(size);
-//        imageView.setLayoutX(startX);
-//        imageView.setLayoutY(startY);
-        return ball;
+        Ball mainBall = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        GameManager gm = GameManager.getInstance();
+        gm.getListBalls().add(mainBall);
+        startGamePane.getChildren().add(mainBall.getImageView());
+
+        return mainBall;
     }
 
     public AnchorPane getStartGamePane() {
