@@ -1,6 +1,6 @@
 package GameController;
 import Models.*;
-import javafx.animation.AnimationTimer;
+import javafx.animation.*;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+
 
 public class GameManager {
     private static GameManager instance;
@@ -212,7 +216,7 @@ public class GameManager {
 
 
     public void updateGame(StartGameController controller){
-        checkCollisions();
+        checkCollisions(controller);
         ball.moveBallWithPaddle(paddle);
         paddle.movePaddle(controller);
         controller.updateCurrentScore(player.getScore());
@@ -249,9 +253,9 @@ public class GameManager {
 
     }
 
-    public void checkCollisions(){
+    public void checkCollisions(StartGameController controller){
         ball.checkPaddleCollision(paddle);
-        ball.checkBrickCollision(listBricks , player);
+        ball.checkBrickCollision(listBricks , player, controller);
         ball.checkWallCollision(paddle , player);
     }
 
@@ -322,4 +326,33 @@ public class GameManager {
         aimingArrow.setEndX(endX);
         aimingArrow.setEndY(endY);
     }
+
+    public void showScorePopup(StartGameController controller, double x, double y, int score) {
+        Text scoreText = new Text("+" + score);
+        scoreText.setFill(Color.GOLD);
+        scoreText.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        scoreText.setLayoutX(x);
+        scoreText.setLayoutY(y);
+
+        controller.getStartGamePane().getChildren().add(scoreText);
+
+        ScaleTransition scale = new ScaleTransition(Duration.millis(400), scoreText);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(1.5);
+        scale.setToY(1.5);
+
+        FadeTransition fade = new FadeTransition(Duration.millis(800), scoreText);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.0);
+
+        TranslateTransition moveUp = new TranslateTransition(Duration.millis(800), scoreText);
+        moveUp.setByY(-40);
+
+        ParallelTransition anim = new ParallelTransition(scale, fade, moveUp);
+        anim.setOnFinished(e -> controller.getStartGamePane().getChildren().remove(scoreText));
+        anim.play();
+    }
+
 }

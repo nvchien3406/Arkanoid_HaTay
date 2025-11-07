@@ -3,6 +3,7 @@ package Models;
 
 import GameController.GameConstant;
 import GameController.GameManager;
+import GameController.StartGameController;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -107,7 +108,7 @@ public class Ball extends MovableObject implements GameConstant {
             player.setLives(player.getLives() - 1);
         }
     }
-    public void checkBrickCollision(List<Brick> bricks , Player player) {
+    public void checkBrickCollision(List<Brick> bricks , Player player, StartGameController controller) {
         for (Brick brick : bricks) {
             if (brick instanceof Brick b && !b.isDestroyed() && checkCollision(brick)) {
                 // Bóng bật lại theo logic hiện tại
@@ -115,8 +116,13 @@ public class Ball extends MovableObject implements GameConstant {
 
                 // Ghi nhận hit rồi cộng điểm
                 brick.takeHit();
-                player.setScore(player.getScore() + 10);
+                int addScore = 10;
+                player.setScore(player.getScore() + addScore);
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
+
+                double popupX = brick.getX() + brick.getWidth() / 2;
+                double popupY = brick.getY() + brick.getHeight() / 2;
+                GameManager.getInstance().showScorePopup(controller, popupX, popupY, addScore);
 
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {

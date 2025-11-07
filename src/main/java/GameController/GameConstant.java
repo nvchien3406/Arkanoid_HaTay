@@ -13,7 +13,7 @@ public interface GameConstant {
 
     double PADDLE_WIDTH = 100;
     double PADDLE_HEIGHT = 20;
-    double PADDLE_SPEED = 5;
+    double PADDLE_SPEED = 3;
 
     double BALL_SIZE = 20;
     double BALL_SPEED = 3;
