@@ -35,7 +35,7 @@ public class ScoreDAO {
     }
 
     //  Ghi điểm mới
-    public void insertScore(String playerName, int score) {
+    public static void insertScore(String playerName, int score) {
         String sql = "INSERT INTO scores (player_name, score, created_at) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -53,7 +53,7 @@ public class ScoreDAO {
     }
 
     //  Lấy danh sách top 10 điểm cao
-    public List<String> getHighScores() {
+    public static List<String> getHighScores() {
         String sql = "SELECT player_name, score, created_at FROM scores ORDER BY score DESC LIMIT 10";
         List<String> highScores = new ArrayList<>();
 
@@ -75,7 +75,7 @@ public class ScoreDAO {
         return highScores;
     }
 
-    public String getRankPlayer(Player player) {
+    public static String getRankPlayer(Player player) {
         String sql = "SELECT COUNT(*) + 1 AS Rank FROM scores WHERE score > ?";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -90,6 +90,32 @@ public class ScoreDAO {
             System.out.println(" Lỗi đọc rank: " + e.getMessage());
         }
         return "N/A";
+    }
+
+    public static List<Player> getTopPlayers() {
+        List<Player> topPlayers = new ArrayList<>();
+
+        String sql = "SELECT player_name, score, " +
+                "(SELECT COUNT(*) + 1 FROM scores s2 WHERE s2.score > s1.score) AS rank " +
+                "From scores s1 ORDER BY s1.score DESC LIMIT 10";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(sql)){
+
+            while (res.next()) {
+                topPlayers.add(new Player(
+                        res.getString("player_name"),
+                        res.getInt("rank"),
+                        res.getInt("score"),
+                        0
+                ));
+            }
+        }catch(SQLException e){
+            System.out.println("Lỗi get top player: " + e.getMessage());
+        }
+
+        return topPlayers;
     }
 }
 
