@@ -4,6 +4,7 @@ package Models;
 import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.StartGameController;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -147,8 +148,9 @@ public class Ball extends MovableObject implements GameConstant {
 
                         gm.getListPowerUps().add(powerUp);
 
-                        AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
-                        pane.getChildren().add(powerUp.getImageView());
+                        controller.getStartGamePane().getChildren().add(powerUp.getImageView());
+                        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+                        if (pauseMenu != null) pauseMenu.toFront();
 
                     }
                 }

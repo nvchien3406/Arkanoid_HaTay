@@ -117,7 +117,44 @@ public class GameManager {
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
+    public void resetGameManager() {
+        GameManager gm = GameManager.getInstance();
+        // Stop AnimationTimer
+        if (gm.getGameTimer() != null) {
+            gm.getGameTimer().stop();
+            gm.setGameTimer(null);
+        }
 
+        // Clear all game objects
+        if (gm.getListBalls() != null) {
+            for (Ball b : gm.getListBalls()) {
+                if (b.getImageView() != null) b.getImageView().setVisible(false);
+            }
+            gm.getListBalls().clear();
+        }
+
+        if (gm.getListBricks() != null) {
+            for (Brick brick : gm.getListBricks()) {
+                if (brick.getImageView() != null) brick.getImageView().setVisible(false);
+            }
+            gm.getListBricks().clear();
+        }
+
+        if (gm.getListPowerUps() != null) {
+            for (PowerUp p : gm.getListPowerUps()) {
+                if (p.getImageView() != null) p.getImageView().setVisible(false);
+            }
+            gm.getListPowerUps().clear();
+        }
+
+        ballsToRemove.clear();
+        powerUpsToRemove.clear();
+        powerUpsToAdd.clear();
+
+        paddle = null;
+        player = null;
+        aimingArrow = null;
+    }
     // === Deferred operations API ===
     public void markBallForRemoval(Ball b) {
         if (b != null && !ballsToRemove.contains(b)) ballsToRemove.add(b);
@@ -280,11 +317,6 @@ public class GameManager {
         for (Ball ball : new ArrayList<>(listBalls)) {
             ball.moveBallWithPaddle(paddle);
         }
-
-        // 3) di chuyển paddle và cập nhật UI
-        for (Ball ball : listBalls) {
-            ball.moveBallWithPaddle(paddle);
-        }
         paddle.movePaddle(controller);
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
@@ -382,7 +414,7 @@ public class GameManager {
         listBalls.clear();
 
         gameState = false;
-        if (gameTimer != null) gameTimer.stop();
+        gameTimer.stop();
         disableKeyControls(controller.getStartGamePane().getScene());
         scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
@@ -393,6 +425,7 @@ public class GameManager {
         endGameController.setRank(scoreDAO.getRankPlayer(player));
 
         player = null;
+        scoreDAO = null;
     }
 
     public boolean hasActivePowerUp() {
