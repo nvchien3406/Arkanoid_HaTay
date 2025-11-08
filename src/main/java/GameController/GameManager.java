@@ -3,6 +3,7 @@ import Models.*;
 import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
 import javafx.animation.*;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
@@ -117,43 +118,75 @@ public class GameManager {
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
-    public void resetGameManager() {
-        GameManager gm = GameManager.getInstance();
-        // Stop AnimationTimer
-        if (gm.getGameTimer() != null) {
-            gm.getGameTimer().stop();
-            gm.setGameTimer(null);
+    public void resetGameManager(StartGameController controller) {
+        // 1️⃣ Dừng game loop
+        if (gameTimer != null) {
+            gameTimer.stop();
+            gameTimer = null;
         }
 
-        // Clear all game objects
-        if (gm.getListBalls() != null) {
-            for (Ball b : gm.getListBalls()) {
-                if (b.getImageView() != null) b.getImageView().setVisible(false);
-            }
-            gm.getListBalls().clear();
+        // 2️⃣ Disable input để tránh key/mouse cũ
+        if (controller != null && controller.getStartGamePane() != null) {
+            Scene scene = controller.getStartGamePane().getScene();
+            if (scene != null) disableKeyControls(scene);
         }
 
-        if (gm.getListBricks() != null) {
-            for (Brick brick : gm.getListBricks()) {
-                if (brick.getImageView() != null) brick.getImageView().setVisible(false);
+        // 3️⃣ Xóa tất cả balls
+        if (listBalls != null) {
+            for (Ball b : listBalls) {
+                if (b.getImageView() != null) {
+                    ((AnchorPane) b.getImageView().getParent()).getChildren().remove(b.getImageView());
+                }
             }
-            gm.getListBricks().clear();
+            listBalls.clear();
         }
 
-        if (gm.getListPowerUps() != null) {
-            for (PowerUp p : gm.getListPowerUps()) {
-                if (p.getImageView() != null) p.getImageView().setVisible(false);
+        // 4️⃣ Xóa tất cả bricks
+        if (listBricks != null) {
+            for (Brick brick : listBricks) {
+                if (brick.getImageView() != null) {
+                    ((AnchorPane) brick.getImageView().getParent()).getChildren().remove(brick.getImageView());
+                }
             }
-            gm.getListPowerUps().clear();
+            listBricks.clear();
+        }
+
+        // 5️⃣ Xóa tất cả powerups
+        if (listPowerUps != null) {
+            for (PowerUp p : listPowerUps) {
+                if (p.getImageView() != null) {
+                    ((AnchorPane) p.getImageView().getParent()).getChildren().remove(p.getImageView());
+                }
+            }
+            listPowerUps.clear();
         }
 
         ballsToRemove.clear();
         powerUpsToRemove.clear();
         powerUpsToAdd.clear();
 
+        // 6️⃣ Xóa paddle
+        if (paddle != null && paddle.getImageView() != null) {
+            ((AnchorPane) paddle.getImageView().getParent()).getChildren().remove(paddle.getImageView());
+        }
         paddle = null;
-        player = null;
+
+        // 7️⃣ Xóa aiming arrow
+        if (aimingArrow != null && controller != null && controller.getStartGamePane() != null) {
+            controller.getStartGamePane().getChildren().remove(aimingArrow);
+        }
         aimingArrow = null;
+
+        // 8️⃣ Reset player & score DAO
+        player = null;
+        if (scoreDAO != null) {
+            scoreDAO = null;
+        }
+
+        // 9️⃣ Remove tất cả scoreboard/highscore Text nodes (nếu có)
+        if (controller != null && controller.getStartGamePane() != null) {
+            controller.getStartGamePane().getChildren().removeIf(node -> node instanceof Text);
+        }
     }
     // === Deferred operations API ===
     public void markBallForRemoval(Ball b) {
@@ -336,7 +369,7 @@ public class GameManager {
         }
 
         // 5) dọn dẹp deferred removes / thêm deferred adds
-        cleanupDeferred();
+        cleanupDeferred(controller);
     }
 
     public void handelInput(){
@@ -352,7 +385,7 @@ public class GameManager {
     }
 
     // ===== cleanup deferred removals & spawn ball if needed =====
-    private void cleanupDeferred() {
+    private void cleanupDeferred(StartGameController controller) {
         // 1) Thêm powerups queued (nếu có)
         if (!powerUpsToAdd.isEmpty()) {
             listPowerUps.addAll(powerUpsToAdd);
@@ -378,13 +411,13 @@ public class GameManager {
 
             // Nếu KHÔNG còn bóng nào trên màn hình -> spawn 1 bóng mới trên paddle
             if (listBalls.isEmpty()) {
-                spawnBallOnPaddleAndLoseLife();
+                spawnBallOnPaddleAndLoseLife(controller);
             }
         }
     }
 
     // Tạo 1 quả bóng mới ở giữa paddle và trừ 1 mạng
-    private void spawnBallOnPaddleAndLoseLife() {
+    private void spawnBallOnPaddleAndLoseLife(StartGameController controller) {
         if (paddle == null || player == null) return;
 
         Ball newBall = new Ball(
@@ -397,25 +430,23 @@ public class GameManager {
         newBall.setStanding(true);
         listBalls.add(newBall);
 
-        // add to scene graph
-        AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
-        pane.getChildren().add(newBall.getImageView());
+//        controller.getStartGamePane().getChildren().add(powerUp.getImageView());
+//        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+//        if (pauseMenu != null) pauseMenu.toFront();
+
+        controller.getStartGamePane().getChildren().add(newBall.getImageView());
+        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+        if (pauseMenu != null) pauseMenu.toFront();
+
+//        // add to scene graph
+//        AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
+//        pane.getChildren().add(newBall.getImageView());
 
         // trừ mạng
         player.setLives(player.getLives() - 1);
     }
 
     public void gameOver(StartGameController controller){
-        paddle = null;
-        // remove nodes and clear lists
-        for (Ball ball : listBalls) {
-            if (ball.getImageView() != null) ball.getImageView().setVisible(false);
-        }
-        listBalls.clear();
-
-        gameState = false;
-        gameTimer.stop();
-        disableKeyControls(controller.getStartGamePane().getScene());
         scoreDAO.insertScore(player.getPlayerName(),  player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
@@ -426,6 +457,7 @@ public class GameManager {
 
         player = null;
         scoreDAO = null;
+        resetGameManager(controller);
     }
 
     public boolean hasActivePowerUp() {

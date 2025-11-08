@@ -201,14 +201,14 @@ public class StartGameController implements GameConstant{
 
     private void restartGame() {
         hidePauseMenu();
-        GameManager.getInstance().resetGameManager();
+        GameManager.getInstance().resetGameManager(this);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "startGame.fxml");
     }
 
     private void exitToMenu() {
         hidePauseMenu();
-        GameManager.getInstance().resetGameManager();
+        GameManager.getInstance().resetGameManager(this);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");
     }
