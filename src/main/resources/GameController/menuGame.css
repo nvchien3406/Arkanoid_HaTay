@@ -1,0 +1,29 @@
+@font-face {
+    font-family: "Orbitron";
+    src: url("../fonts/Orbitron-VariableFont_wght.ttf");
+}
+
+.menu-title1 {
+    -fx-font-size: 60px;
+    -fx-text-fill: #00ffff;
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
+}
+
+.menu-title2 {
+    -fx-font-size: 28px;
+    -fx-text-fill: #00ffff;
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
+    -fx-opacity: 0.8;
+}
+
+.button {
+    -fx-font-size: 20px;
+    -fx-background-color: linear-gradient(#222, #000);
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20 10 20;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#00ffff, #004444);
+}

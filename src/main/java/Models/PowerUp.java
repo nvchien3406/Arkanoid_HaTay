@@ -56,7 +56,7 @@ public abstract class PowerUp extends MovableObject {
 
     public void update() {
         if (!collected) {
-            y += 5;
+            y += 0.5;
             imageView.setLayoutY(y);
 
             // Nếu rơi quá đáy màn hình → đánh dấu hết hạn

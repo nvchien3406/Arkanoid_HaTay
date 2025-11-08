@@ -1,21 +1,19 @@
 package Models;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import GameController.GameConstant;
 
 import java.util.Objects;
 
 
-public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
+public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
 
-    public ExpandPaddlePowerUp() {
+    public ShrinkPaddlePowerDown() {
         super();
     }
 
-    public ExpandPaddlePowerUp(double x, double y) {
-        super(x, y, 32, 32, "/image/ExpandPaddlePowerUp.png", 0, 3,
-                "Expand Paddle", 10.0, false, false, 0.0);
+    public ShrinkPaddlePowerDown(double x, double y) {
+        super(x, y, 32, 32, "/image/ShrinkPaddlePowerDown.png", 0, 3,
+                "Shrink Paddle", 10.0, false, false, 0.0);
     }
 
     @Override
@@ -23,16 +21,15 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
         if (obj instanceof Paddle) {
             Paddle p = (Paddle) obj;
             double paneWidth = 700;
-            double newWidth = p.getBaseWidth() * 1.5;
+            double newWidth = p.getBaseWidth() * 0.7;
             double center = p.getX() + p.getWidth() / 2;
 
             p.setWidth(newWidth);
             p.getImageView().setFitWidth(newWidth);
 
             double newX = center - newWidth / 2;
-
-            if (newX <= 0) newX = 0;
-            else if (newX + newWidth >= paneWidth) newX = paneWidth - newWidth;
+            if (newX < 0) newX = 0;
+            else if (newX + newWidth > paneWidth) newX = paneWidth - newWidth;
 
             p.setX(newX);
             p.getImageView().setLayoutX(newX);
@@ -49,15 +46,19 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
     public void removeEffect(GameObject obj) {
         if (obj instanceof Paddle) {
             Paddle p = (Paddle) obj;
-
+            double paneWidth = 700;
             double newWidth = p.getBaseWidth();
             double center = p.getX() + p.getWidth() / 2;
 
             p.setWidth(newWidth);
             p.getImageView().setFitWidth(newWidth);
 
-            p.setX(center - newWidth / 2);
-            p.getImageView().setLayoutX(p.getX());
+            double newX = center - newWidth / 2;
+            if (newX < 0) newX = 0;
+            else if (newX + newWidth > paneWidth) newX = paneWidth - newWidth;
+
+            p.setX(newX);
+            p.getImageView().setLayoutX(newX);
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
