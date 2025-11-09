@@ -15,9 +15,9 @@ import java.util.List;
 
 
 public class Ball extends MovableObject implements GameConstant {
-    private double speed, directionX, directionY;
-    private boolean isStanding = true;
-    private boolean pierceMode = false;
+    protected double speed, directionX, directionY;
+    protected boolean isStanding = true;
+    protected boolean pierceMode = false;
 
     public Ball () {
         super();

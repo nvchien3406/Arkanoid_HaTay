@@ -403,15 +403,26 @@ public class GameManager {
 
         // 3) Xóa balls deferred (đảm bảo xóa sau khi vòng lặp xong)
         if (!ballsToRemove.isEmpty()) {
+            boolean pierceBallRemoved = false;
+
             for (Ball b : ballsToRemove) {
+                // Kiểm tra nếu là PierceBall
+                if (b instanceof PierceBall) {
+                    pierceBallRemoved = true;
+                }
                 listBalls.remove(b);
                 if (b.getImageView() != null) b.getImageView().setVisible(false);
             }
             ballsToRemove.clear();
 
-            // Nếu KHÔNG còn bóng nào trên màn hình -> spawn 1 bóng mới trên paddle
             if (listBalls.isEmpty()) {
-                spawnBallOnPaddleAndLoseLife(controller);
+                if (pierceBallRemoved) {
+                    // PierceBall vừa đi khỏi màn hình → spawn ball bình thường, không trừ mạng
+                    spawnBallOnPaddleWithoutLosingLife(controller);
+                } else {
+                    // Bóng bình thường → spawn ball và trừ mạng
+                    spawnBallOnPaddleAndLoseLife(controller);
+                }
             }
         }
     }
@@ -430,20 +441,34 @@ public class GameManager {
         newBall.setStanding(true);
         listBalls.add(newBall);
 
-//        controller.getStartGamePane().getChildren().add(powerUp.getImageView());
-//        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
-//        if (pauseMenu != null) pauseMenu.toFront();
-
         controller.getStartGamePane().getChildren().add(newBall.getImageView());
         Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
         if (pauseMenu != null) pauseMenu.toFront();
 
-//        // add to scene graph
-//        AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
-//        pane.getChildren().add(newBall.getImageView());
-
-        // trừ mạng
         player.setLives(player.getLives() - 1);
+    }
+
+    // Tạo 1 quả bóng mới ở giữa paddle mà KHÔNG trừ mạng
+    private void spawnBallOnPaddleWithoutLosingLife(StartGameController controller) {
+        if (paddle == null || player == null) return;
+
+        Ball newBall = new Ball(
+                paddle.getX() + paddle.getWidth() / 2 - 10,
+                paddle.getY() - 20,
+                20, 20,
+                StartGameController.BallImages[0],
+                3, 0, -1
+        );
+        newBall.setStanding(true); // chờ người chơi bắn
+        listBalls.add(newBall);
+
+        // Thêm vào scene
+        controller.getStartGamePane().getChildren().add(newBall.getImageView());
+
+        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+        if (pauseMenu != null) pauseMenu.toFront();
+
+        // Không trừ mạng người chơi
     }
 
     public void gameOver(StartGameController controller){

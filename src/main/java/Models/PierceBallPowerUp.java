@@ -1,18 +1,23 @@
 package Models;
 
+import GameController.GameConstant;
 import GameController.GameManager;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
-public class PierceBallPowerUp extends PowerUp {
+import java.util.ArrayList;
+
+public class PierceBallPowerUp extends PowerUp implements GameConstant {
 
     public PierceBallPowerUp() {
         super();
     }
 
+
     public PierceBallPowerUp(double x, double y) {
         super(x, y, 32, 32,
                 "/image/PierceBallPowerUp.png",
-                0, 3, "Pierce Ball", 8.0,
+                0, 3, "Pierce Ball", 12,
                 false, false, 0.0);
     }
 
@@ -20,31 +25,36 @@ public class PierceBallPowerUp extends PowerUp {
     public void applyEffect(GameObject obj) {
         if (obj instanceof Paddle) {
             GameManager gm = GameManager.getInstance();
-            AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
+            Paddle paddle = gm.getPaddle();
+            AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
 
-            // Thay toàn bộ bóng hiện có bằng PierceBall
-            for (int i = 0; i < gm.getListBalls().size(); i++) {
-                Ball oldBall = gm.getListBalls().get(i);
-
-                PierceBall newBall = new PierceBall(
-                        oldBall.getX(),
-                        oldBall.getY(),
-                        oldBall.getSpeed(),
-                        oldBall.getDirectionX(),
-                        oldBall.getDirectionY()
-                );
-
-                newBall.setStanding(oldBall.isStanding());
-
-                // Thay trong danh sách và scene graph
-                gm.getListBalls().set(i, newBall);
+            // 1️⃣ Xóa tất cả bóng hiện có KHÔNG trừ mạng
+            for (Ball oldBall : new ArrayList<>(gm.getListBalls())) {
                 pane.getChildren().remove(oldBall.getImageView());
-                pane.getChildren().add(newBall.getImageView());
             }
+            gm.getListBalls().clear();
+
+            // 2️⃣ Tạo 1 PierceBall mới ở giữa paddle, đứng yên
+            PierceBall pierceBall = new PierceBall(
+                    paddle.getX() + paddle.getWidth() / 2 - 10,
+                    paddle.getY() - 20,
+                    3,
+                    0, -1
+            );
+            pierceBall.setStanding(true); // chờ bắn bằng chuột
+            gm.getListBalls().add(pierceBall);
+
+            // 3️⃣ Thêm vào scene graph
+            pane.getChildren().add(pierceBall.getImageView());
+
+            // 4️⃣ Đảm bảo mũi tên aiming vẫn ở trên cùng nếu đang hiển thị
+            Node pauseMenu = pane.lookup("#pauseMenu");
+            if (pauseMenu != null) pauseMenu.toFront();
 
             setActive(true);
         }
     }
+
 
     @Override
     public void removeEffect(GameObject obj) {
