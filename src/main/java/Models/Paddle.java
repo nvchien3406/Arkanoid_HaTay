@@ -9,17 +9,16 @@ import javafx.scene.image.ImageView;
 
 public class Paddle extends MovableObject{
     private double speed;
-    public boolean moveL = false;
-    public boolean moveR = false;
     private double baseWidth;
-
-    public double getSpeed() {
-        return speed;
-    }
+    private boolean moveL = false;
+    private boolean moveR = false;
 
     public Paddle() {
         super();
         speed = 0;
+        baseWidth = 0;
+        moveL = false;
+        moveR = false;
     }
 
     public Paddle(double x, double y, double width, double height, String path, double dx, double dy, double speed,
@@ -31,6 +30,30 @@ public class Paddle extends MovableObject{
         this.imageView.setLayoutX(x);
         this.imageView.setLayoutY(y);
         this.baseWidth = width;
+    }
+
+    public void setBaseWidth(double baseWidth) {
+        this.baseWidth = baseWidth;
+    }
+
+    public boolean isMoveL() {
+        return moveL;
+    }
+
+    public void setMoveL(boolean moveL) {
+        this.moveL = moveL;
+    }
+
+    public boolean isMoveR() {
+        return moveR;
+    }
+
+    public void setMoveR(boolean moveR) {
+        this.moveR = moveR;
+    }
+
+    public double getSpeed() {
+        return speed;
     }
 
     public void setSpeed(double speed) {
@@ -56,7 +79,7 @@ public class Paddle extends MovableObject{
         imageView.setLayoutY(getY());
     }
 
-    public void movePaddle(StartGameController controller) {
+    public void update(StartGameController controller) {
         if (moveL) {
             moveLeft(controller);
         }
@@ -64,9 +87,4 @@ public class Paddle extends MovableObject{
             moveRight(controller);
         }
     }
-
-    public void render(GraphicsContext g) {
-
-    }
-
 }

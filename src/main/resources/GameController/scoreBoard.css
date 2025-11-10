@@ -1,0 +1,89 @@
+/* ---------- Toàn cảnh ---------- */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #000000, #020c1b);
+    -fx-text-fill: white;
+}
+
+/* ---------- Tiêu đề ---------- */
+.label {
+    -fx-text-fill: cyan;
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #00ffff, 10, 0.5, 0, 0);
+}
+
+/* ---------- Bảng điểm ---------- */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #00ffff;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-control-inner-background: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #00ffff33, #00444433);
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: #00ffff44;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: cyan;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-text-fill: #FFD700;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER; /* căn giữa nội dung cell */
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, #00ffff44, #004444aa);
+    -fx-text-fill: white;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: linear-gradient(to right, #00ffff22, #00444488);
+}
+
+/* ---------- VBox chứa bảng ---------- */
+.vbox {
+    -fx-background-color: rgba(0,0,0,0.3);
+    -fx-background-radius: 15;
+    -fx-border-color: #00ffff44;
+    -fx-border-radius: 15;
+    -fx-padding: 20;
+}
+
+/* ---------- Nút quay lại ---------- */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #00ffff, #007777);
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-background-radius: 10;
+    -fx-padding: 8 20 8 20;
+    -fx-effect: dropshadow(gaussian, #00ffff, 10, 0.5, 0, 0);
+    -fx-cursor: hand;
+    -fx-transition: 0.2s;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #00ffff, #00aaaa);
+    -fx-text-fill: white;
+}

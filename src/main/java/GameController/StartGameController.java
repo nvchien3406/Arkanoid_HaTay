@@ -194,6 +194,7 @@ public class StartGameController implements GameConstant{
     }
 
     private void resumeGame() {
+        SoundManager.ResumeSoundBackground();
         GameManager gameManager = GameManager.getInstance();
         gameManager.resumeGame(this); // Tiếp tục game loop
         hidePauseMenu();
@@ -208,12 +209,19 @@ public class StartGameController implements GameConstant{
 
     private void exitToMenu() {
         hidePauseMenu();
+        SoundManager.PauseSoundBackground();
         GameManager.getInstance().resetGameManager(this);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");
     }
 
-    private void settingGame() {}
+    private void settingGame() {
+        SoundManager.StopSoundBackground();
+        Stage stage = getStage();
+        Scene currentScene = getScene();
+        SettingsController.setBackScene(currentScene);
+        SceneTransition.switchScene(stage, "settings.fxml");
+    }
 
     @FXML
     public Paddle LoadPaddle() {
@@ -252,6 +260,10 @@ public class StartGameController implements GameConstant{
         Score.setText(String.valueOf(score));
     }
 
+    public void updateCurrentTopScore(int topScore) {
+        TopScore.setText(String.valueOf(topScore));
+    }
+
     // Hiển thị danh sách top 10
     public void updateHighScores(List<String> topScores) {
         scoreBoard.getItems().setAll(topScores);
@@ -263,5 +275,9 @@ public class StartGameController implements GameConstant{
 
     public Stage getStage() {
         return (Stage) startGamePane.getScene().getWindow();
+    }
+
+    public Scene getScene() {
+        return (Scene) startGamePane.getScene();
     }
 }
