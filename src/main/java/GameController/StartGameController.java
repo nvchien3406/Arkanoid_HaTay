@@ -73,30 +73,15 @@ public class StartGameController implements GameConstant{
     };
 
     @FXML
-    public List<Brick> LoadBrick() {
+    public List<Brick> LoadBrick(int[][] map) {
         List<Brick> bricks = new ArrayList();
         Random random = new Random();
 
-        int[][] pattern = {
-                {5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 4, 1, 1, 4, 4, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1},
-                {1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1},
-                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
-                {1, 4, 6, 4, 4, 6, 4, 1, 1, 1, 1, 3, 6, 3, 3, 6, 3, 1},
-                {4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3},
-                {4, 1, 4, 4, 4, 4, 1, 4, 1, 1, 3, 1, 3, 3, 3, 3, 1, 3},
-                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
-                {1, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2}
+        int R = map.length;
+        int C = map[0].length;
 
-        };
-
-        for (int row = ROWS - 1; row >= 0; row--) {
-            for (int col = 0; col < COLS; col++) {
+        for (int row = R - 1; row >= 0; row--) {
+            for (int col = 0; col < C; col++) {
 
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
@@ -104,12 +89,12 @@ public class StartGameController implements GameConstant{
                 double x = col * BRICK_WIDTH + 62;
                 double y = row * BRICK_HEIGHT + 50;
 
-                String imgPath = brickImages[pattern[row][col]].getKey();
+                String imgPath = brickImages[map[row][col]].getKey();
 
                 Brick brick;
-                if (brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
+                if (brickImages[map[row][col]].getValue().equals("NormalBrick")) {
                     brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                } else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
+                } else if (brickImages[map[row][col]].getValue().equals("StrongBrick")) {
                     brick = new StrongBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
                 } else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
 
@@ -202,7 +187,7 @@ public class StartGameController implements GameConstant{
 
     private void restartGame() {
         hidePauseMenu();
-        GameManager.getInstance().resetGameManager(this);
+        GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "startGame.fxml");
     }
@@ -210,7 +195,7 @@ public class StartGameController implements GameConstant{
     private void exitToMenu() {
         hidePauseMenu();
         SoundManager.PauseSoundBackground();
-        GameManager.getInstance().resetGameManager(this);
+        GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");
     }
