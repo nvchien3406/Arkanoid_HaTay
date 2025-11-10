@@ -176,7 +176,7 @@ public class Ball extends MovableObject implements GameConstant {
         if (dy == 0) return;
         if (checkCollision(paddle)) {
             if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
-                bounceOff(paddle);
+                //bounceOff(paddle);
 
                 double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
                 double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);

@@ -1,5 +1,6 @@
 package GameController;
 
+import DAO.ScoreDAO;
 import Models.Player;
 import Utils.SceneTransition;
 import javafx.fxml.FXML;

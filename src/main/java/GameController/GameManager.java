@@ -1,4 +1,5 @@
 package GameController;
+import DAO.ScoreDAO;
 import Models.*;
 import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
@@ -6,12 +7,8 @@ import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;

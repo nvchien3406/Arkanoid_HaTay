@@ -1,4 +1,4 @@
-package GameController;
+package DAO;
 
 import Models.Player;
 

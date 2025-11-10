@@ -11,4 +11,6 @@ module GameController {
     opens GameController to javafx.fxml;
     exports GameController;
     opens Models to javafx.base;
+    exports DAO;
+    opens DAO to javafx.fxml;
 }
