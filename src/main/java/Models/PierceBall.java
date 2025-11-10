@@ -1,10 +1,15 @@
 package Models;
 
+import GameController.GameConstant;
 import GameController.GameManager;
+import GameController.SoundManager;
+import GameController.StartGameController;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.List;
 import java.util.Objects;
 
 public class PierceBall extends Ball {
@@ -18,7 +23,6 @@ public class PierceBall extends Ball {
 
     public PierceBall(double x, double y, double speed, double dirX, double dirY) {
         super(x, y, 80, 32, "/image/PierceBallPowerUp1.png", speed, dirX, dirY);
-        setPierceMode(true);
 
         Image img = new Image(Objects.requireNonNull(
                 getClass().getResource("/image/PierceBallPowerUp1.png")
@@ -33,9 +37,10 @@ public class PierceBall extends Ball {
     }
 
     @Override
-    public void checkWallCollision(Paddle paddle, Player player) {
+    public void checkWallCollision() {
         GameManager gm = GameManager.getInstance();
-        if (x <= 0 || x + width >= PANE_WIDTH || y<= 0) GameManager.getInstance().markBallForRemoval(this);
+        if (x <= 0 || x + width >= GameConstant.PANE_WIDTH || y <= 0)
+            GameManager.getInstance().markBallForRemoval(this);
     }
 
 
@@ -62,5 +67,19 @@ public class PierceBall extends Ball {
 
     public void stopAnimation() {
         if (animationTimer != null) animationTimer.stop();
+    }
+
+    @Override
+    public void playBallMusic() {
+        SoundManager.PlayExplosion();
+    }
+
+    @Override
+    public void handleBrickCollision(List<Brick> bricks, Player player, StartGameController controller) {
+        for (Brick brick : bricks) {
+            if (!brick.isDestroyed() && checkCollision(brick)) {
+                processBrickHit(brick, player, controller);
+            }
+        }
     }
 }

@@ -374,9 +374,11 @@ public class GameManager {
 
     public void checkCollisions(StartGameController controller){
         for (Ball ball : new ArrayList<>(listBalls)){
-            ball.checkPaddleCollision(paddle);
-            ball.checkBrickCollision(listBricks , player,controller);
-            ball.checkWallCollision(paddle , player);
+            if (ball instanceof NormalBall) {
+                ((NormalBall)ball).controlledBounceOff(paddle);
+            }
+            ball.handleBrickCollision(listBricks,player,controller);
+            ball.checkWallCollision();
         }
     }
 
@@ -427,13 +429,14 @@ public class GameManager {
     private void spawnBallOnPaddleAndLoseLife(StartGameController controller) {
         if (paddle == null || player == null) return;
 
-        Ball newBall = new Ball(
+        Ball newBall = new NormalBall(
                 paddle.getX() + paddle.getWidth() / 2 - 10,
                 paddle.getY() - 20,
                 20, 20,
-                StartGameController.BallImages[0],
+                GameConstant.BallImages[0],
                 3, 0, -1
         );
+
         newBall.setStanding(true);
         listBalls.add(newBall);
 
@@ -457,11 +460,11 @@ public class GameManager {
     private void spawnBallOnPaddleWithoutLosingLife(StartGameController controller) {
         if (paddle == null || player == null) return;
 
-        Ball newBall = new Ball(
+        Ball newBall = new NormalBall(
                 paddle.getX() + paddle.getWidth() / 2 - 10,
                 paddle.getY() - 20,
                 20, 20,
-                StartGameController.BallImages[0],
+                GameConstant.BallImages[0],
                 3, 0, -1
         );
         newBall.setStanding(true); // chờ người chơi bắn
@@ -566,7 +569,7 @@ public class GameManager {
         aimingArrow.setEndY(endY);
     }
 
-    public void showScorePopup(StartGameController controller, double x, double y, int score) {
+    public void showScorePopup(StartGameController controller ,double x, double y, int score) {
         Text scoreText = new Text("+" + score);
         scoreText.setFill(Color.GOLD);
         scoreText.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -574,7 +577,7 @@ public class GameManager {
         scoreText.setLayoutX(x);
         scoreText.setLayoutY(y);
 
-        controller.getStartGamePane().getChildren().add(scoreText);
+       controller.getStartGamePane().getChildren().add(scoreText);
 
         ScaleTransition scale = new ScaleTransition(Duration.millis(400), scoreText);
         scale.setFromX(1.0);
@@ -594,4 +597,22 @@ public class GameManager {
         anim.play();
     }
 
+    public void spawnPowerUps(Brick brick, StartGameController controller) {
+        // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện
+        if (this.getListBalls().size() == 1
+                && this.getListPowerUps().stream().noneMatch(p -> !p.isExpired())
+                && !this.hasActivePowerUp()) {
+
+            // Factory Method
+            PowerUpFactory factory = PowerUpFactoryProducer.getRandomFactory();
+            PowerUp powerUp = factory.createPowerUp(brick.getX() + 10, brick.getY());
+
+            this.getListPowerUps().add(powerUp);
+
+            controller.getStartGamePane().getChildren().add(powerUp.getImageView());
+            Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+            if (pauseMenu != null) pauseMenu.toFront();
+
+        }
+    }
 }

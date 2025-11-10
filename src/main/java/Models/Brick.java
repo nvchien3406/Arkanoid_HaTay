@@ -17,7 +17,7 @@ public abstract class Brick extends GameObject {
     protected final int frameHeight = 16;
     private final int totalFrames = 8;
     private int currentFrame = 0;
-    private boolean breaking = false;
+    protected boolean breaking = false;
 
     private AnimationTimer breakAnimation;
 
@@ -39,18 +39,6 @@ public abstract class Brick extends GameObject {
         imageView.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
 
-    public void takeHit() {
-        if (breaking || isDestroyed() || this instanceof SpecialBrick) return;
-
-        hitPoints--;
-        if (hitPoints > 0) {
-            update();
-        } else {
-            startBreakAnimation();
-
-        }
-    }
-
     public boolean isDestroyed() {
         return hitPoints == 0;
     }
@@ -63,7 +51,7 @@ public abstract class Brick extends GameObject {
         }
     }
 
-    private void startBreakAnimation() {
+    protected void startBreakAnimation() {
         breaking = true;
         currentFrame++;
 

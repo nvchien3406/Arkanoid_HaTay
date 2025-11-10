@@ -20,9 +20,9 @@ public class ThreeBallPowerUp extends PowerUp {
 
         for (Ball b : currentBalls) {
             // tạo 2 bóng mới lệch hướng
-            Ball left = new Ball(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
+            Ball left = new NormalBall(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
                     "/image/NormalBall.png", 4, b.getDirectionX() - 0.4, b.getDirectionY());
-            Ball right = new Ball(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
+            Ball right = new NormalBall(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
                     "/image/NormalBall.png", 4, b.getDirectionX() + 0.4, b.getDirectionY());
 
             left.setStanding(false);

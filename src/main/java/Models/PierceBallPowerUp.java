@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 
-public class PierceBallPowerUp extends PowerUp implements GameConstant {
+public class PierceBallPowerUp extends PowerUp{
 
     public PierceBallPowerUp() {
         super();
@@ -66,7 +66,7 @@ public class PierceBallPowerUp extends PowerUp implements GameConstant {
             Ball current = gm.getListBalls().get(i);
 
             if (current instanceof PierceBall pb) {
-                Ball normalBall = new Ball(
+                Ball normalBall = new NormalBall(
                         pb.getX(),
                         pb.getY(),
                         20, 20,

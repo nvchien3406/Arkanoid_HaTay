@@ -1,5 +1,9 @@
 package Models;
 
+import GameController.GameConstant;
+import GameController.GameManager;
+import GameController.StartGameController;
+
 public class Player {
     private String playerName;
     private int score;
@@ -47,5 +51,9 @@ public class Player {
 
     public boolean playerIsAlive() {
         return lives > 0;
+    }
+
+    public void addScore() {
+        score += GameConstant.addScore;
     }
 }
