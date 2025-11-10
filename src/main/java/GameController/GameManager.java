@@ -253,8 +253,8 @@ public class GameManager {
 
     public void setupKeyControls(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.moveL = true;
-            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.moveR = true;
+            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.setMoveL(true);
+            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.setMoveR(true);
             if (event.getCode() == javafx.scene.input.KeyCode.SPACE) {
                 for (Ball ball : listBalls) {
                     if (ball.isStanding()) {
@@ -268,8 +268,8 @@ public class GameManager {
         });
 
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.moveL = false;
-            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.moveR = false;
+            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.setMoveL(false);
+            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.setMoveR(false);
         });
 
         scene.setOnMousePressed(event -> {
@@ -350,11 +350,11 @@ public class GameManager {
         for (Ball ball : new ArrayList<>(listBalls)) {
             ball.moveBallWithPaddle(paddle);
         }
-        paddle.movePaddle(controller);
+        paddle.update(controller);
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
-        paddle.movePaddle(controller);
+        paddle.update(controller);
 
         // 4) update powerups (dùng bản sao)
         if (listPowerUps != null && !listPowerUps.isEmpty()) {
