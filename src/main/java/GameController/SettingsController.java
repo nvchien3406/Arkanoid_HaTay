@@ -77,8 +77,8 @@ public class SettingsController {
          //SoundManager.setMasterVolume(muted ? 0 : volume);
         System.out.println("Settings saved: volume=" + volume + "audioClip=" + audioClip + " muted=" + muted);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Đã lưu cài đặt!", ButtonType.OK);
-        alert.showAndWait();
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Đã lưu cài đặt!", ButtonType.OK);
+//        alert.showAndWait();
     }
 
     @FXML

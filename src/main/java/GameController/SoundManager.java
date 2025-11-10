@@ -55,6 +55,18 @@ public class SoundManager {
         }
     }
 
+    public static void PauseSoundBackground() {
+        if(soundBackground != null) {
+            soundBackground.pause();
+        }
+    }
+
+    public static void ResumeSoundBackground() {
+        if(soundBackground != null) {
+            soundBackground.play();
+        }
+    }
+
     public static void PlaySoundMenuBackground() {
         try {
             soundMenuBackground.setCycleCount(MediaPlayer.INDEFINITE);

@@ -194,6 +194,7 @@ public class StartGameController implements GameConstant{
     }
 
     private void resumeGame() {
+        SoundManager.ResumeSoundBackground();
         GameManager gameManager = GameManager.getInstance();
         gameManager.resumeGame(this); // Tiếp tục game loop
         hidePauseMenu();
@@ -208,7 +209,7 @@ public class StartGameController implements GameConstant{
 
     private void exitToMenu() {
         hidePauseMenu();
-        SoundManager.StopSoundBackground();
+        SoundManager.PauseSoundBackground();
         GameManager.getInstance().resetGameManager(this);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");

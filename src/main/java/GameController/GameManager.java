@@ -347,11 +347,10 @@ public class GameManager {
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
-        paddle.update(controller);
 
         controller.updateCurrentTopScore(ScoreDAO.getTopScores());
 
-        paddle.movePaddle(controller);
+        paddle.update(controller);
 
         // 4) update powerups (dùng bản sao)
         if (listPowerUps != null && !listPowerUps.isEmpty()) {
