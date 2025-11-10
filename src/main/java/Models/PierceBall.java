@@ -1,5 +1,6 @@
 package Models;
 
+import GameController.GameManager;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -30,6 +31,13 @@ public class PierceBall extends Ball {
 
         startAnimation();
     }
+
+    @Override
+    public void checkWallCollision(Paddle paddle, Player player) {
+        GameManager gm = GameManager.getInstance();
+        if (x <= 0 || x + width >= PANE_WIDTH || y<= 0) GameManager.getInstance().markBallForRemoval(this);
+    }
+
 
     private void startAnimation() {
         animationTimer = new AnimationTimer() {

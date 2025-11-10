@@ -226,6 +226,9 @@ public class GameManager {
         scoreDAO = new ScoreDAO();
         gameState = true;
 
+        //SoundManager.StopSoundMenuBackground();
+        SoundManager.PlaySoundBackground();
+
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
 
@@ -237,24 +240,14 @@ public class GameManager {
         // ✅ Chỉ gọi 1 lần
         controller.LoadBall();
 
-        // 🔹 Lấy Scene để bắt phím
-        Scene scene = controller.getStartGamePane().getScene();
-        if (scene != null) {
-            setupKeyControls(scene);
-        } else {
-            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) setupKeyControls(newScene);
-            });
-        }
-
         // 🔹 Bắt đầu vòng lặp game
         startGameLoop(controller);
     }
 
     public void setupKeyControls(Scene scene) {
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.moveL = true;
-            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.moveR = true;
+            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.setMoveL(true);
+            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.setMoveR(true);
             if (event.getCode() == javafx.scene.input.KeyCode.SPACE) {
                 for (Ball ball : listBalls) {
                     if (ball.isStanding()) {
@@ -268,8 +261,8 @@ public class GameManager {
         });
 
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.moveL = false;
-            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.moveR = false;
+            if (event.getCode() == javafx.scene.input.KeyCode.LEFT) paddle.setMoveL(false);
+            if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) paddle.setMoveR(false);
         });
 
         scene.setOnMousePressed(event -> {
@@ -350,11 +343,14 @@ public class GameManager {
         for (Ball ball : new ArrayList<>(listBalls)) {
             ball.moveBallWithPaddle(paddle);
         }
-        paddle.movePaddle(controller);
+        paddle.update(controller);
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
-        paddle.movePaddle(controller);
+
+        controller.updateCurrentTopScore(ScoreDAO.getTopScores());
+
+        paddle.update(controller);
 
         // 4) update powerups (dùng bản sao)
         if (listPowerUps != null && !listPowerUps.isEmpty()) {
@@ -403,15 +399,26 @@ public class GameManager {
 
         // 3) Xóa balls deferred (đảm bảo xóa sau khi vòng lặp xong)
         if (!ballsToRemove.isEmpty()) {
+            boolean pierceBallRemoved = false;
+
             for (Ball b : ballsToRemove) {
+                // Kiểm tra nếu là PierceBall
+                if (b instanceof PierceBall) {
+                    pierceBallRemoved = true;
+                }
                 listBalls.remove(b);
                 if (b.getImageView() != null) b.getImageView().setVisible(false);
             }
             ballsToRemove.clear();
 
-            // Nếu KHÔNG còn bóng nào trên màn hình -> spawn 1 bóng mới trên paddle
             if (listBalls.isEmpty()) {
-                spawnBallOnPaddleAndLoseLife(controller);
+                if (pierceBallRemoved) {
+                    // PierceBall vừa đi khỏi màn hình → spawn ball bình thường, không trừ mạng
+                    spawnBallOnPaddleWithoutLosingLife(controller);
+                } else {
+                    // Bóng bình thường → spawn ball và trừ mạng
+                    spawnBallOnPaddleAndLoseLife(controller);
+                }
             }
         }
     }
@@ -444,6 +451,29 @@ public class GameManager {
 
         // trừ mạng
         player.setLives(player.getLives() - 1);
+    }
+
+    // Tạo 1 quả bóng mới ở giữa paddle mà KHÔNG trừ mạng
+    private void spawnBallOnPaddleWithoutLosingLife(StartGameController controller) {
+        if (paddle == null || player == null) return;
+
+        Ball newBall = new Ball(
+                paddle.getX() + paddle.getWidth() / 2 - 10,
+                paddle.getY() - 20,
+                20, 20,
+                StartGameController.BallImages[0],
+                3, 0, -1
+        );
+        newBall.setStanding(true); // chờ người chơi bắn
+        listBalls.add(newBall);
+
+        // Thêm vào scene
+        controller.getStartGamePane().getChildren().add(newBall.getImageView());
+
+        Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+        if (pauseMenu != null) pauseMenu.toFront();
+
+        // Không trừ mạng người chơi
     }
 
     public void gameOver(StartGameController controller){

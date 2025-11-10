@@ -10,7 +10,8 @@ import javafx.util.Duration;
 public abstract class SceneTransition {
     public static void switchScene(Stage stage, String fxmlFile) {
         try {
-            Parent root = FXMLLoader.load(SceneTransition.class.getResource("/GameController/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(SceneTransition.class.getResource("/GameController/" + fxmlFile));
+            Parent root = loader.load();
 
             // 🔹 Lấy tên CSS tương ứng với file FXML (nếu có)
             String cssName = fxmlFile.replace(".fxml", ".css");
@@ -45,28 +46,30 @@ public abstract class SceneTransition {
         }
     }
 
-    public static void fadeSwitch(Stage stage, Parent nextRoot){
+    public static void fadeSwitch(Stage stage, Parent nextRoot) {
         try {
-            Scene scene = stage.getScene();
+            Scene oldScene = stage.getScene();
 
-            // Nếu chưa có scene thì tạo mới (chạy lần đầu)
-            if (scene == null) {
-                scene = new Scene(nextRoot);
+            if (oldScene == null) {
+                // Chạy lần đầu, chưa có scene
+                Scene scene = new Scene(nextRoot);
                 stage.setScene(scene);
             } else {
-                Parent oldRoot = scene.getRoot();
+                // Tạo Scene mới cho root tiếp theo
+                Scene nextScene = new Scene(nextRoot);
 
-                // Fade out cảnh cũ
+                // Fade out Scene cũ
+                Parent oldRoot = oldScene.getRoot();
                 FadeTransition fadeOut = new FadeTransition(Duration.millis(200), oldRoot);
                 fadeOut.setFromValue(1);
                 fadeOut.setToValue(0);
 
-                // Khi fade out xong thì đổi sang root mới
-                Scene finalScene = scene;
                 fadeOut.setOnFinished(e -> {
-                    finalScene.setRoot(nextRoot);
+                    // Khi fade out xong, set Scene mới với root mới
+                    stage.setScene(nextScene);
 
-                    // Fade in cảnh mới
+                    // Fade in root mới
+                    nextRoot.setOpacity(0);
                     FadeTransition fadeIn = new FadeTransition(Duration.millis(300), nextRoot);
                     fadeIn.setFromValue(0);
                     fadeIn.setToValue(1);
@@ -75,10 +78,10 @@ public abstract class SceneTransition {
 
                 fadeOut.play();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

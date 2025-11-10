@@ -21,6 +21,8 @@ public class HelloApplication extends Application {
             // 🔹 Load CSS (nếu có)
             scene.getStylesheets().add(HelloApplication.class.getResource("menuGame.css").toExternalForm());
 
+            SoundManager.LoadSound();
+            SettingsController.LoadSettings();
 
             stage.setTitle("Arkanoid Game");
             stage.sizeToScene();
