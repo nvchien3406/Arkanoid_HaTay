@@ -75,6 +75,23 @@ public class ScoreDAO {
         return highScores;
     }
 
+    public static int getTopScores() {
+        String sql = "SELECT score FROM scores ORDER BY score DESC LIMIT 1";
+        int rs = 0;
+
+        try(Connection conn = DatabaseManager.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(sql)){
+
+            while (res.next()){
+                rs = res.getInt("score");
+            }
+        }catch (SQLException e){
+            System.out.println(" Lỗi đọc điểm: " + e.getMessage());
+        }
+        return rs;
+    }
+
     public static String getRankPlayer(Player player) {
         String sql = "SELECT COUNT(*) + 1 AS Rank FROM scores WHERE score > ?";
 

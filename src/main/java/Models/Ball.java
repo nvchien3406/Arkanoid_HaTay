@@ -3,6 +3,7 @@ package Models;
 
 import GameController.GameConstant;
 import GameController.GameManager;
+import GameController.SoundManager;
 import GameController.StartGameController;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -52,6 +53,8 @@ public class Ball extends MovableObject implements GameConstant {
 
     public void bounceOff(GameObject other) {
         if (!checkCollision(other)) return;
+
+        SoundManager.PlayHit();
 
         double ballCenterX = this.getX() + this.getWidth() / 2;
         double ballCenterY = this.getY() + this.getHeight() / 2;
@@ -124,17 +127,25 @@ public class Ball extends MovableObject implements GameConstant {
                 }
 
                 // Ghi nhận hit rồi cộng điểm
-                brick.takeHit();
-                int addScore = 10;
-                player.setScore(player.getScore() + addScore);
+                if(!(brick instanceof SpecialBrick)){
+                    brick.takeHit();
+                    int addScore = 10;
+                    player.setScore(player.getScore() + addScore);
+                    double popupX = brick.getX() + brick.getWidth() / 2;
+                    double popupY = brick.getY() + brick.getHeight() / 2;
+                    GameManager.getInstance().showScorePopup(controller, popupX, popupY, addScore);
+                }
                 // không remove ở đây; BasicBrick tự animate rồi đánh dấu destroyed khi xong
-
-                double popupX = brick.getX() + brick.getWidth() / 2;
-                double popupY = brick.getY() + brick.getHeight() / 2;
-                GameManager.getInstance().showScorePopup(controller, popupX, popupY, addScore);
 
                 // Nếu gạch bị phá hoàn toàn
                 if (brick.isDestroyed()) {
+                    if(this instanceof PierceBall) {
+                        SoundManager.PlayExplosion();
+                    }
+                    else {
+                        SoundManager.PlayBreak();
+                    }
+
                     GameManager gm = GameManager.getInstance();
 
                     // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện

@@ -22,6 +22,8 @@ public class EndGameController {
     private Button Menu;
 
     public void initialize() {
+        SoundManager.PlayLosing();
+
         replay.setOnAction(e -> {
             Stage stage =  (Stage) replay.getScene().getWindow();
             SceneTransition.switchScene(stage, "startGame.fxml");

@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 
+import java.io.IOException;
+
 public class MainMenuController {
 
     @FXML private Button btnStart;
@@ -17,15 +19,38 @@ public class MainMenuController {
 
     @FXML
     public void initialize() {
+        //SoundManager.StopSoundBackground();
+        //SoundManager.PlaySoundMenuBackground();
+
         btnStart.setOnAction(e -> {
+            //SoundManager.PlayMouseClick();
+
             Stage stage = (Stage) btnStart.getScene().getWindow();
             SceneTransition.switchScene(stage, "startGame.fxml");
         });
+
         btnScore.setOnAction(e -> {
             Stage stage = (Stage) btnStart.getScene().getWindow();
-            SceneTransition.switchScene(stage, "ScoreBoard.fxml");
+            SceneTransition.switchScene(stage, "scoreBoard.fxml");
+
+            //SoundManager.PlayMouseClick();
         });
-        btnExit.setOnAction(e -> System.exit(0));
+
+        btnSettings.setOnAction(e -> {
+            Stage stage = (Stage) btnStart.getScene().getWindow();
+
+            // 1. Lấy Scene gốc
+            Scene currentScene = stage.getScene();
+            SettingsController.setBackScene(currentScene);
+
+            SceneTransition.switchScene(stage, "settings.fxml");
+        });
+
+        btnExit.setOnAction(e -> {
+            //SoundManager.PlayMouseClick();
+
+            System.exit(0);
+        });
     }
 
 }

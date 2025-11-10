@@ -118,6 +118,7 @@ public class GameManager {
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
+
     public void resetGameManager(StartGameController controller) {
         // 1️⃣ Dừng game loop
         if (gameTimer != null) {
@@ -226,6 +227,9 @@ public class GameManager {
         scoreDAO = new ScoreDAO();
         gameState = true;
 
+        //SoundManager.StopSoundMenuBackground();
+        SoundManager.PlaySoundBackground();
+
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
 
@@ -236,16 +240,6 @@ public class GameManager {
         controller.getStartGamePane().getChildren().add(aimingArrow);
         // ✅ Chỉ gọi 1 lần
         controller.LoadBall();
-
-        // 🔹 Lấy Scene để bắt phím
-        Scene scene = controller.getStartGamePane().getScene();
-        if (scene != null) {
-            setupKeyControls(scene);
-        } else {
-            controller.getStartGamePane().sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) setupKeyControls(newScene);
-            });
-        }
 
         // 🔹 Bắt đầu vòng lặp game
         startGameLoop(controller);
@@ -354,6 +348,9 @@ public class GameManager {
         controller.updateCurrentScore(player.getScore());
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
+
+        controller.updateCurrentTopScore(ScoreDAO.getTopScores());
+
         paddle.movePaddle(controller);
 
         // 4) update powerups (dùng bản sao)
@@ -457,6 +454,7 @@ public class GameManager {
 
         player = null;
         scoreDAO = null;
+
         resetGameManager(controller);
     }
 
