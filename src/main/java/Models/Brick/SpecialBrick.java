@@ -1,4 +1,4 @@
-package Models;
+package Models.Brick;
 
 import javafx.geometry.Rectangle2D;
 

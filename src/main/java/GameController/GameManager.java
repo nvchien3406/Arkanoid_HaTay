@@ -1,17 +1,21 @@
 package GameController;
-import Models.*;
+import Models.Ball.Ball;
+import Models.Ball.NormalBall;
+import Models.Ball.PierceBall;
+import Models.Brick.Brick;
+import Models.Paddle.Paddle;
+import Models.Player.Player;
+import Models.PowerUpFactoryMethod.PowerUpFactory;
+import Models.PowerUpFactoryMethod.PowerUpFactoryProducer;
+import Models.PowerUp_Down.PowerUp;
 import Utils.SceneTransition;
 import javafx.animation.AnimationTimer;
 import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +41,6 @@ public class GameManager {
     private final List<Ball> ballsToRemove = new ArrayList<>();
     private final List<PowerUp> powerUpsToRemove = new ArrayList<>();
     private final List<PowerUp> powerUpsToAdd = new ArrayList<>(); // in case you want deferred add
-    private LevelGame levelGame = new LevelGame();
-
-    private final List<Brick> bricksToRemove = new ArrayList<>();
 
     // 🔒 Constructor private: chỉ cho phép tạo nội bộ
     private GameManager() {
@@ -121,7 +122,7 @@ public class GameManager {
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
-    public void resetGameManager(StartGameController controller, boolean keepPlayerData) {
+    public void resetGameManager(StartGameController controller) {
         // 1️⃣ Dừng game loop
         if (gameTimer != null) {
             gameTimer.stop();
@@ -181,15 +182,9 @@ public class GameManager {
         aimingArrow = null;
 
         // 8️⃣ Reset player & score DAO
-//        player = null;
-//        if (scoreDAO != null) {
-//            scoreDAO = null;
-//        }
-
-        if (!keepPlayerData) {
-            player = null;
+        player = null;
+        if (scoreDAO != null) {
             scoreDAO = null;
-            levelGame = new LevelGame();
         }
 
         // 9️⃣ Remove tất cả scoreboard/highscore Text nodes (nếu có)
@@ -237,8 +232,8 @@ public class GameManager {
 
         //SoundManager.StopSoundMenuBackground();
         SoundManager.PlaySoundBackground();
-        int[][] currentMap = levelGame.getCurrentLevel();
-        this.listBricks = controller.LoadBrick(currentMap);
+
+        this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();
 
         aimingArrow = new Line();
@@ -343,6 +338,19 @@ public class GameManager {
         scene.setOnMouseReleased(null);
     }
 
+    public void updatePowerUps() {
+        if (listPowerUps == null || listPowerUps.isEmpty()) return;
+
+        for (PowerUp p : new ArrayList<>(listPowerUps)) {
+            p.update(paddle);        // Cập nhật logic riêng
+            p.checkPaddleCollision(paddle); // Kiểm tra va chạm với paddle
+
+            if (p.isExpired()) {
+                markPowerUpForRemoval(p);  // Giao cho GameManager xử lý xóa
+            }
+        }
+
+    }
 
     public void updateGame(StartGameController controller){
         // 1) xử lý va chạm & cập nhật vật thể (dùng bản sao để an toàn)
@@ -362,23 +370,10 @@ public class GameManager {
         paddle.update(controller);
 
         // 4) update powerups (dùng bản sao)
-        if (listPowerUps != null && !listPowerUps.isEmpty()) {
-            for (PowerUp p : new ArrayList<>(listPowerUps)) {
-                p.update();
-                p.checkPaddleCollision(paddle);
-            }
-            // collect expired
-            for (PowerUp p : new ArrayList<>(listPowerUps)) {
-                if (p.isExpired()) markPowerUpForRemoval(p);
-            }
-        }
+        updatePowerUps();
 
         // 5) dọn dẹp deferred removes / thêm deferred adds
         cleanupDeferred(controller);
-
-        if (listBricks.isEmpty()) {
-            handleNextLevel(controller);
-        }
     }
 
     public void handelInput(){
@@ -387,9 +382,11 @@ public class GameManager {
 
     public void checkCollisions(StartGameController controller){
         for (Ball ball : new ArrayList<>(listBalls)){
-            ball.checkPaddleCollision(paddle);
-            ball.checkBrickCollision(listBricks , player,controller);
-            ball.checkWallCollision(paddle , player);
+            if (ball instanceof NormalBall) {
+                ((NormalBall)ball).controlledBounceOff(paddle);
+            }
+            ball.handleBrickCollision(listBricks,player,controller);
+            ball.checkWallCollision();
         }
     }
 
@@ -434,30 +431,20 @@ public class GameManager {
                 }
             }
         }
-        // 4️⃣ Xóa brick bị phá hoàn toàn
-        if (!bricksToRemove.isEmpty()) {
-            for (Brick brick : bricksToRemove) {
-                listBricks.remove(brick);
-                if (brick.getImageView() != null) {
-                    ((AnchorPane) brick.getImageView().getParent()).getChildren().remove(brick.getImageView());
-                }
-            }
-            bricksToRemove.clear();
-        }
-
     }
 
     // Tạo 1 quả bóng mới ở giữa paddle và trừ 1 mạng
     private void spawnBallOnPaddleAndLoseLife(StartGameController controller) {
         if (paddle == null || player == null) return;
 
-        Ball newBall = new Ball(
+        Ball newBall = new NormalBall(
                 paddle.getX() + paddle.getWidth() / 2 - 10,
                 paddle.getY() - 20,
                 20, 20,
-                StartGameController.BallImages[0],
+                GameConstant.BallImages[0],
                 3, 0, -1
         );
+
         newBall.setStanding(true);
         listBalls.add(newBall);
 
@@ -481,11 +468,11 @@ public class GameManager {
     private void spawnBallOnPaddleWithoutLosingLife(StartGameController controller) {
         if (paddle == null || player == null) return;
 
-        Ball newBall = new Ball(
+        Ball newBall = new NormalBall(
                 paddle.getX() + paddle.getWidth() / 2 - 10,
                 paddle.getY() - 20,
                 20, 20,
-                StartGameController.BallImages[0],
+                GameConstant.BallImages[0],
                 3, 0, -1
         );
         newBall.setStanding(true); // chờ người chơi bắn
@@ -511,7 +498,7 @@ public class GameManager {
 
         player = null;
         scoreDAO = null;
-        resetGameManager(controller, false);
+        resetGameManager(controller);
     }
 
     public boolean hasActivePowerUp() {
@@ -590,7 +577,7 @@ public class GameManager {
         aimingArrow.setEndY(endY);
     }
 
-    public void showScorePopup(StartGameController controller, double x, double y, int score) {
+    public void showScorePopup(StartGameController controller ,double x, double y, int score) {
         Text scoreText = new Text("+" + score);
         scoreText.setFill(Color.GOLD);
         scoreText.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -598,7 +585,7 @@ public class GameManager {
         scoreText.setLayoutX(x);
         scoreText.setLayoutY(y);
 
-        controller.getStartGamePane().getChildren().add(scoreText);
+       controller.getStartGamePane().getChildren().add(scoreText);
 
         ScaleTransition scale = new ScaleTransition(Duration.millis(400), scoreText);
         scale.setFromX(1.0);
@@ -618,42 +605,22 @@ public class GameManager {
         anim.play();
     }
 
-    private void handleNextLevel(StartGameController controller) {
-        if (levelGame.hasNextLevel()) {
-            // Tăng level
-            levelGame.nextLevel();
+    public void spawnPowerUps(Brick brick, StartGameController controller) {
+        // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện
+        if (this.getListBalls().size() == 1
+                && this.getListPowerUps().stream().noneMatch(p -> !p.isExpired())
+                && !this.hasActivePowerUp()) {
 
-            // Dọn hiện trường cũ
-            resetGameManager(controller, true);
+            // Factory Method
+            PowerUpFactory factory = PowerUpFactoryProducer.getRandomFactory();
+            PowerUp powerUp = factory.createPowerUp(brick.getX() + 10, brick.getY());
 
-            // Tạo level mới
-            int[][] nextMap = levelGame.getCurrentLevel();
-            this.listBricks = controller.LoadBrick(nextMap);
-            this.paddle = controller.LoadPaddle();
-            controller.LoadBall();
+            this.getListPowerUps().add(powerUp);
 
-            aimingArrow = new Line();
-            aimingArrow.setStrokeWidth(3);
-            aimingArrow.setStroke(Color.CYAN);
-            aimingArrow.setVisible(false);
-            controller.getStartGamePane().getChildren().add(aimingArrow);
+            controller.getStartGamePane().getChildren().add(powerUp.getImageView());
+            Node pauseMenu = controller.getStartGamePane().lookup("#pauseMenu");
+            if (pauseMenu != null) pauseMenu.toFront();
 
-            // Giữ điểm và mạng cũ
-            SoundManager.PlaySoundBackground();
-            startGameLoop(controller);
-
-            System.out.println("➡ Chuyển sang Level " + levelGame.getLevelNumber());
-        } else {
-            // Hết level → thắng toàn bộ game
-            System.out.println("🎉 Hoàn thành tất cả level!");
-            gameOver(controller);
         }
     }
-
-    public void markBrickForRemoval(Brick brick) {
-        if (brick != null && !bricksToRemove.contains(brick)) {
-            bricksToRemove.add(brick);
-        }
-    }
-
 }

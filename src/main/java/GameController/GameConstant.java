@@ -2,23 +2,24 @@ package GameController;
 
 import javafx.util.Pair;
 
-public interface GameConstant {
-    int ROWS = 14;
-    int COLS = 18;
-    int BRICK_WIDTH = 32;
-    int BRICK_HEIGHT = 16;
+public final class GameConstant {
+    public static final int ROWS = 14;
+    public static final int COLS = 18;
+    public static final int BRICK_WIDTH = 32;
+    public static final int BRICK_HEIGHT = 16;
 
-    int PANE_WIDTH = 700;
-    int PANE_HEIGHT = 700;
+    public static final int PANE_WIDTH = 700;
+    public static final int PANE_HEIGHT = 700;
 
-    double PADDLE_WIDTH = 100;
-    double PADDLE_HEIGHT = 20;
-    double PADDLE_SPEED = 3;
+    public static final double PADDLE_WIDTH = 100;
+    public static final double PADDLE_HEIGHT = 20;
+    public static final double PADDLE_SPEED = 3;
 
-    double BALL_SIZE = 20;
-    double BALL_SPEED = 3;
+    public static final double BALL_SIZE = 20;
+    public static final double BALL_SPEED = 3;
+    public static final int addScore = 10;
 
-    Pair<String, String>[] brickImages = new Pair[]{
+    public static final Pair<String, String>[] brickImages = new Pair[]{
             new Pair<>("/image/BlueBrick.png", "NormalBrick"),
             new Pair<>("/image/GreenBrick.png", "NormalBrick"),
             new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
@@ -27,13 +28,13 @@ public interface GameConstant {
             new Pair<>("/image/YellowBrick.png", "StrongBrick"),
             new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
     };
-    String[] paddleImages = {
-            "/image/Paddle.png"
+    public static final String paddleImages = "/image/Paddle.png";
+
+    public static final String[] BallImages = {
+            "/image/NormalBall.png",
+            "/image/PierceBall.png"
     };
-    String[] BallImages = {
-            "/image/Ball.png"
-    };
-    String[] powerUpImages = {
+    public static final String[] powerUpImages = {
             "/image/ExpandPaddlePowerUp.png"
     };
 }
