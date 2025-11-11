@@ -26,7 +26,7 @@ public class MainMenuController {
             //SoundManager.PlayMouseClick();
 
             Stage stage = (Stage) btnStart.getScene().getWindow();
-            SceneTransition.switchScene(stage, "startGame.fxml");
+            SceneTransition.switchScene(stage, "login.fxml");
         });
 
         btnScore.setOnAction(e -> {

@@ -2,7 +2,6 @@ package Models.Ball;
 
 import GameController.GameConstant;
 import GameController.GameManager;
-import GameController.SoundManager;
 import GameController.StartGameController;
 import Models.Brick.Brick;
 import Models.Interface.BounceOff;
@@ -21,7 +20,7 @@ public class NormalBall extends Ball implements BounceOff {
     public void naturalBounceOff(GameObject other) {
         if (!checkCollision(other)) return;
 
-        SoundManager.PlayHit();
+        GameManager.getInstance().getSoundService().playHit();
 
         double ballCenterX = this.getX() + this.getWidth() / 2;
         double ballCenterY = this.getY() + this.getHeight() / 2;
@@ -106,7 +105,7 @@ public class NormalBall extends Ball implements BounceOff {
 
     @Override
     public void playBallMusic(){
-        SoundManager.PlayBreak();
+        GameManager.getInstance().getSoundService().playBreak();
     }
 
     @Override

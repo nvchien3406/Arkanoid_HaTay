@@ -1,9 +1,7 @@
 package GameController;
 
-import DAO.DatabaseManager;
 import DAO.IScoreRepository;
 import DAO.SQLiteScoreRepository;
-import Models.Brick.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,10 +20,10 @@ public class HelloApplication extends Application {
             // 🔹 Load CSS (nếu có)
             scene.getStylesheets().add(HelloApplication.class.getResource("menuGame.css").toExternalForm());
 
-            DatabaseManager db = new DatabaseManager("data/scores.db");
-            IScoreRepository repo = new SQLiteScoreRepository(db);
+            IScoreRepository repo = new SQLiteScoreRepository("data/scores.db");
+            ISoundService soundService = new SoundManager();
 
-            GameManager.initialize(repo);
+            GameManager.initialize(repo ,soundService);
 
             SoundManager.LoadSound();
             SettingsController.LoadSettings();

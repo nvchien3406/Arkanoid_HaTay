@@ -22,7 +22,7 @@ public class EndGameController {
     private Button Menu;
 
     public void initialize() {
-        SoundManager.PlayLosing();
+        GameManager.getInstance().getSoundService().playLosing();
 
         replay.setOnAction(e -> {
             Stage stage =  (Stage) replay.getScene().getWindow();

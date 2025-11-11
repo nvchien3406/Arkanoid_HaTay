@@ -4,12 +4,8 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
-import java.util.prefs.Preferences;
-
-public class SoundManager {
+public class SoundManager implements ISoundService {
     private static MediaPlayer soundBackground ;
-    private static MediaPlayer soundMenuBackground ;
 
     private static AudioClip breakClip;
     private static AudioClip hitClip;
@@ -17,16 +13,17 @@ public class SoundManager {
     private  static AudioClip soundLosing;
     //private  static AudioClip mouseClick;
 
+    public SoundManager() {
+        LoadSound();
+    }
+
+
     public static void LoadSound() {
         try {
             //Sound BackGround
             String path = SoundManager.class.getResource("/sounds/S31-Night-Prowler.mp3").toExternalForm();
             Media media = new Media(path);
             soundBackground = new MediaPlayer(media);
-
-            String path2 = SoundManager.class.getResource("/sounds/menuMusic.mp3").toExternalForm();
-            Media media2 = new Media(path2);
-            soundMenuBackground = new MediaPlayer(media2);
 
             //Sound audioclip
             breakClip = new AudioClip(SoundManager.class.getResource("/sounds/break.mp3").toExternalForm());
@@ -39,7 +36,8 @@ public class SoundManager {
         }
     }
 
-    public static void PlaySoundBackground() {
+    @Override
+    public void playBackground() {
         try {
             soundBackground.setCycleCount(MediaPlayer.INDEFINITE);
             soundBackground.play();
@@ -48,60 +46,51 @@ public class SoundManager {
         }
     }
 
-    public static void StopSoundBackground() {
+    @Override
+    public void stopBackground() {
         if(soundBackground != null) {
             soundBackground.stop();
             System.out.println("đã dừng nhạc nền");
         }
     }
 
-    public static void PauseSoundBackground() {
+    @Override
+    public void pauseSoundBackground() {
         if(soundBackground != null) {
             soundBackground.pause();
         }
     }
 
-    public static void ResumeSoundBackground() {
+    @Override
+    public void resumeSoundBackground() {
         if(soundBackground != null) {
             soundBackground.play();
         }
     }
 
-    public static void PlaySoundMenuBackground() {
-        try {
-            soundMenuBackground.setCycleCount(MediaPlayer.INDEFINITE);
-            soundMenuBackground.play();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void StopSoundMenuBackground() {
-        if(soundMenuBackground != null) {
-            soundMenuBackground.stop();
-            System.out.println("đã dừng nhạc nền menu");
-        }
-    }
-
-    public static void PlayHit() {
+    @Override
+    public void playHit() {
         if(hitClip != null) {
             hitClip.play();
         }
     }
 
-    public static void PlayBreak() {
+    @Override
+    public void playBreak() {
         if(breakClip != null) {
             breakClip.play();
         }
     }
 
-    public static void PlayExplosion(){
+    @Override
+    public void playExplosion() {
         if(explosionClip  != null) {
             explosionClip.play();
         }
     }
 
-    public static void PlayLosing(){
+    @Override
+    public void playLosing(){
         if(soundLosing != null) {
             soundLosing.play();
         }
@@ -113,9 +102,9 @@ public class SoundManager {
 //        }
 //    }
 
-    public static void setMasterVolume(double volume , double audioClip) {
+    @Override
+    public void setMasterVolume(double volume , double audioClip) {
         soundBackground.setVolume(volume);
-        soundMenuBackground.setVolume(volume);
 
         breakClip.setVolume(audioClip);
         hitClip.setVolume(audioClip);

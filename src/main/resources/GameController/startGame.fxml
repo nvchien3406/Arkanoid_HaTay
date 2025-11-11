@@ -15,8 +15,8 @@
             <Label style="-fx-text-fill: yellow; -fx-font-size: 20px; -fx-font-weight: bold;" text="SCORE BOARD" />
             <ListView fx:id="scoreBoard" prefHeight="450" style="-fx-background-color: #0d1b2a; -fx-text-fill: Gold;" styleClass="scoreboard-list" />
             <VBox alignment="CENTER">
-                <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="TITLE NAME" />
-                <Label style="-fx-text-fill: #999; -fx-font-size: 14px;" text="LOGO" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="ARKANOID" />
+                <Label style="-fx-text-fill: #999; -fx-font-size: 14px;" text="HÀ TÂY" />
             </VBox>
         </VBox>
     </left>
@@ -42,8 +42,8 @@
             <Button fx:id="Pause" style="-fx-font-size: 18px; -fx-background-color: gray; -fx-text-fill: white;" text="PAUSE" />
 
             <VBox alignment="CENTER">
-                <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="TITLE NAME" />
-                <Label style="-fx-text-fill: #999; -fx-font-size: 14px;" text="LOGO" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="ARKANOID" />
+                <Label style="-fx-text-fill: #999; -fx-font-size: 14px;" text="HÀ TÂY" />
             </VBox>
         </VBox>
     </right>

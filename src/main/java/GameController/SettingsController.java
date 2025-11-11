@@ -1,6 +1,5 @@
 package GameController;
 
-import Utils.SceneTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -56,10 +55,10 @@ public class SettingsController {
         audioClipLabel.setText((int) (audioClip * 100) + "%");
         // Nếu bạn có SoundManager, gọi cập nhật âm lượng ở đây:
         if(muteCheckBox.isSelected()) {
-            SoundManager.setMasterVolume(0 , 0);
+            GameManager.getInstance().getSoundService().setMasterVolume(0 , 0);
         }
         else{
-            SoundManager.setMasterVolume(volume , audioClip);
+            GameManager.getInstance().getSoundService().setMasterVolume(volume , audioClip);
         }
     }
 
@@ -122,10 +121,10 @@ public class SettingsController {
         System.out.println("muted is " + muted + " Volume is " + volume + " audioClip is " + audioClip);
 
         if(muted){
-            SoundManager.setMasterVolume(0 , 0);
+            GameManager.getInstance().getSoundService().setMasterVolume(0 , 0);
         }
         else{
-            SoundManager.setMasterVolume(volume , audioClip);
+            GameManager.getInstance().getSoundService().setMasterVolume(volume , audioClip);
         }
     }
 }

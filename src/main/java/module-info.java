@@ -1,16 +1,22 @@
 module GameController {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.desktop;
     requires javafx.graphics;
-    requires java.sql;
     requires javafx.media;
+    requires java.desktop;
+    requires java.sql;
     requires java.prefs;
-    //requires GameController;
+//    requires GameController;
 
-
-    opens GameController to javafx.fxml;
     exports GameController;
+    opens GameController to javafx.fxml;
+
+//    exports Sounds; // <— CHỈ cần dòng này
+//    opens Sounds to javafx.fxml;
+
+    exports DAO;
+    opens DAO to javafx.fxml;
+
     opens Models to javafx.base;
     opens Models.Ball to javafx.base;
     opens Models.Brick to javafx.base;
@@ -20,6 +26,4 @@ module GameController {
     opens Models.Object to javafx.base;
     opens Models.Player to javafx.base;
     opens Models.Interface to javafx.base;
-    exports DAO;
-    opens DAO to javafx.fxml;
 }
