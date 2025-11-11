@@ -1,0 +1,29 @@
+.root{
+    -fx-background-color: linear-gradient(to bottom , #000000 ,#061b2c);
+    -fx-text-fill: while;
+}
+
+.title-label {
+    -fx-font-size: 60px;
+    -fx-text-fill: cyan;
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
+    -fx-font-weight: bold;
+}
+
+.label{
+    -fx-text-fill: #e0faff;
+    -fx-font-size: 16px;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #1e3d59, #f5f0e1);
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.text-field, .password-field {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: gray;
+}

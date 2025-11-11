@@ -9,8 +9,8 @@ import java.util.List;
 public class SQLiteScoreRepository implements IScoreRepository {
     private final DatabaseManager dbManager;
 
-    public SQLiteScoreRepository(DatabaseManager dbManager) {
-        this.dbManager = dbManager;
+    public SQLiteScoreRepository(String dbPath) {
+        dbManager = new DatabaseManager(dbPath);
         createTableIfNotExists();
     }
 

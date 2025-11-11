@@ -32,6 +32,7 @@ public class GameManager {
     private AnimationTimer gameTimer;
     private Player player ;
     private final IScoreRepository scoreDAO;
+    private final ISoundService soundService;
     private boolean gameState;
     private Line aimingArrow;
     private static final double AIMING_ARROW_LENGTH = 80.0;
@@ -42,15 +43,16 @@ public class GameManager {
     private final List<PowerUp> powerUpsToAdd = new ArrayList<>(); // in case you want deferred add
 
     // Constructor có tham số
-    private GameManager(IScoreRepository scoreDAO) {
+    private GameManager(IScoreRepository scoreDAO,ISoundService soundService) {
         this.scoreDAO = scoreDAO;
+        this.soundService = soundService;
         listPowerUps = new ArrayList<>();
     }
 
     // Phương thức khởi tạo đầu tiên (inject dependency)
-    public static void initialize(IScoreRepository repo) {
+    public static void initialize(IScoreRepository repo, ISoundService soundService) {
         if (instance == null) {
-            instance = new GameManager(repo);
+            instance = new GameManager(repo, soundService);
         }
     }
 
@@ -64,6 +66,10 @@ public class GameManager {
 
     public IScoreRepository getScoreDAO() {
         return scoreDAO;
+    }
+
+    public ISoundService getSoundService() {
+        return soundService;
     }
 
     public List<Ball> getListBalls() {
@@ -222,12 +228,11 @@ public class GameManager {
     }
 
     public void startGame(StartGameController controller) {
-        player = new Player("Bao" ,0 , 3);
 //        scoreDAO = new ScoreDAO();
         gameState = true;
 
         //SoundManager.StopSoundMenuBackground();
-        SoundManager.PlaySoundBackground();
+        GameManager.getInstance().getSoundService().pauseSoundBackground();
 
         this.listBricks = controller.LoadBrick();
         this.paddle = controller.LoadPaddle();

@@ -167,7 +167,7 @@ public class StartGameController{
     }
 
     private void resumeGame() {
-        SoundManager.ResumeSoundBackground();
+        GameManager.getInstance().getSoundService().resumeSoundBackground();
         GameManager gameManager = GameManager.getInstance();
         gameManager.resumeGame(this); // Tiếp tục game loop
         hidePauseMenu();
@@ -182,14 +182,14 @@ public class StartGameController{
 
     private void exitToMenu() {
         hidePauseMenu();
-        SoundManager.PauseSoundBackground();
+        GameManager.getInstance().getSoundService().pauseSoundBackground();
         GameManager.getInstance().resetGameManager(this);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");
     }
 
     private void settingGame() {
-        SoundManager.StopSoundBackground();
+        GameManager.getInstance().getSoundService().stopBackground();
         Stage stage = getStage();
         Scene currentScene = getScene();
         SettingsController.setBackScene(currentScene);

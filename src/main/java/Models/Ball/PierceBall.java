@@ -2,7 +2,6 @@ package Models.Ball;
 
 import GameController.GameConstant;
 import GameController.GameManager;
-import GameController.SoundManager;
 import GameController.StartGameController;
 import Models.Brick.Brick;
 import Models.Player.Player;
@@ -73,7 +72,7 @@ public class PierceBall extends Ball {
 
     @Override
     public void playBallMusic() {
-        SoundManager.PlayExplosion();
+        GameManager.getInstance().getSoundService().playExplosion();
     }
 
     @Override
