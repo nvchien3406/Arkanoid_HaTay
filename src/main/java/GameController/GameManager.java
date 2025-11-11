@@ -20,6 +20,8 @@ import javafx.scene.shape.Line;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -204,6 +206,8 @@ public class GameManager {
         controller.getStartGamePane().getChildren().add(aimingArrow);
         // ✅ Chỉ gọi 1 lần
         controller.LoadBall();
+
+        showLevelIntro(controller, level.getLevelNumber());
 
         // 🔹 Bắt đầu vòng lặp game
         startGameLoop(controller);
@@ -693,8 +697,11 @@ public class GameManager {
 
         // 1️⃣ Tạo text
         Text levelText = new Text("LEVEL " + levelNumber);
-        levelText.setFill(Color.WHITE);
-        levelText.setStyle("-fx-font-size: 64px; -fx-font-weight: bold;");
+        levelText.setFill(Color.GOLD);
+        levelText.setStroke(Color.BLACK);
+        levelText.setStrokeWidth(3);
+
+        levelText.setFont(Font.font("Impact", FontWeight.BOLD, 72));
 
         // 2️⃣ Căn giữa màn hình
         levelText.setLayoutX(pane.getWidth() / 2 - 150);
