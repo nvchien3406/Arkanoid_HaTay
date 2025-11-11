@@ -61,35 +61,48 @@ public class GameUIManager {
         levelText.setStroke(Color.BLACK);
         levelText.setStrokeWidth(3);
 
-        levelText.setFont(Font.font("Impact", FontWeight.BOLD, 72));
-
-        // 2️⃣ Căn giữa màn hình
-        levelText.setLayoutX(pane.getWidth() / 2 - 150);
-        levelText.setLayoutY(pane.getHeight() / 2);
-
+        levelText.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/Bangers-Regular.ttf"), 72));
         pane.getChildren().add(levelText);
 
-        // 3️⃣ Hiệu ứng xuất hiện & biến mất
-        ScaleTransition scale = new ScaleTransition(Duration.millis(700), levelText);
-        scale.setFromX(0.5);
-        scale.setFromY(0.5);
-        scale.setToX(1.2);
-        scale.setToY(1.2);
+        Runnable playAnimation = () -> {
+            double centerX = (pane.getWidth() - levelText.getLayoutBounds().getWidth()) / 2;
+            double centerY = (pane.getHeight() / 2);
+            levelText.setLayoutX(centerX);
+            levelText.setLayoutY(centerY);
 
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), levelText);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
+            ScaleTransition scale = new ScaleTransition(Duration.millis(700), levelText);
+            scale.setFromX(0.5);
+            scale.setFromY(0.5);
+            scale.setToX(1.2);
+            scale.setToY(1.2);
 
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(800), levelText);
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.setDelay(Duration.millis(1000)); // chờ 1s rồi mờ dần
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), levelText);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
 
-        ParallelTransition appear = new ParallelTransition(scale, fadeIn);
-        SequentialTransition totalAnim = new SequentialTransition(appear, fadeOut);
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(800), levelText);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setDelay(Duration.millis(1000));
 
-        totalAnim.setOnFinished(e -> pane.getChildren().remove(levelText));
-        totalAnim.play();
+            ParallelTransition appear = new ParallelTransition(scale, fadeIn);
+            SequentialTransition totalAnim = new SequentialTransition(appear, fadeOut);
+            totalAnim.setOnFinished(e -> pane.getChildren().remove(levelText));
+            totalAnim.play();
+        };
+
+        // 🟡 Nếu pane chưa layout xong -> đợi khi nó hiển thị trên màn hình
+        if (pane.getWidth() == 0 || pane.getHeight() == 0) {
+            pane.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal.getWidth() > 0 && newVal.getHeight() > 0) {
+                    // Chỉ chạy 1 lần
+                    pane.layoutBoundsProperty().removeListener((o, ov, nv) -> {});
+                    playAnimation.run();
+                }
+            });
+        } else {
+            playAnimation.run();
+        }
     }
     /**
      * Cập nhật vị trí cuối của mũi tên dựa trên vị trí chuột,

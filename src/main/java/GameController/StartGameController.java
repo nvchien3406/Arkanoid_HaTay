@@ -54,14 +54,20 @@ public class StartGameController{
         int R = map.length;
         int C = map[0].length;
 
+        double totalWidth = C * GameConstant.BRICK_WIDTH;
+        double totalHeight = R * GameConstant.BRICK_HEIGHT;
+
+        double startX = (GameConstant.PANE_WIDTH - totalWidth) / 2;
+        double startY = 50;
+
         for (int row = R - 1; row >= 0; row--) {
             for (int col = 0; col < C; col++) {
 
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * GameConstant.BRICK_WIDTH + 62;
-                double y = row * GameConstant.BRICK_HEIGHT + 50;
+                double x = startX + col * GameConstant.BRICK_WIDTH;
+                double y = startY + row * GameConstant.BRICK_HEIGHT;;
 
                 String imgPath = GameConstant.brickImages[map[row][col]].getKey();
 
