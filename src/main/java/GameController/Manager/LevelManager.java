@@ -35,6 +35,8 @@ public class LevelManager {
             return;
         }
 
+        objectManager.clearLevelObjects(controller);
+
         level.nextLevel();
         controller.animateLevelUp(level.getLevelNumber());
         clearLevelObjects(controller);

@@ -42,6 +42,15 @@ public class GameUIManager {
         anim.setOnFinished(e -> controller.getStartGamePane().getChildren().remove(scoreText));
         anim.play();
     }
+
+    public Line getAimingArrow() {
+        return aimingArrow;
+    }
+
+    public void setAimingArrow(Line aimingArrow) {
+        this.aimingArrow = aimingArrow;
+    }
+
     public void showLevelIntro(StartGameController controller, int levelNumber) {
         AnchorPane pane = controller.getStartGamePane();
         if (pane == null) return;
@@ -123,11 +132,12 @@ public class GameUIManager {
         aimingArrow.setEndY(endY);
     }
 
-    public Line createAimingArrow() {
+    public Line createAimingArrow(StartGameController controller) {
         aimingArrow = new Line();
         aimingArrow.setStrokeWidth(3);
         aimingArrow.setStroke(Color.CYAN);
         aimingArrow.setVisible(false);
+        controller.getStartGamePane().getChildren().add(aimingArrow);
         return aimingArrow;
     }
 }

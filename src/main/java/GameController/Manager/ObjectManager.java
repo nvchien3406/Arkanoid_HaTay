@@ -192,16 +192,19 @@ public class ObjectManager {
     public void clearLevelObjects(StartGameController controller) {
         if (controller == null) return;
         clearCollections();
-        listBalls.clear();
-        listPowerUps.clear();
         if (listBricks != null) listBricks.clear();
+        if (paddle != null && paddle.getImageView() != null) {
+            controller.getStartGamePane().getChildren().remove(paddle.getImageView());
+        }
+        paddle = null;
 
-        // remove visual nodes (balls, powerups, bricks)
-        controller.getStartGamePane().getChildren().removeIf(node ->
-                node.getId() != null && (
-                        node.getId().contains("ball") ||
-                                node.getId().contains("brick") ||
-                                node.getId().contains("powerup")
-                ));
+        for (Ball b : listBalls) {
+            controller.getStartGamePane().getChildren().remove(b.getImageView());
+        }
+        listBalls.clear();
+        for (PowerUp p : listPowerUps) {
+            controller.getStartGamePane().getChildren().remove(p.getImageView());
+        }
+        listPowerUps.clear();
     }
 }
