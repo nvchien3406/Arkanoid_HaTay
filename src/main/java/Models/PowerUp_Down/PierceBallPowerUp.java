@@ -1,7 +1,11 @@
-package Models;
+package Models.PowerUp_Down;
 
-import GameController.GameConstant;
 import GameController.GameManager;
+import Models.Ball.Ball;
+import Models.Ball.NormalBall;
+import Models.Ball.PierceBall;
+import Models.Object.GameObject;
+import Models.Paddle.Paddle;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 

@@ -1,6 +1,9 @@
-package Models;
+package Models.PowerUp_Down;
 
 import GameController.GameManager;
+import Models.Ball.Ball;
+import Models.Ball.NormalBall;
+import Models.Object.GameObject;
 import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;

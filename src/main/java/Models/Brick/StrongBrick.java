@@ -1,4 +1,4 @@
-package Models;
+package Models.Brick;
 
 public class StrongBrick extends Brick {
     public StrongBrick() {

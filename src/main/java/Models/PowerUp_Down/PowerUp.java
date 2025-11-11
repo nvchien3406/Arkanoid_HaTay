@@ -1,6 +1,8 @@
-package Models;
+package Models.PowerUp_Down;
 
-import GameController.GameManager;
+import Models.Object.GameObject;
+import Models.Object.MovableObject;
+import Models.Paddle.Paddle;
 
 public abstract class PowerUp extends MovableObject {
     protected String type;

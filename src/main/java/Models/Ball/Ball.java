@@ -1,17 +1,21 @@
-package Models;
+package Models.Ball;
 
 
 import GameController.GameConstant;
 import GameController.GameManager;
-import GameController.SoundManager;
 import GameController.StartGameController;
-import javafx.scene.Node;
-import javafx.scene.canvas.GraphicsContext;
+import Models.Brick.Brick;
+import Models.Brick.NormalBrick;
+import Models.Brick.SpecialBrick;
+import Models.Brick.StrongBrick;
+import Models.Object.MovableObject;
+import Models.Paddle.Paddle;
+import Models.Player.Player;
 
 import java.util.List;
 
 
-public abstract class Ball extends MovableObject{
+public abstract class Ball extends MovableObject {
     protected double speed, directionX, directionY;
     protected boolean isStanding = true;
 

@@ -1,13 +1,18 @@
-package Models;
+package Models.Ball;
 
 import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.SoundManager;
 import GameController.StartGameController;
+import Models.Brick.Brick;
+import Models.Interface.BounceOff;
+import Models.Object.GameObject;
+import Models.Paddle.Paddle;
+import Models.Player.Player;
 
 import java.util.List;
 
-public class NormalBall extends Ball implements BounceOff{
+public class NormalBall extends Ball implements BounceOff {
     public NormalBall(double x, double y, double width, double height , String path,
                       double speed, double directionX, double directionY) {
         super(x , y , width , height, path, speed , directionX, directionY);

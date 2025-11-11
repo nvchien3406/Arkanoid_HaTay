@@ -1,9 +1,11 @@
-package Models;
+package Models.Ball;
 
 import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.SoundManager;
 import GameController.StartGameController;
+import Models.Brick.Brick;
+import Models.Player.Player;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;

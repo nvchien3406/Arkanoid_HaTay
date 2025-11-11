@@ -1,4 +1,8 @@
-package Models;
+package Models.Interface;
+
+import Models.Brick.Brick;
+import Models.Object.GameObject;
+import Models.Paddle.Paddle;
 
 import java.util.List;
 

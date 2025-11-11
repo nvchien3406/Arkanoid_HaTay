@@ -1,8 +1,6 @@
-package Models;
+package Models.Player;
 
 import GameController.GameConstant;
-import GameController.GameManager;
-import GameController.StartGameController;
 
 public class Player {
     private String playerName;

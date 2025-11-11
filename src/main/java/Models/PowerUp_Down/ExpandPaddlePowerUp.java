@@ -1,5 +1,7 @@
-package Models;
+package Models.PowerUp_Down;
 
+import Models.Object.GameObject;
+import Models.Paddle.Paddle;
 import javafx.scene.image.Image;
 import GameController.GameConstant;
 

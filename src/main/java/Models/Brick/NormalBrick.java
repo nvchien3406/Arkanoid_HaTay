@@ -1,10 +1,10 @@
-package Models;
+package Models.Brick;
 
 import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.StartGameController;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import Models.Interface.CanTakeHit;
+import Models.Player.Player;
 
 public class NormalBrick extends Brick implements CanTakeHit {
 
@@ -28,7 +28,7 @@ public class NormalBrick extends Brick implements CanTakeHit {
         }
     }
 
-    public void addScore(Brick brick,Player player, StartGameController controller) {
+    public void addScore(Brick brick, Player player, StartGameController controller) {
         player.setScore(player.getScore() + GameConstant.addScore);
         double popupX = brick.getX() + brick.getWidth() / 2;
         double popupY = brick.getY() + brick.getHeight() / 2;

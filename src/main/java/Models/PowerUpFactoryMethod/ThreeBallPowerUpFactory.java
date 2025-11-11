@@ -1,4 +1,7 @@
-package Models;
+package Models.PowerUpFactoryMethod;
+
+import Models.PowerUp_Down.PowerUp;
+import Models.PowerUp_Down.ThreeBallPowerUp;
 
 public class ThreeBallPowerUpFactory implements PowerUpFactory {
     @Override

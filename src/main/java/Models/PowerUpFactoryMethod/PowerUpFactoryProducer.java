@@ -1,4 +1,4 @@
-package Models;
+package Models.PowerUpFactoryMethod;
 
 import java.util.Random;
 

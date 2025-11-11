@@ -1,6 +1,6 @@
 package GameController;
 
-import Models.Player;
+import Models.Player.Player;
 
 import java.sql.*;
 import java.time.LocalDateTime;

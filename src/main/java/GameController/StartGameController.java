@@ -1,28 +1,26 @@
 package GameController;
 
-import Models.*;
+import Models.Ball.Ball;
+import Models.Ball.NormalBall;
+import Models.Brick.Brick;
+import Models.Brick.NormalBrick;
+import Models.Brick.SpecialBrick;
+import Models.Brick.StrongBrick;
+import Models.Paddle.Paddle;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 
 import java.util.ArrayList;
