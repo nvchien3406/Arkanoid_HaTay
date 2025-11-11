@@ -4,7 +4,7 @@ public class LevelGame {
     private final int[][][] levels = {
             // level 0: test
             {
-                    {1}
+                    {1, 1}
             },
             // level 1
             {

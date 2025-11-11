@@ -147,7 +147,7 @@ public class Ball extends MovableObject implements GameConstant {
                     }
 
                     GameManager gm = GameManager.getInstance();
-
+                    gm.markBrickForRemoval(brick);
                     // ⚡ Chỉ tạo PowerUp nếu đủ điều kiện
                     if (gm.getListBalls().size() == 1
                             && gm.getListPowerUps().stream().noneMatch(p -> !p.isExpired())

@@ -39,6 +39,8 @@ public class GameManager {
     private final List<PowerUp> powerUpsToAdd = new ArrayList<>(); // in case you want deferred add
     private LevelGame levelGame = new LevelGame();
 
+    private final List<Brick> bricksToRemove = new ArrayList<>();
+
     // 🔒 Constructor private: chỉ cho phép tạo nội bộ
     private GameManager() {
         listPowerUps = new ArrayList<>();
@@ -187,6 +189,7 @@ public class GameManager {
         if (!keepPlayerData) {
             player = null;
             scoreDAO = null;
+            levelGame = new LevelGame();
         }
 
         // 9️⃣ Remove tất cả scoreboard/highscore Text nodes (nếu có)
@@ -431,6 +434,17 @@ public class GameManager {
                 }
             }
         }
+        // 4️⃣ Xóa brick bị phá hoàn toàn
+        if (!bricksToRemove.isEmpty()) {
+            for (Brick brick : bricksToRemove) {
+                listBricks.remove(brick);
+                if (brick.getImageView() != null) {
+                    ((AnchorPane) brick.getImageView().getParent()).getChildren().remove(brick.getImageView());
+                }
+            }
+            bricksToRemove.clear();
+        }
+
     }
 
     // Tạo 1 quả bóng mới ở giữa paddle và trừ 1 mạng
@@ -618,6 +632,12 @@ public class GameManager {
             this.paddle = controller.LoadPaddle();
             controller.LoadBall();
 
+            aimingArrow = new Line();
+            aimingArrow.setStrokeWidth(3);
+            aimingArrow.setStroke(Color.CYAN);
+            aimingArrow.setVisible(false);
+            controller.getStartGamePane().getChildren().add(aimingArrow);
+
             // Giữ điểm và mạng cũ
             SoundManager.PlaySoundBackground();
             startGameLoop(controller);
@@ -627,6 +647,12 @@ public class GameManager {
             // Hết level → thắng toàn bộ game
             System.out.println("🎉 Hoàn thành tất cả level!");
             gameOver(controller);
+        }
+    }
+
+    public void markBrickForRemoval(Brick brick) {
+        if (brick != null && !bricksToRemove.contains(brick)) {
+            bricksToRemove.add(brick);
         }
     }
 
