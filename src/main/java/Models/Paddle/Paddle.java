@@ -1,13 +1,10 @@
-package Models;
+package Models.Paddle;
 
 import GameController.StartGameController;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import Models.Object.MovableObject;
 
 
-
-public class Paddle extends MovableObject{
+public class Paddle extends MovableObject {
     private double speed;
     private double baseWidth;
     private boolean moveL = false;

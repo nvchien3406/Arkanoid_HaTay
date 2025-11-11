@@ -4,35 +4,34 @@ import DAO.DatabaseManager;
 import DAO.IScoreRepository;
 import DAO.SQLiteScoreRepository;
 import Models.*;
+import Models.Ball.Ball;
+import Models.Ball.NormalBall;
+import Models.Brick.Brick;
+import Models.Brick.NormalBrick;
+import Models.Brick.SpecialBrick;
+import Models.Brick.StrongBrick;
+import Models.Paddle.Paddle;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StartGameController implements GameConstant{
+public class StartGameController{
     @FXML
     private AnchorPane startGamePane;
     @FXML
@@ -50,30 +49,6 @@ public class StartGameController implements GameConstant{
 
     private Rectangle overlay;
     private boolean isPaused = false;
-
-    public static final int ROWS = 14;
-    public static final int COLS = 18;
-    public static final int BRICK_WIDTH = 32;
-    public static final int BRICK_HEIGHT = 16;
-    public static final Pair<String, String>[] brickImages = new Pair[]{
-            new Pair<>("/image/BlueBrick.png", "NormalBrick"),
-            new Pair<>("/image/GreenBrick.png", "NormalBrick"),
-            new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
-            new Pair<>("/image/PurpleBrick.png", "StrongBrick"),
-            new Pair<>("/image/RedBrick.png", "StrongBrick"),
-            new Pair<>("/image/YellowBrick.png", "StrongBrick"),
-            new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
-    };
-    public static final String[] paddleImages = {
-            "/image/Paddle.png"
-    };
-    public static final String[] BallImages = {
-            "/image/NormalBall.png",
-            "/image/PierceBall.png"
-    };
-    public static final String[] powerUpImages = {
-            "/image/ExpandPaddlePowerUp.png"
-    };
 
     @FXML
     public List<Brick> LoadBrick() {
@@ -98,23 +73,23 @@ public class StartGameController implements GameConstant{
 
         };
 
-        for (int row = ROWS - 1; row >= 0; row--) {
-            for (int col = 0; col < COLS; col++) {
+        for (int row = GameConstant.ROWS - 1; row >= 0; row--) {
+            for (int col = 0; col < GameConstant.COLS; col++) {
 
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
 
-                double x = col * BRICK_WIDTH + 62;
-                double y = row * BRICK_HEIGHT + 50;
+                double x = col * GameConstant.BRICK_WIDTH + 62;
+                double y = row * GameConstant.BRICK_HEIGHT + 50;
 
-                String imgPath = brickImages[pattern[row][col]].getKey();
+                String imgPath = GameConstant.brickImages[pattern[row][col]].getKey();
 
                 Brick brick;
-                if (brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
-                    brick = new NormalBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                } else if (brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
-                    brick = new StrongBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
-                } else brick = new SpecialBrick(x, y, BRICK_WIDTH, BRICK_HEIGHT, imgPath);
+                if (GameConstant.brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
+                    brick = new NormalBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
+                } else if (GameConstant.brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
+                    brick = new StrongBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
+                } else brick = new SpecialBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
 
                 bricks.add(brick);
                 startGamePane.getChildren().add(brick.getImageView());
@@ -228,12 +203,12 @@ public class StartGameController implements GameConstant{
 
     @FXML
     public Paddle LoadPaddle() {
-        double width = PADDLE_WIDTH;
-        double height = PADDLE_HEIGHT;
+        double width = GameConstant.PADDLE_WIDTH;
+        double height = GameConstant.PADDLE_HEIGHT;
         double startX = 550;
         double startY = 600;
-        Paddle paddle = new Paddle(startX, startY, width, height, paddleImages[0], 0, 0,
-                PADDLE_SPEED, false, false);
+        Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages, 0, 0,
+                GameConstant.PADDLE_SPEED, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());
         return paddle;
@@ -241,12 +216,12 @@ public class StartGameController implements GameConstant{
 
     @FXML
     public Ball LoadBall() {
-        double size = BALL_SIZE;
+        double size = GameConstant.BALL_SIZE;
 
         double startX = 550;
         double startY = 500;
 
-        Ball mainBall = new Ball(startX , startY , 20 , 20 , BallImages[0] ,3 ,1 , 1 );
+        Ball mainBall = new NormalBall(startX , startY , 20 , 20 , GameConstant.BallImages[0] ,3 ,1 , 1 );
         GameManager gm = GameManager.getInstance();
         gm.getListBalls().add(mainBall);
         startGamePane.getChildren().add(mainBall.getImageView());

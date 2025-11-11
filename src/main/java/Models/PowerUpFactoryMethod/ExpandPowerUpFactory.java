@@ -1,4 +1,7 @@
-package Models;
+package Models.PowerUpFactoryMethod;
+
+import Models.PowerUp_Down.ExpandPaddlePowerUp;
+import Models.PowerUp_Down.PowerUp;
 
 public class ExpandPowerUpFactory implements PowerUpFactory {
     @Override

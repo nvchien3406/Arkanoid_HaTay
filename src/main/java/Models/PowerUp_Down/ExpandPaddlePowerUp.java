@@ -1,17 +1,14 @@
-package Models;
+package Models.PowerUp_Down;
 
-import javafx.scene.canvas.GraphicsContext;
+import Models.Object.GameObject;
+import Models.Paddle.Paddle;
 import javafx.scene.image.Image;
 import GameController.GameConstant;
 
 import java.util.Objects;
 
 
-public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
-
-    public ExpandPaddlePowerUp() {
-        super();
-    }
+public class ExpandPaddlePowerUp extends PowerUp {
 
     public ExpandPaddlePowerUp(double x, double y) {
         super(x, y, 32, 32, "/image/ExpandPaddlePowerUp.png", 0, 3,
@@ -20,9 +17,7 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
 
     @Override
     public void applyEffect(GameObject obj) {
-        if (obj instanceof Paddle) {
-            Paddle p = (Paddle) obj;
-            double paneWidth = 700;
+        if (obj instanceof Paddle p) {
             double newWidth = p.getBaseWidth() * 1.5;
             double center = p.getX() + p.getWidth() / 2;
 
@@ -32,14 +27,14 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
             double newX = center - newWidth / 2;
 
             if (newX <= 0) newX = 0;
-            else if (newX + newWidth >= paneWidth) newX = paneWidth - newWidth;
+            else if (newX + newWidth >= GameConstant.PANE_WIDTH) newX = GameConstant.PANE_WIDTH - newWidth;
 
             p.setX(newX);
             p.getImageView().setLayoutX(newX);
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(paddleVariables[0])
+                            getClass().getResource(GameConstant.paddleImages)
                     ).toExternalForm())
             );
         }
@@ -47,8 +42,7 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
 
     @Override
     public void removeEffect(GameObject obj) {
-        if (obj instanceof Paddle) {
-            Paddle p = (Paddle) obj;
+        if (obj instanceof Paddle p) {
 
             double newWidth = p.getBaseWidth();
             double center = p.getX() + p.getWidth() / 2;
@@ -61,7 +55,7 @@ public class ExpandPaddlePowerUp extends PowerUp implements PaddleVariables {
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(paddleVariables[0])
+                            getClass().getResource(GameConstant.paddleImages)
                     ).toExternalForm())
             );
         }

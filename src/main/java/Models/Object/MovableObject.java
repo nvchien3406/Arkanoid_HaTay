@@ -1,7 +1,4 @@
-package Models;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+package Models.Object;
 
 public abstract class MovableObject extends GameObject {
     protected double dx,dy;
