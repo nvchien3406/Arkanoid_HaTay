@@ -2,6 +2,7 @@ package GameController;
 import DAO.IScoreRepository;
 import Models.Ball.*;
 import Models.Brick.Brick;
+import Models.LevelGame;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
 import Models.PowerUpFactoryMethod.PowerUpFactory;
@@ -19,6 +20,8 @@ import javafx.scene.shape.Line;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -41,6 +44,9 @@ public class GameManager {
     private final List<Ball> ballsToRemove = new ArrayList<>();
     private final List<PowerUp> powerUpsToRemove = new ArrayList<>();
     private final List<PowerUp> powerUpsToAdd = new ArrayList<>(); // in case you want deferred add
+
+    //LevelGame
+    private LevelGame level =  new LevelGame();
 
     // Constructor có tham số
     private GameManager(IScoreRepository scoreDAO,ISoundService soundService) {
@@ -127,72 +133,34 @@ public class GameManager {
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
-    public void resetGameManager(StartGameController controller) {
-        // 1️⃣ Dừng game loop
+    public void resetGameManager(StartGameController controller, boolean keepPlayerData) {
+        stopGameLoop();
+        clearLevelObjects(controller);
+        clearCollections();
+
+        if (!keepPlayerData) {
+            // Reset tất cả dữ liệu người chơi và level
+            player = null;
+            level = new LevelGame(); //restart lại từ level 0
+        }
+
+        // Xóa UI text (score, highscore)
+        if (controller != null && controller.getStartGamePane() != null) {
+            controller.getStartGamePane().getChildren().removeIf(node -> node instanceof Text);
+        }
+    }
+    private void stopGameLoop() {
         if (gameTimer != null) {
             gameTimer.stop();
             gameTimer = null;
         }
+    }
 
-        // 2️⃣ Disable input để tránh key/mouse cũ
-        if (controller != null && controller.getStartGamePane() != null) {
-            Scene scene = controller.getStartGamePane().getScene();
-            if (scene != null) disableKeyControls(scene);
-        }
-
-        // 3️⃣ Xóa tất cả balls
-        if (listBalls != null) {
-            for (Ball b : listBalls) {
-                if (b.getImageView() != null) {
-                    ((AnchorPane) b.getImageView().getParent()).getChildren().remove(b.getImageView());
-                }
-            }
-            listBalls.clear();
-        }
-
-        // 4️⃣ Xóa tất cả bricks
-        if (listBricks != null) {
-            for (Brick brick : listBricks) {
-                if (brick.getImageView() != null) {
-                    ((AnchorPane) brick.getImageView().getParent()).getChildren().remove(brick.getImageView());
-                }
-            }
-            listBricks.clear();
-        }
-
-        // 5️⃣ Xóa tất cả powerups
-        if (listPowerUps != null) {
-            for (PowerUp p : listPowerUps) {
-                if (p.getImageView() != null) {
-                    ((AnchorPane) p.getImageView().getParent()).getChildren().remove(p.getImageView());
-                }
-            }
-            listPowerUps.clear();
-        }
-
+    private void clearCollections() {
         ballsToRemove.clear();
         powerUpsToRemove.clear();
         powerUpsToAdd.clear();
-
-        // 6️⃣ Xóa paddle
-        if (paddle != null && paddle.getImageView() != null) {
-            ((AnchorPane) paddle.getImageView().getParent()).getChildren().remove(paddle.getImageView());
-        }
-        paddle = null;
-
-        // 7️⃣ Xóa aiming arrow
-        if (aimingArrow != null && controller != null && controller.getStartGamePane() != null) {
-            controller.getStartGamePane().getChildren().remove(aimingArrow);
-        }
-        aimingArrow = null;
-
-        // 8️⃣ Reset player & score DAO
-        player = null;
-
-        // 9️⃣ Remove tất cả scoreboard/highscore Text nodes (nếu có)
-        if (controller != null && controller.getStartGamePane() != null) {
-            controller.getStartGamePane().getChildren().removeIf(node -> node instanceof Text);
-        }
+        powerUpsToRemove.clear();
     }
     // === Deferred operations API ===
     public void markBallForRemoval(Ball b) {
@@ -228,13 +196,14 @@ public class GameManager {
     }
 
     public void startGame(StartGameController controller) {
+        player = new Player("Bao" ,0 , 3);
 //        scoreDAO = new ScoreDAO();
         gameState = true;
 
         //SoundManager.StopSoundMenuBackground();
         GameManager.getInstance().getSoundService().pauseSoundBackground();
 
-        this.listBricks = controller.LoadBrick();
+        this.listBricks = controller.LoadBrick(level);
         this.paddle = controller.LoadPaddle();
 
         aimingArrow = new Line();
@@ -244,6 +213,8 @@ public class GameManager {
         controller.getStartGamePane().getChildren().add(aimingArrow);
         // ✅ Chỉ gọi 1 lần
         controller.LoadBall();
+
+        showLevelIntro(controller, level.getLevelNumber());
 
         // 🔹 Bắt đầu vòng lặp game
         startGameLoop(controller);
@@ -375,6 +346,24 @@ public class GameManager {
 
         // 5) dọn dẹp deferred removes / thêm deferred adds
         cleanupDeferred(controller);
+
+        // Check map
+        if (allBricksDestroyed()) {
+            //handleNextLevel(controller);
+            gameTimer.stop();
+
+            PauseTransition waitForBreakAnim = new PauseTransition(Duration.seconds(1.0)); // tuỳ bạn, thường 0.8–1.0s
+            waitForBreakAnim.setOnFinished(e -> {
+                handleNextLevel(controller);
+                gameTimer.start();
+            });
+            waitForBreakAnim.play();
+        }
+    }
+
+    private boolean allBricksDestroyed() {
+        if (listBricks == null || listBricks.isEmpty()) return false;
+        return listBricks.stream().allMatch(Brick::isDestroyed);
     }
 
     public void handelInput(){
@@ -623,4 +612,140 @@ public class GameManager {
 
         }
     }
+
+    private void handleNextLevel(StartGameController controller) {
+
+        if (level == null) {
+            System.err.println("[GameManager] LevelGame chưa được khởi tạo!");
+            return;
+        }
+
+        if (!level.hasNextLevel()) {
+            System.out.println("🎉 Hoàn thành tất cả level!");
+            gameOver(controller);
+            return;
+        }
+
+        // Sang level mới
+        level.nextLevel();
+        controller.animateLevelUp(level.getLevelNumber());
+        // Dọn cảnh cũ
+        clearLevelObjects(controller);
+
+        this.listBricks = controller.LoadBrick(level);
+        this.paddle = controller.LoadPaddle();
+        controller.LoadBall();
+
+        showLevelIntro(controller, level.getLevelNumber());
+
+        // Tạo lại mũi tên
+        aimingArrow = new Line();
+        aimingArrow.setStrokeWidth(3);
+        aimingArrow.setStroke(Color.CYAN);
+        aimingArrow.setVisible(false);
+        controller.getStartGamePane().getChildren().add(aimingArrow);
+        aimingArrow.toBack();
+
+        Scene scene = controller.getStartGamePane().getScene();
+        if (scene != null) {
+            setupKeyControls(scene);
+        }
+
+
+        // Giữ nguyên điểm, mạng, player
+        System.out.println("➡ Sang Level " + level.getLevelNumber());
+    }
+
+    /**
+     * Dọn cảnh giữa các level — KHÔNG xoá player, score, hay DAO.
+     * Chỉ reset các object hiển thị trong màn chơi.
+     */
+    private void clearLevelObjects(StartGameController controller) {
+        // Xóa bóng
+        if (listBalls != null) {
+            for (Ball b : listBalls) {
+                if (b.getImageView() != null) {
+                    ((AnchorPane) b.getImageView().getParent()).getChildren().remove(b.getImageView());
+                }
+            }
+            listBalls.clear();
+        }
+
+        // Xóa gạch
+        if (listBricks != null) {
+            for (Brick brick : listBricks) {
+                if (brick.getImageView() != null) {
+                    ((AnchorPane) brick.getImageView().getParent()).getChildren().remove(brick.getImageView());
+                }
+            }
+            listBricks.clear();
+        }
+
+        // Xóa PowerUp
+        if (listPowerUps != null) {
+            for (PowerUp p : listPowerUps) {
+                if (p.getImageView() != null) {
+                    ((AnchorPane) p.getImageView().getParent()).getChildren().remove(p.getImageView());
+                }
+            }
+            listPowerUps.clear();
+        }
+
+        // Xóa paddle
+        if (paddle != null && paddle.getImageView() != null) {
+            ((AnchorPane) paddle.getImageView().getParent()).getChildren().remove(paddle.getImageView());
+        }
+        paddle = null;
+
+        // Xóa arrow
+        if (aimingArrow != null && controller != null && controller.getStartGamePane() != null) {
+            controller.getStartGamePane().getChildren().remove(aimingArrow);
+        }
+        clearCollections();
+
+        disableKeyControls(controller.getStartGamePane().getScene());
+    }
+
+    private void showLevelIntro(StartGameController controller, int levelNumber) {
+        AnchorPane pane = controller.getStartGamePane();
+        if (pane == null) return;
+
+        // 1️⃣ Tạo text
+        Text levelText = new Text("LEVEL " + levelNumber);
+        levelText.setFill(Color.GOLD);
+        levelText.setStroke(Color.BLACK);
+        levelText.setStrokeWidth(3);
+
+        levelText.setFont(Font.font("Impact", FontWeight.BOLD, 72));
+
+        // 2️⃣ Căn giữa màn hình
+        levelText.setLayoutX(pane.getWidth() / 2 - 150);
+        levelText.setLayoutY(pane.getHeight() / 2);
+
+        pane.getChildren().add(levelText);
+
+        // 3️⃣ Hiệu ứng xuất hiện & biến mất
+        ScaleTransition scale = new ScaleTransition(Duration.millis(700), levelText);
+        scale.setFromX(0.5);
+        scale.setFromY(0.5);
+        scale.setToX(1.2);
+        scale.setToY(1.2);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), levelText);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(800), levelText);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+        fadeOut.setDelay(Duration.millis(1000)); // chờ 1s rồi mờ dần
+
+        ParallelTransition appear = new ParallelTransition(scale, fadeIn);
+        SequentialTransition totalAnim = new SequentialTransition(appear, fadeOut);
+
+        totalAnim.setOnFinished(e -> pane.getChildren().remove(levelText));
+        totalAnim.play();
+    }
+
+
 }

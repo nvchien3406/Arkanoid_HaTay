@@ -4,9 +4,11 @@ import Models.Brick.Brick;
 import Models.Brick.NormalBrick;
 import Models.Brick.SpecialBrick;
 import Models.Brick.StrongBrick;
+import Models.LevelGame;
 import Models.Paddle.Paddle;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -46,30 +48,14 @@ public class StartGameController{
     private boolean isPaused = false;
 
     @FXML
-    public List<Brick> LoadBrick() {
+    public List<Brick> LoadBrick(LevelGame level) {
         List<Brick> bricks = new ArrayList();
-        Random random = new Random();
+        int[][] map = level.getCurrentLevel();
+        int R = map.length;
+        int C = map[0].length;
 
-        int[][] pattern = {
-                {5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6, 5, 6},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 4, 4, 1, 1, 4, 4, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1},
-                {1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1},
-                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
-                {1, 4, 6, 4, 4, 6, 4, 1, 1, 1, 1, 3, 6, 3, 3, 6, 3, 1},
-                {4, 4, 4, 4, 4, 4, 4, 4, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3},
-                {4, 1, 4, 4, 4, 4, 1, 4, 1, 1, 3, 1, 3, 3, 3, 3, 1, 3},
-                {1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1},
-                {1, 1, 4, 1, 1, 4, 1, 1, 1, 1, 1, 1, 3, 1, 1, 3, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2}
-
-        };
-
-        for (int row = GameConstant.ROWS - 1; row >= 0; row--) {
-            for (int col = 0; col < GameConstant.COLS; col++) {
+        for (int row = R - 1; row >= 0; row--) {
+            for (int col = 0; col < C; col++) {
 
                 // Tạo ngẫu nhiên: 20% không có gạch
                 //if (random.nextDouble() < 0.2) continue;
@@ -77,12 +63,12 @@ public class StartGameController{
                 double x = col * GameConstant.BRICK_WIDTH + 62;
                 double y = row * GameConstant.BRICK_HEIGHT + 50;
 
-                String imgPath = GameConstant.brickImages[pattern[row][col]].getKey();
+                String imgPath = GameConstant.brickImages[map[row][col]].getKey();
 
                 Brick brick;
-                if (GameConstant.brickImages[pattern[row][col]].getValue().equals("NormalBrick")) {
+                if (GameConstant.brickImages[map[row][col]].getValue().equals("NormalBrick")) {
                     brick = new NormalBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
-                } else if (GameConstant.brickImages[pattern[row][col]].getValue().equals("StrongBrick")) {
+                } else if (GameConstant.brickImages[map[row][col]].getValue().equals("StrongBrick")) {
                     brick = new StrongBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
                 } else brick = new SpecialBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
 
@@ -175,7 +161,7 @@ public class StartGameController{
 
     private void restartGame() {
         hidePauseMenu();
-        GameManager.getInstance().resetGameManager(this);
+        GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "startGame.fxml");
     }
@@ -183,7 +169,7 @@ public class StartGameController{
     private void exitToMenu() {
         hidePauseMenu();
         GameManager.getInstance().getSoundService().pauseSoundBackground();
-        GameManager.getInstance().resetGameManager(this);
+        GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame.fxml");
     }
@@ -223,6 +209,26 @@ public class StartGameController{
 
         return mainBall;
     }
+
+    public void animateLevelUp(int newLevel) {
+        if (Level == null) return;
+
+        Level.setText(String.valueOf(newLevel));
+        Level.setTextFill(Color.WHITE); // trắng sáng rõ
+
+        // Hiệu ứng nảy nhỏ
+        ScaleTransition scale = new ScaleTransition(Duration.millis(400), Level);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(1.3);
+        scale.setToY(1.3);
+
+        scale.setAutoReverse(true);
+        scale.setCycleCount(2);
+
+        scale.play();
+    }
+
 
     public AnchorPane getStartGamePane() {
         return startGamePane;

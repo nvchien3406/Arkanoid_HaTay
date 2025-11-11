@@ -4,10 +4,7 @@ package Models.Ball;
 import GameController.GameConstant;
 import GameController.GameManager;
 import GameController.StartGameController;
-import Models.Brick.Brick;
-import Models.Brick.NormalBrick;
-import Models.Brick.SpecialBrick;
-import Models.Brick.StrongBrick;
+import Models.Brick.*;
 import Models.Object.MovableObject;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
@@ -55,12 +52,7 @@ public abstract class Ball extends MovableObject {
 
     protected void processBrickHit(Brick brick, Player player, StartGameController controller) {
         if (!(brick instanceof SpecialBrick)) {
-                if (brick instanceof NormalBrick) {
-                    ((NormalBrick)brick).takeHit();
-                }
-                else if (brick instanceof StrongBrick) {
-                    ((StrongBrick)brick).takeHit();
-                }
+            ((BreakableBrick)brick).takeHit();
                 player.addScore();
                 GameManager.getInstance().showScorePopup(
                         controller,
