@@ -1,7 +1,7 @@
 package Models.Ball;
 
 import GameController.GameConstant;
-import GameController.GameManager;
+import GameController.Manager.GameManager;
 import GameController.StartGameController;
 import Models.Brick.Brick;
 import Models.Player.Player;
@@ -41,7 +41,7 @@ public class PierceBall extends Ball {
     public void checkWallCollision() {
         GameManager gm = GameManager.getInstance();
         if (x <= 0 || x + width >= GameConstant.PANE_WIDTH || y <= 0)
-            GameManager.getInstance().markBallForRemoval(this);
+            GameManager.getInstance().getObjectManager().markBallForRemoval(this);
     }
 
 

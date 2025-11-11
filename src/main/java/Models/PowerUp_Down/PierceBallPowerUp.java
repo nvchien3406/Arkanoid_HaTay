@@ -1,6 +1,6 @@
 package Models.PowerUp_Down;
 
-import GameController.GameManager;
+import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 import Models.Ball.PierceBall;
@@ -31,11 +31,11 @@ public class PierceBallPowerUp extends PowerUp{
     private void replaceAllBallsWithPierceBall(GameManager gm, AnchorPane pane, Paddle paddle) {
         removeAllBallsFromPane(gm, pane);
 
-        gm.getListBalls().clear();
+        GameManager.getInstance().getObjectManager().getListBalls().clear();
 
         PierceBall pierceBall = createPierceBall(paddle);
 
-        gm.getListBalls().add(pierceBall);
+        GameManager.getInstance().getObjectManager().getListBalls().add(pierceBall);
         addBallToScene(pane, pierceBall);
     }
 
@@ -51,7 +51,7 @@ public class PierceBallPowerUp extends PowerUp{
     }
 
     private void restoreNormalBalls(GameManager gm, AnchorPane pane) {
-        List<Ball> balls = gm.getListBalls();
+        List<Ball> balls = GameManager.getInstance().getObjectManager().getListBalls();
 
         for (int i = 0; i < balls.size(); i++) {
             Ball current = balls.get(i);
@@ -81,7 +81,7 @@ public class PierceBallPowerUp extends PowerUp{
     /* -------------------- UI utility methods -------------------- */
 
     private void removeAllBallsFromPane(GameManager gm, AnchorPane pane) {
-        for (Ball oldBall : new ArrayList<>(gm.getListBalls())) {
+        for (Ball oldBall : new ArrayList<>(GameManager.getInstance().getObjectManager().getListBalls())) {
             pane.getChildren().remove(oldBall.getImageView());
         }
     }
@@ -106,7 +106,7 @@ public class PierceBallPowerUp extends PowerUp{
         if (!(obj instanceof Paddle)) return;
 
         GameManager gm = GameManager.getInstance();
-        Paddle paddle = gm.getPaddle();
+        Paddle paddle = GameManager.getInstance().getObjectManager().getPaddle();
         AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
 
         replaceAllBallsWithPierceBall(gm, pane, paddle);
@@ -118,7 +118,7 @@ public class PierceBallPowerUp extends PowerUp{
     @Override
     public void removeEffect(GameObject obj) {
         GameManager gm = GameManager.getInstance();
-        AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
+        AnchorPane pane = (AnchorPane) GameManager.getInstance().getObjectManager().getPaddle().getImageView().getParent();
 
         restoreNormalBalls(gm, pane);
         setActive(false);

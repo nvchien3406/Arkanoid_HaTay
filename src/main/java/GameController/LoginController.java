@@ -1,11 +1,10 @@
 package GameController;
 
+import GameController.Manager.GameManager;
 import Models.Player.Player;
 import Utils.SceneTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -20,7 +19,7 @@ public class LoginController {
 
         if (!username.isEmpty()) {
             Player player = new Player(username, 0, 3);
-            GameManager.getInstance().setPlayer(player);
+            GameManager.getInstance().getObjectManager().setPlayer(player);
 
             Stage stage = (Stage) txtUsername.getScene().getWindow();
             SceneTransition.switchScene(stage, "startGame.fxml");

@@ -1,5 +1,6 @@
 package GameController;
 
+import GameController.Manager.GameManager;
 import Utils.SceneTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

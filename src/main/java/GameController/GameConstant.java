@@ -18,6 +18,7 @@ public final class GameConstant {
     public static final double BALL_SIZE = 20;
     public static final double BALL_SPEED = 3;
     public static final int addScore = 10;
+    public static final double AIMING_ARROW_LENGTH = 80.0;
 
     public static final Pair<String, String>[] brickImages = new Pair[]{
             new Pair<>("/image/BlueBrick.png", "NormalBrick"),

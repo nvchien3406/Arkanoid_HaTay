@@ -26,4 +26,6 @@ module GameController {
     opens Models.Object to javafx.base;
     opens Models.Player to javafx.base;
     opens Models.Interface to javafx.base;
+    exports GameController.Manager;
+    opens GameController.Manager to javafx.fxml;
 }

@@ -1,6 +1,6 @@
 package Models.PowerUp_Down;
 
-import GameController.GameManager;
+import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 import Models.Object.GameObject;
@@ -17,11 +17,10 @@ public class ThreeBallPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(GameObject gameObject) {
-        GameManager gm = GameManager.getInstance();
-        AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
+        AnchorPane pane = (AnchorPane) GameManager.getInstance().getObjectManager().getPaddle().getImageView().getParent();
 
-        List<Ball> newBalls = createExtraBalls(gm.getListBalls());
-        addBallsToGame(gm, pane, newBalls);
+        List<Ball> newBalls = createExtraBalls(GameManager.getInstance().getObjectManager().getListBalls());
+        addBallsToGame(GameManager.getInstance(), pane, newBalls);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class ThreeBallPowerUp extends PowerUp {
      * Thêm các bóng mới vào GameManager và UI
      */
     private void addBallsToGame(GameManager gm, AnchorPane pane, List<Ball> newBalls) {
-        gm.getListBalls().addAll(newBalls);
+        GameManager.getInstance().getObjectManager().getListBalls().addAll(newBalls);
         newBalls.forEach(ball -> pane.getChildren().add(ball.getImageView()));
     }
 }

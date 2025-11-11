@@ -1,7 +1,7 @@
 package Models.Ball;
 
 import GameController.GameConstant;
-import GameController.GameManager;
+import GameController.Manager.GameManager;
 import GameController.StartGameController;
 import Models.Brick.Brick;
 import Models.Interface.BounceOff;
@@ -77,10 +77,6 @@ public class NormalBall extends Ball implements BounceOff {
     }
 
     public void checkWallCollision() {
-        double paneWidth = 700;
-        double paneHeight = 700;
-        GameManager gm = GameManager.getInstance();
-
         if (x <= 0 || x + width >= GameConstant.PANE_WIDTH) {
             setDirectionX(directionX * -1);
         }
@@ -94,7 +90,7 @@ public class NormalBall extends Ball implements BounceOff {
             }
 
             // 🔹 Đánh dấu bóng này để GameManager dọn sau khi vòng lặp xong
-            gm.markBallForRemoval(this);
+            GameManager.getInstance().getObjectManager().markBallForRemoval(this);
         }
     }
     public void brickBounceOff(List<Brick> bricks) {

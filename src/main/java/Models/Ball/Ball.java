@@ -2,7 +2,7 @@ package Models.Ball;
 
 
 import GameController.GameConstant;
-import GameController.GameManager;
+import GameController.Manager.GameManager;
 import GameController.StartGameController;
 import Models.Brick.*;
 import Models.Object.MovableObject;
@@ -54,16 +54,18 @@ public abstract class Ball extends MovableObject {
         if (!(brick instanceof SpecialBrick)) {
             ((BreakableBrick)brick).takeHit();
                 player.addScore();
-                GameManager.getInstance().showScorePopup(
-                        controller,
-                        brick.getX() + brick.getWidth() / 2,
-                        brick.getY() + brick.getHeight() / 2,
-                        GameConstant.addScore
-                );
+            GameManager.getInstance()
+                    .getGameUIManager()
+                    .showScorePopup(
+                            controller,
+                            brick.getX() + brick.getWidth() / 2,
+                            brick.getY() + brick.getHeight() / 2,
+                            GameConstant.addScore
+                    );
         }
 
         if (brick.isDestroyed()) playBallMusic();
-        GameManager.getInstance().spawnPowerUps(brick, controller);
+        GameManager.getInstance().getObjectManager().spawnPowerUps(brick, controller);
     }
 
     public void resetBall(Paddle paddle) {

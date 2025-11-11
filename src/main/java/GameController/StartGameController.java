@@ -1,5 +1,6 @@
 package GameController;
 
+import GameController.Manager.GameManager;
 import Models.Brick.Brick;
 import Models.Brick.NormalBrick;
 import Models.Brick.SpecialBrick;
@@ -8,7 +9,6 @@ import Models.LevelGame;
 import Models.Paddle.Paddle;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -18,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -26,7 +27,6 @@ import Models.Ball.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class StartGameController{
     @FXML
@@ -43,7 +43,7 @@ public class StartGameController{
     @FXML private Button restart;
     @FXML private Button exit;
     @FXML private Button setting;
-
+    @FXML private Line aimingArrow;
     private Rectangle overlay;
     private boolean isPaused = false;
 
@@ -81,13 +81,13 @@ public class StartGameController{
 
     public void initialize() {
         GameManager gameManager = GameManager.getInstance();
-        gameManager.startGame(this);
+        GameManager.getInstance().startGame(this);
 
         createPauseMenu();
 
         Pause.setOnAction(e -> {
             showPauseMenu();
-            gameManager.pauseGame();
+            GameManager.getInstance().getGameFlowManager().pauseGame();
         });
 
         resume.setOnAction(e -> resumeGame());
@@ -154,8 +154,7 @@ public class StartGameController{
 
     private void resumeGame() {
         GameManager.getInstance().getSoundService().resumeSoundBackground();
-        GameManager gameManager = GameManager.getInstance();
-        gameManager.resumeGame(this); // Tiếp tục game loop
+        GameManager.getInstance().getGameFlowManager().resumeGame(this); // Tiếp tục game loop
         hidePauseMenu();
     }
 
@@ -204,7 +203,7 @@ public class StartGameController{
 
         Ball mainBall = new NormalBall(startX , startY , 20 , 20 , GameConstant.BallImages[0] ,3 ,1 , 1 );
         GameManager gm = GameManager.getInstance();
-        gm.getListBalls().add(mainBall);
+        GameManager.getInstance().getObjectManager().getListBalls().add(mainBall);
         startGamePane.getChildren().add(mainBall.getImageView());
 
         return mainBall;
@@ -227,6 +226,15 @@ public class StartGameController{
         scale.setCycleCount(2);
 
         scale.play();
+    }
+
+    public Line LoadAimingRow() {
+        aimingArrow = new Line();
+        aimingArrow.setStrokeWidth(3);
+        aimingArrow.setStroke(Color.CYAN);
+        aimingArrow.setVisible(false);
+        startGamePane.getChildren().add(aimingArrow);
+        return aimingArrow;
     }
 
 

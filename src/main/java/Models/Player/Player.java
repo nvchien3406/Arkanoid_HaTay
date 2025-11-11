@@ -54,4 +54,11 @@ public class Player {
     public void addScore() {
         score += GameConstant.addScore;
     }
+
+    public void resetPlayer() {
+        this.playerName = "";
+        this.score = 0;
+        this.lives = 3;
+        this.rank = 0;
+    }
 }
