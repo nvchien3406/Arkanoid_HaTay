@@ -37,6 +37,7 @@ public class GameFlowManager {
             endGameController.setFinalScore(player.getScore());
             endGameController.setRank(gameManager.getScoreDAO().getRankPlayer(player));
 
+            //gameManager.getObjectManager().setPlayer(null);
             gameManager.resetGameManager(controller,false);
         } else {
             // fallback

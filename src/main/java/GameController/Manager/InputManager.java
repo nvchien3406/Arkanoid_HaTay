@@ -15,6 +15,11 @@ public class InputManager {
 
     public void setupKeyControls(Scene scene) {
         scene.setOnKeyPressed(event -> {
+            var paddle = objectManager.getPaddle();
+            if (paddle == null) {
+                System.err.println("[InputManager] Paddle is null, ignoring key press.");
+                return;
+            }
             if (event.getCode() == javafx.scene.input.KeyCode.LEFT) objectManager.getPaddle().setMoveL(true);
             if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) objectManager.getPaddle().setMoveR(true);
             if (event.getCode() == javafx.scene.input.KeyCode.SPACE) {
@@ -29,6 +34,11 @@ public class InputManager {
         });
 
         scene.setOnKeyReleased(event -> {
+            var paddle = objectManager.getPaddle();
+            if (paddle == null) {
+                System.err.println("[InputManager] Paddle is null, ignoring key press.");
+                return;
+            }
             if (event.getCode() == javafx.scene.input.KeyCode.LEFT) objectManager.getPaddle().setMoveL(false);
             if (event.getCode() == javafx.scene.input.KeyCode.RIGHT) objectManager.getPaddle().setMoveR(false);
         });
