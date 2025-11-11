@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="700" prefWidth="1200" style="-fx-background-color: #1e3d59;" stylesheets="@startGame.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController.StartGameController">
@@ -58,6 +59,7 @@
                         <Button fx:id="setting" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="SETTING" />
                     </children>
                 </VBox>
+            <HBox fx:id="livesHBox" layoutX="5.0" layoutY="660.0" prefHeight="32.0" spacing="10.0" />
             </children></AnchorPane>
     </center>
 

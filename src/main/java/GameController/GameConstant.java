@@ -38,4 +38,7 @@ public final class GameConstant {
     public static final String[] powerUpImages = {
             "/image/ExpandPaddlePowerUp.png"
     };
+
+    public static final String heartImages = "/image/Heart.png";
+    public static final String heartEmptyImages = "/image/UnHeart.png";
 }

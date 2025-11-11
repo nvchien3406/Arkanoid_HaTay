@@ -7,15 +7,21 @@ import Models.Brick.SpecialBrick;
 import Models.Brick.StrongBrick;
 import Models.LevelGame;
 import Models.Paddle.Paddle;
+import Models.Player.Player;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -44,6 +50,13 @@ public class StartGameController{
     @FXML private Button exit;
     @FXML private Button setting;
     @FXML private Line aimingArrow;
+    @FXML private HBox livesHBox;
+
+    private final List<ImageView> heartViews = new ArrayList<>();
+    private Image heartImage;
+    private Image heartEmptyImage; // tuỳ chọn: ảnh trái tim rỗng
+    private int maxLives = 3;      // set tuỳ ý
+
     private Rectangle overlay;
     private boolean isPaused = false;
 
@@ -94,7 +107,73 @@ public class StartGameController{
         restart.setOnAction(e -> restartGame());
         exit.setOnAction(e -> exitToMenu());
         setting.setOnAction(e -> settingGame());
+
+        try {
+            heartImage = new Image(getClass().getResourceAsStream(GameConstant.heartImages));
+            heartEmptyImage = new Image(getClass().getResourceAsStream(GameConstant.heartEmptyImages));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // fallback: không crash, tạo label text nếu thiếu ảnh
+            heartImage = null;
+        }
+
+        initHearts(maxLives);
+
+        Player player = GameManager.getInstance().getObjectManager().getPlayer();
+        if (player != null) {
+            updateLives(player.getLives());
+        }
     }
+
+    private void initHearts(int count) {
+        livesHBox.getChildren().clear();
+        heartViews.clear();
+
+        for (int i = 0; i < count; i++) {
+            ImageView iv = new ImageView();
+            iv.setPreserveRatio(true);
+
+            if (heartImage != null) iv.setImage(heartImage);
+
+            heartViews.add(iv);
+            livesHBox.getChildren().add(iv);
+        }
+    }
+
+    public void updateLives(int playerLives) {
+        // đảm bảo không âm
+        if (playerLives < 0) playerLives = 0;
+
+        // nếu không đủ ImageView (player có lives > max), ta có thể mở rộng
+        if (playerLives > heartViews.size()) {
+            int diff = playerLives - heartViews.size();
+            for (int i = 0; i < diff; i++) {
+                ImageView iv = new ImageView(heartImage);
+                iv.setFitWidth(28);
+                iv.setFitHeight(28);
+                iv.setPreserveRatio(true);
+                heartViews.add(iv);
+                livesHBox.getChildren().add(iv);
+            }
+        }
+
+        // set visible / đổi ảnh rỗng nếu muốn
+        for (int i = 0; i < heartViews.size(); i++) {
+            ImageView iv = heartViews.get(i);
+            if (i < playerLives) {
+                iv.setVisible(true);
+                if (heartImage != null) iv.setImage(heartImage);
+            } else {
+                if (heartEmptyImage != null) {
+                    iv.setImage(heartEmptyImage);
+                    iv.setVisible(true);
+                } else {
+                    iv.setVisible(false);
+                }
+            }
+        }
+    }
+
 
     public void createPauseMenu() {
         // overlay mờ nền

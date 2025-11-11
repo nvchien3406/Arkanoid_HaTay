@@ -94,7 +94,6 @@ public class GameManager {
         objectManager.setPaddle(controller.LoadPaddle());
         objectManager.setAimingArrow(gameUIManager.createAimingArrow(controller)); // GameUIManager tạo arrow
         controller.LoadBall();
-
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
 
         startGameLoop(controller);
@@ -109,6 +108,8 @@ public class GameManager {
         objectManager.updatePlayer(controller);
         objectManager.updatePaddle(controller);
         objectManager.updatePowerUps();
+
+        controller.updateLives(objectManager.getPlayer().getLives());
 
         // 3. DB/Score UI
         List<String> topscores = scoreDAO.getHighScores();
