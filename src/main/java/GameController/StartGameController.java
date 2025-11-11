@@ -1,7 +1,5 @@
 package GameController;
 
-import Models.Ball.Ball;
-import Models.Ball.NormalBall;
 import Models.Brick.Brick;
 import Models.Brick.NormalBrick;
 import Models.Brick.SpecialBrick;
@@ -21,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import Models.Ball.*;
 
 
 import java.util.ArrayList;

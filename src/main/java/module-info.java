@@ -6,6 +6,7 @@ module GameController {
     requires java.sql;
     requires javafx.media;
     requires java.prefs;
+    //requires GameController;
 
 
     opens GameController to javafx.fxml;
@@ -19,4 +20,6 @@ module GameController {
     opens Models.Object to javafx.base;
     opens Models.Player to javafx.base;
     opens Models.Interface to javafx.base;
+    exports DAO;
+    opens DAO to javafx.fxml;
 }

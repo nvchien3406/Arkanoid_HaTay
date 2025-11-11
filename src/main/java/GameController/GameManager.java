@@ -1,7 +1,6 @@
 package GameController;
-import Models.Ball.Ball;
-import Models.Ball.NormalBall;
-import Models.Ball.PierceBall;
+import DAO.IScoreRepository;
+import Models.Ball.*;
 import Models.Brick.Brick;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
@@ -32,7 +31,7 @@ public class GameManager {
     private List<PowerUp> listPowerUps = new ArrayList<>();
     private AnimationTimer gameTimer;
     private Player player ;
-    private ScoreDAO scoreDAO;
+    private final IScoreRepository scoreDAO;
     private boolean gameState;
     private Line aimingArrow;
     private static final double AIMING_ARROW_LENGTH = 80.0;
@@ -42,21 +41,29 @@ public class GameManager {
     private final List<PowerUp> powerUpsToRemove = new ArrayList<>();
     private final List<PowerUp> powerUpsToAdd = new ArrayList<>(); // in case you want deferred add
 
-    // 🔒 Constructor private: chỉ cho phép tạo nội bộ
-    private GameManager() {
+    // Constructor có tham số
+    private GameManager(IScoreRepository scoreDAO) {
+        this.scoreDAO = scoreDAO;
         listPowerUps = new ArrayList<>();
     }
 
-    // 🔹 Singleton getter
+    // Phương thức khởi tạo đầu tiên (inject dependency)
+    public static void initialize(IScoreRepository repo) {
+        if (instance == null) {
+            instance = new GameManager(repo);
+        }
+    }
+
+    // Getter Singleton
     public static GameManager getInstance() {
         if (instance == null) {
-            instance = new GameManager();
+            throw new IllegalStateException("GameManager chưa được khởi tạo! Hãy gọi initialize(repo) trước.");
         }
         return instance;
     }
 
-    public static void setInstance(GameManager instance) {
-        GameManager.instance = instance;
+    public IScoreRepository getScoreDAO() {
+        return scoreDAO;
     }
 
     public List<Ball> getListBalls() {
@@ -81,14 +88,6 @@ public class GameManager {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    public ScoreDAO getScoreDAO() {
-        return scoreDAO;
-    }
-
-    public void setScoreDAO(ScoreDAO scoreDAO) {
-        this.scoreDAO = scoreDAO;
     }
 
     public Paddle getPaddle() {
@@ -183,9 +182,6 @@ public class GameManager {
 
         // 8️⃣ Reset player & score DAO
         player = null;
-        if (scoreDAO != null) {
-            scoreDAO = null;
-        }
 
         // 9️⃣ Remove tất cả scoreboard/highscore Text nodes (nếu có)
         if (controller != null && controller.getStartGamePane() != null) {
@@ -227,7 +223,7 @@ public class GameManager {
 
     public void startGame(StartGameController controller) {
         player = new Player("Bao" ,0 , 3);
-        scoreDAO = new ScoreDAO();
+//        scoreDAO = new ScoreDAO();
         gameState = true;
 
         //SoundManager.StopSoundMenuBackground();
@@ -365,7 +361,7 @@ public class GameManager {
         List<String> topscores = scoreDAO.getHighScores();
         controller.updateHighScores(topscores);
 
-        controller.updateCurrentTopScore(ScoreDAO.getTopScores());
+        controller.updateCurrentTopScore(scoreDAO.getTopScore());
 
         paddle.update(controller);
 
@@ -497,7 +493,6 @@ public class GameManager {
         endGameController.setRank(scoreDAO.getRankPlayer(player));
 
         player = null;
-        scoreDAO = null;
         resetGameManager(controller);
     }
 
