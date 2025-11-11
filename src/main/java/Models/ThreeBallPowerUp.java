@@ -2,6 +2,8 @@ package Models;
 
 import GameController.GameManager;
 import javafx.scene.layout.AnchorPane;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThreeBallPowerUp extends PowerUp {
 
@@ -15,28 +17,56 @@ public class ThreeBallPowerUp extends PowerUp {
         GameManager gm = GameManager.getInstance();
         AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
 
-        // Copy danh sách hiện tại để tránh ConcurrentModificationException
-        var currentBalls = new java.util.ArrayList<>(gm.getListBalls());
-
-        for (Ball b : currentBalls) {
-            // tạo 2 bóng mới lệch hướng
-            Ball left = new NormalBall(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
-                    "/image/NormalBall.png", 4, b.getDirectionX() - 0.4, b.getDirectionY());
-            Ball right = new NormalBall(b.getX(), b.getY(), b.getWidth(), b.getHeight(),
-                    "/image/NormalBall.png", 4, b.getDirectionX() + 0.4, b.getDirectionY());
-
-            left.setStanding(false);
-            right.setStanding(false);
-
-            gm.getListBalls().add(left);
-            gm.getListBalls().add(right);
-
-            pane.getChildren().addAll(left.getImageView(), right.getImageView());
-        }
+        List<Ball> newBalls = createExtraBalls(gm.getListBalls());
+        addBallsToGame(gm, pane, newBalls);
     }
 
     @Override
     public void removeEffect(GameObject gameObject) {
-        // không cần xóa bóng khi hết hiệu lực
+        // Không cần xử lý khi hết hiệu lực
+    }
+
+    /* -------------------- Helper methods -------------------- */
+
+    /**
+     * Tạo thêm 2 bóng (trái & phải) cho mỗi bóng hiện tại
+     */
+    private List<Ball> createExtraBalls(List<Ball> currentBalls) {
+        List<Ball> newBalls = new ArrayList<>();
+
+        for (Ball b : new ArrayList<>(currentBalls)) {
+            Ball left = createOffsetBall(b, -0.4);
+            Ball right = createOffsetBall(b, 0.4);
+            newBalls.add(left);
+            newBalls.add(right);
+        }
+
+        return newBalls;
+    }
+
+    /**
+     * Tạo một bóng mới lệch hướng
+     */
+    private Ball createOffsetBall(Ball baseBall, double offsetX) {
+        Ball newBall = new NormalBall(
+                baseBall.getX(),
+                baseBall.getY(),
+                baseBall.getWidth(),
+                baseBall.getHeight(),
+                "/image/NormalBall.png",
+                4,
+                baseBall.getDirectionX() + offsetX,
+                baseBall.getDirectionY()
+        );
+        newBall.setStanding(false);
+        return newBall;
+    }
+
+    /**
+     * Thêm các bóng mới vào GameManager và UI
+     */
+    private void addBallsToGame(GameManager gm, AnchorPane pane, List<Ball> newBalls) {
+        gm.getListBalls().addAll(newBalls);
+        newBalls.forEach(ball -> pane.getChildren().add(ball.getImageView()));
     }
 }

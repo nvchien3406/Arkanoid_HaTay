@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PierceBallPowerUp extends PowerUp{
 
@@ -21,67 +22,101 @@ public class PierceBallPowerUp extends PowerUp{
                 false, false, 0.0);
     }
 
-    @Override
-    public void applyEffect(GameObject obj) {
-        if (obj instanceof Paddle) {
-            GameManager gm = GameManager.getInstance();
-            Paddle paddle = gm.getPaddle();
-            AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
+    /* -------------------- Helper methods -------------------- */
 
-            // 1️⃣ Xóa tất cả bóng hiện có KHÔNG trừ mạng
-            for (Ball oldBall : new ArrayList<>(gm.getListBalls())) {
-                pane.getChildren().remove(oldBall.getImageView());
+    private void replaceAllBallsWithPierceBall(GameManager gm, AnchorPane pane, Paddle paddle) {
+        removeAllBallsFromPane(gm, pane);
+
+        gm.getListBalls().clear();
+
+        PierceBall pierceBall = createPierceBall(paddle);
+
+        gm.getListBalls().add(pierceBall);
+        addBallToScene(pane, pierceBall);
+    }
+
+    private PierceBall createPierceBall(Paddle paddle) {
+        PierceBall pierceBall = new PierceBall(
+                paddle.getX() + paddle.getWidth() / 2 - 10,
+                paddle.getY() - 20,
+                3,
+                0, -1
+        );
+        pierceBall.setStanding(true);
+        return pierceBall;
+    }
+
+    private void restoreNormalBalls(GameManager gm, AnchorPane pane) {
+        List<Ball> balls = gm.getListBalls();
+
+        for (int i = 0; i < balls.size(); i++) {
+            Ball current = balls.get(i);
+
+            if (current instanceof PierceBall pb) {
+                Ball normalBall = createNormalBallFromPierce(pb);
+                balls.set(i, normalBall);
+                replaceBallInPane(pane, pb, normalBall);
             }
-            gm.getListBalls().clear();
-
-            // 2️⃣ Tạo 1 PierceBall mới ở giữa paddle, đứng yên
-            PierceBall pierceBall = new PierceBall(
-                    paddle.getX() + paddle.getWidth() / 2 - 10,
-                    paddle.getY() - 20,
-                    3,
-                    0, -1
-            );
-            pierceBall.setStanding(true); // chờ bắn bằng chuột
-            gm.getListBalls().add(pierceBall);
-
-            // 3️⃣ Thêm vào scene graph
-            pane.getChildren().add(pierceBall.getImageView());
-
-            // 4️⃣ Đảm bảo mũi tên aiming vẫn ở trên cùng nếu đang hiển thị
-            Node pauseMenu = pane.lookup("#pauseMenu");
-            if (pauseMenu != null) pauseMenu.toFront();
-
-            setActive(true);
         }
     }
 
+    private Ball createNormalBallFromPierce(PierceBall pb) {
+        Ball normalBall = new NormalBall(
+                pb.getX(),
+                pb.getY(),
+                20, 20,
+                "/image/NormalBall.png",
+                pb.getSpeed(),
+                pb.getDirectionX(),
+                pb.getDirectionY()
+        );
+        normalBall.setStanding(pb.isStanding());
+        return normalBall;
+    }
+
+    /* -------------------- UI utility methods -------------------- */
+
+    private void removeAllBallsFromPane(GameManager gm, AnchorPane pane) {
+        for (Ball oldBall : new ArrayList<>(gm.getListBalls())) {
+            pane.getChildren().remove(oldBall.getImageView());
+        }
+    }
+
+    private void addBallToScene(AnchorPane pane, Ball ball) {
+        pane.getChildren().add(ball.getImageView());
+    }
+
+    private void replaceBallInPane(AnchorPane pane, Ball oldBall, Ball newBall) {
+        pane.getChildren().remove(oldBall.getImageView());
+        pane.getChildren().add(newBall.getImageView());
+    }
+
+    private void bringPauseMenuToFront(AnchorPane pane) {
+        Node pauseMenu = pane.lookup("#pauseMenu");
+        if (pauseMenu != null) pauseMenu.toFront();
+    }
+
+
+    @Override
+    public void applyEffect(GameObject obj) {
+        if (!(obj instanceof Paddle)) return;
+
+        GameManager gm = GameManager.getInstance();
+        Paddle paddle = gm.getPaddle();
+        AnchorPane pane = (AnchorPane) paddle.getImageView().getParent();
+
+        replaceAllBallsWithPierceBall(gm, pane, paddle);
+        bringPauseMenuToFront(pane);
+
+        setActive(true);
+    }
 
     @Override
     public void removeEffect(GameObject obj) {
         GameManager gm = GameManager.getInstance();
         AnchorPane pane = (AnchorPane) gm.getPaddle().getImageView().getParent();
 
-        // Chuyển ngược lại thành Ball thường
-        for (int i = 0; i < gm.getListBalls().size(); i++) {
-            Ball current = gm.getListBalls().get(i);
-
-            if (current instanceof PierceBall pb) {
-                Ball normalBall = new NormalBall(
-                        pb.getX(),
-                        pb.getY(),
-                        20, 20,
-                        "/image/NormalBall.png",
-                        pb.getSpeed(),
-                        pb.getDirectionX(),
-                        pb.getDirectionY()
-                );
-                normalBall.setStanding(pb.isStanding());
-
-                gm.getListBalls().set(i, normalBall);
-                pane.getChildren().remove(pb.getImageView());
-                pane.getChildren().add(normalBall.getImageView());
-            }
-        }
+        restoreNormalBalls(gm, pane);
         setActive(false);
     }
 }

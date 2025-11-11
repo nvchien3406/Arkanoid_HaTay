@@ -205,7 +205,7 @@ public class StartGameController{
         double height = GameConstant.PADDLE_HEIGHT;
         double startX = 550;
         double startY = 600;
-        Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages[0], 0, 0,
+        Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages, 0, 0,
                 GameConstant.PADDLE_SPEED, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());

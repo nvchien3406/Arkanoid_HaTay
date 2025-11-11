@@ -54,7 +54,7 @@ public abstract class PowerUp extends MovableObject {
     }
 
 
-    public void update() {
+    public void update(Paddle paddle) {
         if (!collected) {
             y += 0.5;
             imageView.setLayoutY(y);
@@ -62,7 +62,6 @@ public abstract class PowerUp extends MovableObject {
             // Nếu rơi quá đáy màn hình → đánh dấu hết hạn
             if (y > 800) {
                 expired = true;
-                GameManager.getInstance().removePowerUp(this);
                 return;
             }
         }
@@ -72,7 +71,7 @@ public abstract class PowerUp extends MovableObject {
 
             // Hết hạn
             if (elapsedTime >= duration) {
-                removeEffect(GameManager.getInstance().getPaddle());
+                removeEffect(paddle);
                 active = false;
                 expired = true;
             }

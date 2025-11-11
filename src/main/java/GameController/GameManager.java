@@ -334,6 +334,19 @@ public class GameManager {
         scene.setOnMouseReleased(null);
     }
 
+    public void updatePowerUps() {
+        if (listPowerUps == null || listPowerUps.isEmpty()) return;
+
+        for (PowerUp p : new ArrayList<>(listPowerUps)) {
+            p.update(paddle);        // Cập nhật logic riêng
+            p.checkPaddleCollision(paddle); // Kiểm tra va chạm với paddle
+
+            if (p.isExpired()) {
+                markPowerUpForRemoval(p);  // Giao cho GameManager xử lý xóa
+            }
+        }
+
+    }
 
     public void updateGame(StartGameController controller){
         // 1) xử lý va chạm & cập nhật vật thể (dùng bản sao để an toàn)
@@ -353,16 +366,7 @@ public class GameManager {
         paddle.update(controller);
 
         // 4) update powerups (dùng bản sao)
-        if (listPowerUps != null && !listPowerUps.isEmpty()) {
-            for (PowerUp p : new ArrayList<>(listPowerUps)) {
-                p.update();
-                p.checkPaddleCollision(paddle);
-            }
-            // collect expired
-            for (PowerUp p : new ArrayList<>(listPowerUps)) {
-                if (p.isExpired()) markPowerUpForRemoval(p);
-            }
-        }
+        updatePowerUps();
 
         // 5) dọn dẹp deferred removes / thêm deferred adds
         cleanupDeferred(controller);

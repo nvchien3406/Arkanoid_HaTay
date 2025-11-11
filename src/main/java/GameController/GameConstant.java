@@ -28,9 +28,8 @@ public final class GameConstant {
             new Pair<>("/image/YellowBrick.png", "StrongBrick"),
             new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
     };
-    public static final String[] paddleImages = {
-            "/image/Paddle.png"
-    };
+    public static final String paddleImages = "/image/Paddle.png";
+
     public static final String[] BallImages = {
             "/image/NormalBall.png",
             "/image/PierceBall.png"

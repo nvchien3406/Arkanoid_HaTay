@@ -1,15 +1,12 @@
 package Models;
 
+import GameController.GameConstant;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
 
 
-public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
-
-    public ShrinkPaddlePowerDown() {
-        super();
-    }
+public class ShrinkPaddlePowerDown extends PowerUp{
 
     public ShrinkPaddlePowerDown(double x, double y) {
         super(x, y, 32, 32, "/image/ShrinkPaddlePowerDown.png", 0, 3,
@@ -18,9 +15,7 @@ public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
 
     @Override
     public void applyEffect(GameObject obj) {
-        if (obj instanceof Paddle) {
-            Paddle p = (Paddle) obj;
-            double paneWidth = 700;
+        if (obj instanceof Paddle p) {
             double newWidth = p.getBaseWidth() * 0.7;
             double center = p.getX() + p.getWidth() / 2;
 
@@ -29,14 +24,14 @@ public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
 
             double newX = center - newWidth / 2;
             if (newX < 0) newX = 0;
-            else if (newX + newWidth > paneWidth) newX = paneWidth - newWidth;
+            else if (newX + newWidth > GameConstant.PANE_WIDTH) newX = GameConstant.PANE_WIDTH - newWidth;
 
             p.setX(newX);
             p.getImageView().setLayoutX(newX);
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(paddleVariables[0])
+                            getClass().getResource(GameConstant.paddleImages)
                     ).toExternalForm())
             );
         }
@@ -44,9 +39,7 @@ public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
 
     @Override
     public void removeEffect(GameObject obj) {
-        if (obj instanceof Paddle) {
-            Paddle p = (Paddle) obj;
-            double paneWidth = 700;
+        if (obj instanceof Paddle p) {
             double newWidth = p.getBaseWidth();
             double center = p.getX() + p.getWidth() / 2;
 
@@ -55,14 +48,14 @@ public class ShrinkPaddlePowerDown extends PowerUp implements PaddleVariables {
 
             double newX = center - newWidth / 2;
             if (newX < 0) newX = 0;
-            else if (newX + newWidth > paneWidth) newX = paneWidth - newWidth;
+            else if (newX + newWidth > GameConstant.PANE_WIDTH) newX = GameConstant.PANE_WIDTH - newWidth;
 
             p.setX(newX);
             p.getImageView().setLayoutX(newX);
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(paddleVariables[0])
+                            getClass().getResource(GameConstant.paddleImages)
                     ).toExternalForm())
             );
         }
