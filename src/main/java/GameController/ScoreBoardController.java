@@ -1,7 +1,7 @@
 package GameController;
 
 import DAO.IScoreRepository;
-import Models.Player;
+import Models.Player.*;
 import Models.Player.Player;
 import Utils.SceneTransition;
 import javafx.fxml.FXML;

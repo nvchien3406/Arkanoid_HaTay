@@ -3,7 +3,7 @@ package GameController;
 import DAO.DatabaseManager;
 import DAO.IScoreRepository;
 import DAO.SQLiteScoreRepository;
-import Models.Brick;
+import Models.Brick.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

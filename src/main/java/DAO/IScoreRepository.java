@@ -1,6 +1,6 @@
 package DAO;
 
-import Models.Player;
+import Models.Player.Player;
 import java.util.List;
 
 public interface IScoreRepository {
