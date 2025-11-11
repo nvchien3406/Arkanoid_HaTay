@@ -64,8 +64,8 @@ public abstract class Ball extends MovableObject {
                 player.addScore();
                 GameManager.getInstance().showScorePopup(
                         controller,
-                        (brick.getX() + brick.getWidth()) / 2,
-                        (brick.getY() + brick.getHeight()) / 2 + brick.getHeight(),
+                        brick.getX() + brick.getWidth() / 2,
+                        brick.getY() + brick.getHeight() / 2,
                         GameConstant.addScore
                 );
         }
