@@ -6,19 +6,24 @@ import java.sql.SQLException;
 import java.io.File;
 
 public class DatabaseManager {
-    private static final String DB_PATH = "data/scores.db";
-    private static final String URL = "jdbc:sqlite:" + DB_PATH;
+    private final String dbPath;
+    private final String url;
 
-    public static Connection getConnection() {
-        try {
-            File dataDir = new File("data");
-            if (!dataDir.exists()) {
-                dataDir.mkdirs();
-            }
-            return DriverManager.getConnection(URL);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+    public DatabaseManager(String dbPath) {
+        this.dbPath = dbPath;
+        this.url = "jdbc:sqlite:" + dbPath;
+        createDataFolderIfNotExists();
+    }
+
+    private void createDataFolderIfNotExists() {
+        File dataDir = new File(new File(dbPath).getParent());
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
         }
     }
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url);
+    }
 }
+

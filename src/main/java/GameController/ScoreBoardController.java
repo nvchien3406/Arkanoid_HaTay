@@ -1,6 +1,6 @@
 package GameController;
 
-import DAO.ScoreDAO;
+import DAO.IScoreRepository;
 import Models.Player;
 import Utils.SceneTransition;
 import javafx.fxml.FXML;
@@ -30,7 +30,8 @@ public class ScoreBoardController {
         rankColumn.setCellValueFactory(new PropertyValueFactory<>("rank"));
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
-        List<Player> topPlayers = ScoreDAO.getTopPlayers();
+        IScoreRepository scoreDAO = GameManager.getInstance().getScoreDAO();
+        List<Player> topPlayers = scoreDAO.getTopPlayers();
         scoreTable.getItems().addAll(topPlayers);
 
         backButton.setOnAction(e -> {

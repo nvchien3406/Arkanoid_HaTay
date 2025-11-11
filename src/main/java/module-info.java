@@ -6,6 +6,7 @@ module GameController {
     requires java.sql;
     requires javafx.media;
     requires java.prefs;
+    //requires GameController;
 
 
     opens GameController to javafx.fxml;

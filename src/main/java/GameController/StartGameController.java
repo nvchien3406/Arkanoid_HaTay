@@ -1,5 +1,8 @@
 package GameController;
 
+import DAO.DatabaseManager;
+import DAO.IScoreRepository;
+import DAO.SQLiteScoreRepository;
 import Models.*;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
