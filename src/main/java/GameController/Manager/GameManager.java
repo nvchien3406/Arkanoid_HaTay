@@ -2,6 +2,8 @@ package GameController.Manager;
 
 import DAO.IScoreRepository;
 import GameController.Controllers.StartGameController;
+import Models.Brick.Brick;
+import Models.Brick.MovingBrick;
 import Models.Level.LevelGame;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
@@ -9,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
@@ -94,7 +97,7 @@ public class GameManager {
         objectManager.setAimingArrow(gameUIManager.createAimingArrow(controller)); // GameUIManager tạo arrow
         controller.LoadBall();
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
-
+        controller.animateLevelUp(currentLevel.getLevelNumber());
         startGameLoop(controller);
     }
 
@@ -107,6 +110,7 @@ public class GameManager {
         objectManager.updatePlayer(controller);
         objectManager.updatePaddle(controller);
         objectManager.updatePowerUps();
+        objectManager.updateBricks();
 
         controller.updateLives(objectManager.getPlayer().getLives());
 

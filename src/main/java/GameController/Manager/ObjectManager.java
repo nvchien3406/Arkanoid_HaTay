@@ -6,6 +6,7 @@ import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 import Models.Ball.PierceBall;
 import Models.Brick.Brick;
+import Models.Brick.MovingBrick;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
 import Models.PowerUpFactoryMethod.PowerUpFactory;
@@ -96,6 +97,14 @@ public class ObjectManager {
             p.update(paddle);
             p.checkPaddleCollision(paddle);
             if (p.isExpired()) markPowerUpForRemoval(p);
+        }
+    }
+
+    public void updateBricks() {
+        for (Brick brick : listBricks) {
+            if (brick instanceof MovingBrick movingBrick) {
+                movingBrick.moveBrick();
+            }
         }
     }
 

@@ -14,8 +14,8 @@ public abstract class Brick extends GameObject {
 
     protected final int frameWidth = 32;
     protected final int frameHeight = 16;
-    private final int totalFrames = 8;
-    private int currentFrame = 0;
+    protected final int totalFrames = 8;
+    protected int currentFrame = 0;
     protected boolean breaking = false;
 
     private AnimationTimer breakAnimation;
@@ -56,7 +56,7 @@ public abstract class Brick extends GameObject {
 
         breakAnimation = new AnimationTimer() {
             private long lastFrameTime = 0;
-            private final long frameDelay = 70_000_000; // 70ms / frame
+            private final long frameDelay = 50_000_000; // 70ms / frame
 
             @Override
             public void handle(long now) {

@@ -24,10 +24,12 @@ public final class GameConstant {
             new Pair<>("/image/BlueBrick.png", "NormalBrick"),
             new Pair<>("/image/GreenBrick.png", "NormalBrick"),
             new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
+            new Pair<>("/image/RedBrick.png", "NormalBrick"),
             new Pair<>("/image/PurpleBrick.png", "StrongBrick"),
             new Pair<>("/image/RedBrick.png", "StrongBrick"),
             new Pair<>("/image/YellowBrick.png", "StrongBrick"),
-            new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
+            new Pair<>("/image/SpecialBrick.png", "SpecialBrick"),
+            new Pair<>("/image/MovingBrick.png", "MovingBrick")
     };
     public static final String paddleImages = "/image/Paddle.png";
 

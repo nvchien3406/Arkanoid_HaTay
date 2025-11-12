@@ -43,7 +43,7 @@ public class PierceBallPowerUp extends PowerUp{
         PierceBall pierceBall = new PierceBall(
                 paddle.getX() + paddle.getWidth() / 2 - 10,
                 paddle.getY() - 20,
-                3,
+                4,
                 0, -1
         );
         pierceBall.setStanding(true);

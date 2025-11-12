@@ -29,13 +29,6 @@ public class LevelManager {
             System.err.println("[LevelManager] LevelGame null");
             return;
         }
-        if (!level.hasNextLevel()) {
-            System.out.println("Hoan thanh tat ca level");
-            gameManager.getGameFlowManager().gameOver(controller);
-            return;
-        }
-
-//        objectManager.clearLevelObjects(controller);
 
         level.nextLevel();
         controller.animateLevelUp(level.getLevelNumber());
