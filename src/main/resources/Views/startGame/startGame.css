@@ -1,0 +1,102 @@
+@font-face {
+}
+
+/* startGame.css - làm đẹp ScoreBoard */
+
+.root {
+    -fx-background-color: linear-gradient(to bottom, #0a0a0a, #1b1b1b);
+    -fx-font-family: "Cynosure";
+}
+
+.vbox-side {
+    -fx-background-color: rgba(10, 20, 40, 0.85); /* xanh đậm trong suốt nhẹ */
+    -fx-background-radius: 12;
+    -fx-border-color: cyan;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, #00ffff, 15, 0.3, 0, 0);
+    -fx-padding: 15;
+}
+
+.vbox-score {
+    -fx-border-color: cyan;
+    -fx-border-width: 2;
+}
+
+/*  ListView bảng điểm */
+.scoreboard-list {
+    -fx-background-color: #121212;
+    -fx-font-family: "Cynosure";
+    -fx-border-color: cyan;
+    -fx-border-width: 2;
+    -fx-padding: 5;
+    -fx-control-inner-background: #1e1e1e;
+    -fx-font-size: 16px;
+}
+
+.scoreboard-list .list-cell {
+    -fx-text-fill: #FFD700;
+    -fx-font-weight: bold;
+    -fx-font-family: "Cynosure";
+    -fx-effect: dropshadow(gaussian, #FFD700, 10, 0.5, 0, 0);
+    -fx-alignment: CENTER;
+}
+
+.scoreboard-list .list-cell:hover {
+    -fx-background-color: #00ffff22;
+}
+
+/*  Label tiêu đề Score */
+.score-title {
+    -fx-text-fill: cyan;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.current-score {
+    -fx-text-fill: #FFD700;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 20px;
+    -fx-background-color: linear-gradient(to bottom, #1e90ff, #004aad);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #00bfff, 10, 0.4, 0, 0);
+}
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #00bfff, #0066ff);
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.7, 0, 0);
+}
+
+.HaTay {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ff0000;
+    /*-fx-effect: dropshadow(gaussian, #ff0000, 20, 0.5, 0, 0);*/
+}
+
+/* ===== Pause Menu ===== */
+#pauseMenu {
+    -fx-background-color: rgba(20,20,20,0.9);
+    -fx-padding: 30px;
+    -fx-background-radius: 15;
+}
+
+#pauseMenu Button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#42a5f5, #1e88e5);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.3, 0, 2);
+}
+
+#pauseMenu Button:hover {
+    -fx-background-color: linear-gradient(to bottom, #00bfff, #0066ff);
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.7, 0, 0);
+    -fx-cursor: hand; /* đổi con trỏ thành bàn tay */
+}

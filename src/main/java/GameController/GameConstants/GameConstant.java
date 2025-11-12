@@ -1,0 +1,68 @@
+package GameController.GameConstants;
+
+import javafx.util.Pair;
+
+public final class GameConstant {
+    public static final int ROWS = 14;
+    public static final int COLS = 18;
+    public static final int BRICK_WIDTH = 32;
+    public static final int BRICK_HEIGHT = 16;
+
+    public static final int PANE_WIDTH = 700;
+    public static final int PANE_HEIGHT = 700;
+
+    public static final double PADDLE_WIDTH = 80;
+    public static final double PADDLE_HEIGHT = 16;
+    public static final double PADDLE_SPEED = 3;
+    public static final int FRAME_WIDTH_PADDLE = 80;
+    public static final int FRAME_HEIGHT_PADDLE  = 16;
+    public static final int TOTAL_FRAME_PADDLE = 8;
+
+    public static final int  TOTAL_FRAME_PIERCE_BALL = 4;
+    public static final int FRAME_WIDTH_PIERCE_BALL = 80;
+    public static final int FRAME_HEIGHT_PIERCE_BALL = 32;
+    public static final int FRAME_WIDTH_NORMAL_BALL = 16;
+    public static final int FRAME_HEIGHT_NORMAL_BALL = 16;
+    public static final int TOTAL_FRAME_NORMAL_BALL = 8;
+    public static final double BALL_SIZE = 20;
+    public static final double BALL_SPEED = 3;
+    public static final int addScore = 10;
+    public static final double AIMING_ARROW_LENGTH = 80.0;
+
+    public static final int POWER_UP_SPEED = 2;
+
+    public static final Pair<String, String>[] brickImages = new Pair[]{
+            new Pair<>("/image/BlueBrick.png", "NormalBrick"),
+            new Pair<>("/image/GreenBrick.png", "NormalBrick"),
+            new Pair<>("/image/OrangeBrick.png", "NormalBrick"),
+            new Pair<>("/image/RedBrick.png", "NormalBrick"),
+            new Pair<>("/image/PurpleBrick.png", "StrongBrick"),
+            new Pair<>("/image/RedBrick.png", "StrongBrick"),
+            new Pair<>("/image/YellowBrick.png", "StrongBrick"),
+            new Pair<>("/image/SpecialBrick.png", "SpecialBrick"),
+            new Pair<>("/image/MovingBrick.png", "MovingBrick"),
+    };
+    public static final String[] paddleImages = {
+            "/image/Paddle.png",
+            "/image/ExpandPaddle.png",
+            "/image/FirePaddle.png",
+            "/image/ShrinkPaddle.png",
+            "/image/ThreeBallsPaddle.png"
+    };
+
+    public static final String[] BallImages = {
+            "/image/Ball.png",
+            "/image/PierceBall.png"
+    };
+    public static final String[] powerUpImages = {
+            "/image/ExpandPaddlePowerUp.png",
+            "/image/PierceBallPowerUp.png",
+            "/image/ShrinkPaddlePowerDown.png",
+            "/image/ThreeBallPowerUp.png"
+    };
+
+    public static final String heartImages = "/image/Heart.png";
+    public static final String heartEmptyImages = "/image/UnHeart.png";
+
+    public static final String backgroundImages = "/images/BackgroundLevel";
+}
