@@ -1,5 +1,6 @@
 package Models.PowerUp_Down;
 
+import GameController.GameConstant;
 import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
@@ -21,7 +22,7 @@ public class PierceBallPowerUp extends PowerUp{
 
     public PierceBallPowerUp(double x, double y) {
         super(x, y, 32, 32,
-                "/image/PierceBallPowerUp.png",
+                GameConstant.powerUpImages[1],
                 0, 3, "Pierce Ball", 12,
                 false, false, 0.0);
     }
@@ -69,7 +70,7 @@ public class PierceBallPowerUp extends PowerUp{
                 pb.getX(),
                 pb.getY(),
                 20, 20,
-                "/image/NormalBall.png",
+                GameConstant.BallImages[0],
                 pb.getSpeed(),
                 pb.getDirectionX(),
                 pb.getDirectionY()

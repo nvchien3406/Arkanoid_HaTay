@@ -1,5 +1,6 @@
 package Models.PowerUp_Down;
 
+import GameController.GameConstant;
 import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
@@ -11,7 +12,7 @@ import java.util.List;
 public class ThreeBallPowerUp extends PowerUp {
 
     public ThreeBallPowerUp(double x, double y) {
-        super(x, y, 32, 32, "/image/ThreeBallsPowerUp.png",
+        super(x, y, 32, 32, GameConstant.powerUpImages[3],
                 0, 3, "ThreeBall", 0, false, false, 0);
     }
 
@@ -55,7 +56,7 @@ public class ThreeBallPowerUp extends PowerUp {
                 baseBall.getY(),
                 baseBall.getWidth(),
                 baseBall.getHeight(),
-                "/image/NormalBall.png",
+                GameConstant.BallImages[0],
                 4,
                 baseBall.getDirectionX() + offsetX,
                 baseBall.getDirectionY()

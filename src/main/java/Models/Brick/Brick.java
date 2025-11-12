@@ -78,8 +78,4 @@ public abstract class Brick extends GameObject {
     public ImageView getImageView() {
         return imageView;
     }
-
-    public void render(GraphicsContext g) {
-
-    }
 }
