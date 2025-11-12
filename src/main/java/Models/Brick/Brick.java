@@ -14,9 +14,9 @@ public abstract class Brick extends GameObject {
 
     protected final int frameWidth = 32;
     protected final int frameHeight = 16;
-    private final int totalFrames = 8;
+    protected final int totalFrames = 8;
     private int currentFrame = 0;
-    protected boolean breaking = false;
+    private boolean breaking = false;
 
     private AnimationTimer breakAnimation;
 
@@ -79,7 +79,27 @@ public abstract class Brick extends GameObject {
         return imageView;
     }
 
-    public void render(GraphicsContext g) {
+    public boolean isBreaking() {
+        return breaking;
+    }
 
+    public void setBreaking(boolean breaking) {
+        this.breaking = breaking;
+    }
+
+    public AnimationTimer getBreakAnimation() {
+        return breakAnimation;
+    }
+
+    public void setBreakAnimation(AnimationTimer breakAnimation) {
+        this.breakAnimation = breakAnimation;
+    }
+
+    public int getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(int currentFrame) {
+        this.currentFrame = currentFrame;
     }
 }

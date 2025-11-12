@@ -9,7 +9,7 @@ public abstract class BreakableBrick extends Brick implements CanTakeHit {
     }
 
     public void takeHit() {
-        if (breaking || isDestroyed() ) return;
+        if (isBreaking() || isDestroyed() ) return;
 
         hitPoints--;
         if (hitPoints > 0) {
