@@ -2,6 +2,7 @@ package GameController.Controllers;
 
 import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
+import Models.AimingArrow.AimingArrow;
 import Models.Brick.*;
 import Models.Level.LevelGame;
 import Models.Paddle.Paddle;
@@ -98,6 +99,18 @@ public class StartGameController{
             }
         }
         return bricks;
+    }
+
+    public AimingArrow LoadAimingArrow(Ball ball) {
+        AimingArrow aimingArrow = new AimingArrow(
+                ball.getX(),
+                ball.getY() - 100,
+                40,
+                80,
+                "/image/AimingArrow.png"
+        );
+        startGamePane.getChildren().add(aimingArrow.getImageView());
+        return aimingArrow;
     }
 
     public void initialize() {

@@ -2,6 +2,7 @@ package GameController.Manager;
 
 import GameController.Controllers.StartGameController;
 import GameController.GameConstants.GameConstant;
+import Models.AimingArrow.AimingArrow;
 import javafx.animation.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -12,6 +13,15 @@ import javafx.util.Duration;
 
 public class GameUIManager {
     private Line aimingArrow;
+    private AimingArrow aimingArrow1;
+
+    public AimingArrow getAimingArrow1() {
+        return aimingArrow1;
+    }
+
+    public void setAimingArrow1(AimingArrow aimingArrow1) {
+        this.aimingArrow1 = aimingArrow1;
+    }
 
     public void showScorePopup(StartGameController controller , double x, double y, int score) {
         Text scoreText = new Text("+" + score);

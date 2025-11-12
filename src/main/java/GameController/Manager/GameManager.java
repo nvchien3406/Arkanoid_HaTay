@@ -2,6 +2,7 @@ package GameController.Manager;
 
 import DAO.IScoreRepository;
 import GameController.Controllers.StartGameController;
+import Models.Ball.Ball;
 import Models.Brick.Brick;
 import Models.Brick.MovingBrick;
 import Models.Level.LevelGame;
@@ -96,6 +97,8 @@ public class GameManager {
         objectManager.setPaddle(controller.LoadPaddle());
         gameUIManager.setAimingArrow(gameUIManager.createAimingArrow(controller)); // GameUIManager tạo arrow
         controller.LoadBall();
+        Ball mainBall = objectManager.getListBalls().get(0);
+        gameUIManager.setAimingArrow1(controller.LoadAimingArrow(mainBall));
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
         controller.animateLevelUp(currentLevel.getLevelNumber());
         startGameLoop(controller);
