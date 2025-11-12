@@ -4,12 +4,12 @@ import GameController.GameConstants.GameConstant;
 public class MovingBrick extends BreakableBrick {
     private double startX;
     private double endX;
-    private double distance = 64;
-    private double speed = 1.0;
+    private double distance = 70;
+    private double speed = 0.8;
     private double direction;
 
     public MovingBrick(double x, double y, double width, double height, String path, double direction, boolean isLeft) {
-        super(x, y, width, height, 2, "MovingBrick", path);
+        super(x, y, width, height, 3, "MovingBrick", path);
         this.direction = direction;
         if (isLeft) {
             startX = x - distance;

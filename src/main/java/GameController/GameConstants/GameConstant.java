@@ -29,7 +29,7 @@ public final class GameConstant {
             new Pair<>("/image/RedBrick.png", "StrongBrick"),
             new Pair<>("/image/YellowBrick.png", "StrongBrick"),
             new Pair<>("/image/SpecialBrick.png", "SpecialBrick"),
-            new Pair<>("/image/MovingBrick.png", "MovingBrick")
+            new Pair<>("/image/MovingBrick.png", "MovingBrick"),
     };
     public static final String paddleImages = "/image/Paddle.png";
 

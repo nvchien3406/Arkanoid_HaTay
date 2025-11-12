@@ -68,7 +68,7 @@ public class StartGameController{
         double totalHeight = R * GameConstant.BRICK_HEIGHT;
 
         double startX = (GameConstant.PANE_WIDTH - totalWidth) / 2;
-        double startY = 50;
+        double startY = 70;
 
         for (int row = R - 1; row >= 0; row--) {
             for (int col = 0; col < C; col++) {
@@ -76,7 +76,7 @@ public class StartGameController{
                 if (map[row][col] == 0) {continue;}
 
                 double x = startX + col * GameConstant.BRICK_WIDTH;
-                double y = startY + row * GameConstant.BRICK_HEIGHT;;
+                double y = startY + row * GameConstant.BRICK_HEIGHT;
 
                 String imgPath = GameConstant.brickImages[map[row][col] - 1].getKey();
 
@@ -89,7 +89,7 @@ public class StartGameController{
                     brick = new SpecialBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
                 } else {
                     int direction = (col > C/2 ? 1 : -1);
-                    boolean isLeft = (col < C/2);
+                    boolean isLeft = (col <= C/2 ? true : false);
                     brick = new MovingBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath, direction, isLeft);
                 }
 
