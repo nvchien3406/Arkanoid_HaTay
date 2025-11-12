@@ -4,18 +4,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700" prefWidth="1200" stylesheets="@login.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController.Controllers.LoginController">
+<AnchorPane prefHeight="700" prefWidth="1200" styleClass="background" stylesheets="@login.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController.Controllers.LoginController">
     <children>
-        <!-- Title -->
-        <Label layoutX="530.5" layoutY="162.0" prefHeight="25.0" prefWidth="139.0" styleClass="title-label" text="ARKANOID LOGIN" />
 
-        <!-- Username -->
-        <Label layoutX="541.75" layoutY="209.0" text="Enter your name" />
-        <TextField fx:id="txtUsername" layoutX="470.0" layoutY="255.0" prefHeight="35" prefWidth="260" />
+        <VBox fx:id="loginBox" alignment="CENTER" layoutX="400.0" layoutY="238.5" prefWidth="400" spacing="30.0" styleClass="login-box">
 
-        <!-- Buttons -->
-        <Button layoutX="540.0" layoutY="330.0" onAction="#handleLogin" prefHeight="40" prefWidth="120" text="Play" />
+            <Label styleClass="title1" text="ENTER PLAYER NAME" />
+
+            <TextField fx:id="txtName" promptText="Player Name" styleClass="input-field" />
+         <Label fx:id="lblWarning" text = "" styleClass="title3" />
+
+            <Button fx:id="btnStart" onAction="#handleLogin" styleClass="start-btn" text="START GAME" />
+
+        </VBox>
+         <!-- Title -->
+         <Label layoutX="496.5" layoutY="153.0" prefHeight="36.0" prefWidth="207.0" styleClass="title2" text="ARKANOID LOGIN" />
 
     </children>
 </AnchorPane>

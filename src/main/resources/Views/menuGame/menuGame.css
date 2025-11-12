@@ -1,18 +1,18 @@
 @font-face {
-    font-family: "Bangers";
-    src: url("../../fonts/Bangers-Regular.ttf");
+    font-family: "cyber31";
+    src: url("../../fonts/cyber31.ttf");
 }
 
 .menu-title1 {
     -fx-font-size: 60px;
-    -fx-text-fill: #00ffff;
-    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
+    -fx-text-fill: #ff0000;
+    -fx-effect: dropshadow(gaussian, #ff0000, 20, 0.5, 0, 0);
 }
 
 .menu-title2 {
     -fx-font-size: 28px;
-    -fx-text-fill: #00ffff;
-    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
+    -fx-text-fill: #ff0000;
+    -fx-effect: dropshadow(gaussian, #ff0000, 20, 0.5, 0, 0);
     -fx-opacity: 0.8;
 }
 
@@ -26,5 +26,5 @@
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#00ffff, #004444);
+    -fx-background-color: linear-gradient(#ff0000, #c84249);
 }

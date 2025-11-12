@@ -33,7 +33,7 @@ public class GameFlowManager {
             List<String> topscores = gameManager.getScoreDAO().getHighScores();
             controller.updateHighScores(topscores);
 
-            EndGameController endGameController = SceneTransition.switchSceneWithController(controller.getStage(), "endGame.fxml");
+            EndGameController endGameController = SceneTransition.switchSceneWithController(controller.getStage(), "endGame/endGame.fxml");
             endGameController.setFinalScore(player.getScore());
             endGameController.setRank(gameManager.getScoreDAO().getRankPlayer(player));
 

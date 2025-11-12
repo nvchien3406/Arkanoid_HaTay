@@ -41,4 +41,6 @@ public final class GameConstant {
 
     public static final String heartImages = "/image/Heart.png";
     public static final String heartEmptyImages = "/image/UnHeart.png";
+
+    public static final String backgroundImages = "/images/BackgroundLevel";
 }

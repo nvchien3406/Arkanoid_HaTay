@@ -24,6 +24,7 @@ public class EndGameController {
 
     public void initialize() {
         GameManager.getInstance().getSoundService().playLosing();
+        GameManager.getInstance().getSoundService().stopBackground();
 
         replay.setOnAction(e -> {
             Stage stage =  (Stage) replay.getScene().getWindow();

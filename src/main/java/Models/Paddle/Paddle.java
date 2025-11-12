@@ -61,7 +61,7 @@ public class Paddle extends MovableObject {
         return baseWidth;
     }
 
-    public void moveLeft(StartGameController controller) {
+        public void moveLeft(StartGameController controller) {
         setX(Math.max(0, getX() - getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());

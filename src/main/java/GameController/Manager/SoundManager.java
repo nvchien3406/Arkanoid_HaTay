@@ -11,7 +11,6 @@ public class SoundManager implements ISoundService {
     private  AudioClip hitClip;
     private  AudioClip explosionClip;
     private   AudioClip soundLosing;
-    //private  static AudioClip mouseClick;
 
     public SoundManager() {
         LoadSound();
@@ -30,7 +29,7 @@ public class SoundManager implements ISoundService {
             hitClip = new AudioClip(SoundManager.class.getResource("/sounds/hit.wav").toExternalForm());
             explosionClip = new AudioClip(SoundManager.class.getResource("/sounds/explosion.mp3").toExternalForm());
             soundLosing = new AudioClip(SoundManager.class.getResource("/sounds/losing.mp3").toExternalForm());
-            //mouseClick = new AudioClip(SoundManager.class.getResource("/sounds/mouseClick2.wav").toExternalForm());
+
         } catch (Exception e) {
             throw new RuntimeException("lỗi load âm thanh" , e);
         }
