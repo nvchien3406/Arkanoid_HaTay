@@ -2,10 +2,8 @@ package GameController.Controllers;
 
 import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
-import Models.Brick.Brick;
-import Models.Brick.NormalBrick;
-import Models.Brick.SpecialBrick;
-import Models.Brick.StrongBrick;
+import Models.AimingArrow.AimingArrow;
+import Models.Brick.*;
 import Models.Level.LevelGame;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
@@ -31,6 +29,7 @@ import javafx.util.Duration;
 import Models.Ball.*;
 
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,31 +71,48 @@ public class StartGameController{
         double totalHeight = R * GameConstant.BRICK_HEIGHT;
 
         double startX = (GameConstant.PANE_WIDTH - totalWidth) / 2;
-        double startY = 50;
+        double startY = 70;
 
         for (int row = R - 1; row >= 0; row--) {
             for (int col = 0; col < C; col++) {
 
-                // Tạo ngẫu nhiên: 20% không có gạch
-                //if (random.nextDouble() < 0.2) continue;
+                if (map[row][col] == 0) {continue;}
 
                 double x = startX + col * GameConstant.BRICK_WIDTH;
-                double y = startY + row * GameConstant.BRICK_HEIGHT;;
+                double y = startY + row * GameConstant.BRICK_HEIGHT;
 
-                String imgPath = GameConstant.brickImages[map[row][col]].getKey();
+                String imgPath = GameConstant.brickImages[map[row][col] - 1].getKey();
 
                 Brick brick;
-                if (GameConstant.brickImages[map[row][col]].getValue().equals("NormalBrick")) {
+                if (GameConstant.brickImages[map[row][col] - 1].getValue().equals("NormalBrick")) {
                     brick = new NormalBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
-                } else if (GameConstant.brickImages[map[row][col]].getValue().equals("StrongBrick")) {
+                } else if (GameConstant.brickImages[map[row][col] - 1].getValue().equals("StrongBrick")) {
                     brick = new StrongBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
-                } else brick = new SpecialBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
+                } else if (GameConstant.brickImages[map[row][col] - 1].getValue().equals("SpecialBrick")) {
+                    brick = new SpecialBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath);
+                } else {
+                    int direction = (col > C/2 ? 1 : -1);
+                    boolean isLeft = (col <= C/2 ? true : false);
+                    brick = new MovingBrick(x, y, GameConstant.BRICK_WIDTH, GameConstant.BRICK_HEIGHT, imgPath, direction, isLeft);
+                }
 
                 bricks.add(brick);
                 startGamePane.getChildren().add(brick.getImageView());
             }
         }
         return bricks;
+    }
+
+    public AimingArrow LoadAimingArrow(Ball ball) {
+        AimingArrow aimingArrow = new AimingArrow(
+                ball.getX(),
+                ball.getY() - 100,
+                40,
+                80,
+                "/image/AimingArrow.png"
+        );
+        startGamePane.getChildren().add(aimingArrow.getImageView());
+        return aimingArrow;
     }
 
     public void initialize() {
@@ -282,7 +298,7 @@ public class StartGameController{
     public Paddle LoadPaddle() {
         double width = GameConstant.PADDLE_WIDTH;
         double height = GameConstant.PADDLE_HEIGHT;
-        double startX = 550;
+        double startX = GameConstant.PANE_WIDTH / 2 - GameConstant.PADDLE_WIDTH / 2;
         double startY = 600;
         Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages[0], 0, 0,
                 GameConstant.PADDLE_SPEED, false, false);
