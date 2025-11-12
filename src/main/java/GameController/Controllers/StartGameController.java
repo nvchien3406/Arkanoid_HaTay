@@ -105,10 +105,10 @@ public class StartGameController{
 
     public AimingArrow LoadAimingArrow(Ball ball) {
         AimingArrow aimingArrow = new AimingArrow(
-                ball.getX(),
-                ball.getY() - 100,
+                ball.getX() + GameConstant.BRICK_WIDTH / 2,
+                ball.getY() + GameConstant.BRICK_HEIGHT / 2,
                 40,
-                80,
+                90,
                 "/image/AimingArrow.png"
         );
         startGamePane.getChildren().add(aimingArrow.getImageView());
