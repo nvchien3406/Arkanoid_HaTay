@@ -1,4 +1,4 @@
-package GameController;
+package GameController.Controllers;
 
 import GameController.Manager.GameManager;
 import Models.Player.Player;
@@ -22,7 +22,7 @@ public class LoginController {
             GameManager.getInstance().getObjectManager().setPlayer(player);
 
             Stage stage = (Stage) txtUsername.getScene().getWindow();
-            SceneTransition.switchScene(stage, "startGame.fxml");
+            SceneTransition.switchScene(stage, "startGame/startGame.fxml");
         }
     }
 }

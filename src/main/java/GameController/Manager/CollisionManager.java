@@ -1,6 +1,6 @@
 package GameController.Manager;
 
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 

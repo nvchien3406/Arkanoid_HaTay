@@ -10,12 +10,12 @@ import javafx.util.Duration;
 public abstract class SceneTransition {
     public static void switchScene(Stage stage, String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(SceneTransition.class.getResource("/GameController/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(SceneTransition.class.getResource("/Views/" + fxmlFile));
             Parent root = loader.load();
 
             // 🔹 Lấy tên CSS tương ứng với file FXML (nếu có)
             String cssName = fxmlFile.replace(".fxml", ".css");
-            var cssUrl = SceneTransition.class.getResource("/GameController/" + cssName);
+            var cssUrl = SceneTransition.class.getResource("/Views/" + cssName);
             if (cssUrl != null) {
                 root.getStylesheets().add(cssUrl.toExternalForm());
             }
@@ -28,12 +28,12 @@ public abstract class SceneTransition {
 
     public static <T> T switchSceneWithController(Stage stage, String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(SceneTransition.class.getResource("/GameController/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(SceneTransition.class.getResource("/Views/" + fxmlFile));
             Parent root = loader.load();
 
             // 🔹 Lấy tên CSS tương ứng với file FXML (nếu có)
             String cssName = fxmlFile.replace(".fxml", ".css");
-            var cssUrl = SceneTransition.class.getResource("/GameController/" + cssName);
+            var cssUrl = SceneTransition.class.getResource("/Views/" + cssName);
             if (cssUrl != null) {
                 root.getStylesheets().add(cssUrl.toExternalForm());
             }

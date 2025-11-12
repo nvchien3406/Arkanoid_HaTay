@@ -3,7 +3,6 @@
 
 .root {
     -fx-background-color: linear-gradient(to bottom, #0a0a0a, #1b1b1b);
-    //-fx-font-family: "Orbitron", "Segoe UI", "Arial";
 }
 
 /*  ListView bảng điểm */
@@ -27,7 +26,7 @@
     -fx-background-color: #00ffff22;
 }
 
-/* 🎯 Label tiêu đề Score */
+/*  Label tiêu đề Score */
 .score-title {
     -fx-text-fill: cyan;
     -fx-font-size: 20px;

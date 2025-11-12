@@ -1,4 +1,4 @@
-package GameController;
+package GameController.Controllers;
 
 import GameController.Manager.GameManager;
 import Utils.SceneTransition;
@@ -27,12 +27,12 @@ public class EndGameController {
 
         replay.setOnAction(e -> {
             Stage stage =  (Stage) replay.getScene().getWindow();
-            SceneTransition.switchScene(stage, "startGame.fxml");
+            SceneTransition.switchScene(stage, "startGame/startGame.fxml");
         });
 
         Menu.setOnAction(e -> {
             Stage stage =  (Stage) Menu.getScene().getWindow();
-            SceneTransition.switchScene(stage, "menuGame.fxml");
+            SceneTransition.switchScene(stage, "menuGame/menuGame.fxml");
         });
     }
 

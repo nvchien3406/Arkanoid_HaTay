@@ -1,14 +1,10 @@
-package GameController;
+package GameController.Controllers;
 
 import Utils.SceneTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
-import javafx.fxml.FXMLLoader;
-
-import java.io.IOException;
 
 public class MainMenuController {
 
@@ -26,12 +22,12 @@ public class MainMenuController {
             //SoundManager.PlayMouseClick();
 
             Stage stage = (Stage) btnStart.getScene().getWindow();
-            SceneTransition.switchScene(stage, "login.fxml");
+            SceneTransition.switchScene(stage, "login/login.fxml");
         });
 
         btnScore.setOnAction(e -> {
             Stage stage = (Stage) btnStart.getScene().getWindow();
-            SceneTransition.switchScene(stage, "scoreBoard.fxml");
+            SceneTransition.switchScene(stage, "scoreBoard/scoreBoard.fxml");
 
             //SoundManager.PlayMouseClick();
         });
@@ -43,7 +39,7 @@ public class MainMenuController {
             Scene currentScene = stage.getScene();
             SettingsController.setBackScene(currentScene);
 
-            SceneTransition.switchScene(stage, "settings.fxml");
+            SceneTransition.switchScene(stage, "settingGame/settings.fxml");
         });
 
         btnExit.setOnAction(e -> {

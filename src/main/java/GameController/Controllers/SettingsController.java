@@ -1,4 +1,4 @@
-package GameController;
+package GameController.Controllers;
 
 import GameController.Manager.GameManager;
 import javafx.fxml.FXML;

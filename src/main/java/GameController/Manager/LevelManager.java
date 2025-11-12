@@ -1,9 +1,9 @@
 package GameController.Manager;
 
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
 import Models.Brick.Brick;
-import Models.LevelGame;   // ⚠️ thêm dòng này
-import javafx.scene.layout.AnchorPane;
+import Models.Level.LevelGame;   // ⚠️ thêm dòng này
+
 import java.util.List;
 
 public class LevelManager {

@@ -1,6 +1,6 @@
 package Models.Player;
 
-import GameController.GameConstant;
+import GameController.GameConstants.GameConstant;
 
 public class Player {
     private String playerName;

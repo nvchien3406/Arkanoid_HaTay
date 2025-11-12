@@ -1,4 +1,4 @@
-package GameController;
+package GameController.Controllers;
 
 import DAO.IScoreRepository;
 import GameController.Manager.GameManager;
@@ -37,7 +37,7 @@ public class ScoreBoardController {
 
         backButton.setOnAction(e -> {
             Stage stage = (Stage) backButton.getScene().getWindow();
-            SceneTransition.switchScene(stage, "menuGame.fxml");
+            SceneTransition.switchScene(stage, "menuGame/menuGame.fxml");
         });
     }
 }
