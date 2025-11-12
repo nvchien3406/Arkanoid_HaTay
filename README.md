@@ -45,6 +45,11 @@
 
 ---
 
+## UML Diagram
+- **Class Diagram**
+<img src="docs/UML/Arkanoid.png" width="230"/>
+---
+
 ## 🖼️ Ảnh & Video Demo
 <div align="center">
 
