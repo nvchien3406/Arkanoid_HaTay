@@ -1,4 +1,4 @@
-package GameController;
+package GameController.Manager;
 
 public interface ISoundService {
     void playBackground();

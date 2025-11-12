@@ -1,16 +1,14 @@
 package GameController.Manager;
 
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
+import GameController.GameConstants.GameConstant;
 import javafx.animation.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import GameController.*;
 
 public class GameUIManager {
     private Line aimingArrow;

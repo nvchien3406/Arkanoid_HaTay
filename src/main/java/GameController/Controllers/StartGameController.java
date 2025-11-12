@@ -1,17 +1,17 @@
-package GameController;
+package GameController.Controllers;
 
+import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
 import Models.Brick.Brick;
 import Models.Brick.NormalBrick;
 import Models.Brick.SpecialBrick;
 import Models.Brick.StrongBrick;
-import Models.LevelGame;
+import Models.Level.LevelGame;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
 import Utils.SceneTransition;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -247,7 +246,7 @@ public class StartGameController{
         hidePauseMenu();
         GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
-        SceneTransition.switchScene(stage, "startGame.fxml");
+        SceneTransition.switchScene(stage, "startGame/startGame.fxml");
     }
 
     private void exitToMenu() {
@@ -255,15 +254,15 @@ public class StartGameController{
         GameManager.getInstance().getSoundService().pauseSoundBackground();
         GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
-        SceneTransition.switchScene(stage, "menuGame.fxml");
+        SceneTransition.switchScene(stage, "menuGame/menuGame.fxml");
     }
 
     private void settingGame() {
-        GameManager.getInstance().getSoundService().stopBackground();
+        GameManager.getInstance().getSoundService().pauseSoundBackground();
         Stage stage = getStage();
         Scene currentScene = getScene();
         SettingsController.setBackScene(currentScene);
-        SceneTransition.switchScene(stage, "settings.fxml");
+        SceneTransition.switchScene(stage, "settingGame/settings.fxml");
     }
 
     @FXML

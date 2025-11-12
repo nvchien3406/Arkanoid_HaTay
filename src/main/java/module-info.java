@@ -17,7 +17,7 @@ module GameController {
     exports DAO;
     opens DAO to javafx.fxml;
 
-    opens Models to javafx.base;
+    //opens Models to javafx.base;
     opens Models.Ball to javafx.base;
     opens Models.Brick to javafx.base;
     opens Models.PowerUp_Down to javafx.base;
@@ -28,4 +28,9 @@ module GameController {
     opens Models.Interface to javafx.base;
     exports GameController.Manager;
     opens GameController.Manager to javafx.fxml;
+    exports GameController.Controllers;
+    opens GameController.Controllers to javafx.fxml;
+    exports GameController.GameConstants;
+    opens GameController.GameConstants to javafx.fxml;
+    opens Models.Level to javafx.base;
 }

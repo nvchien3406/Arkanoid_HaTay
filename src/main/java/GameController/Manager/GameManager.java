@@ -1,9 +1,8 @@
 package GameController.Manager;
 
 import DAO.IScoreRepository;
-import GameController.ISoundService;
-import GameController.StartGameController;
-import Models.LevelGame;
+import GameController.Controllers.StartGameController;
+import Models.Level.LevelGame;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;

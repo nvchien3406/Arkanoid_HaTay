@@ -1,9 +1,9 @@
 package Models.Ball;
 
 
-import GameController.GameConstant;
+import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
 import Models.Brick.*;
 import Models.Object.MovableObject;
 import Models.Paddle.Paddle;

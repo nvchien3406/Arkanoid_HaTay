@@ -1,6 +1,6 @@
 package Models.Paddle;
 
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
 import Models.Object.MovableObject;
 
 

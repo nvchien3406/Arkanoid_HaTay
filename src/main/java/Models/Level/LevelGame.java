@@ -1,4 +1,4 @@
-package Models;
+package Models.Level;
 
 public class LevelGame {
     private final int[][][] levels = {

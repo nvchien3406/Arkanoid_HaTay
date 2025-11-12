@@ -1,7 +1,7 @@
 package GameController.Manager;
 
-import GameController.EndGameController;
-import GameController.StartGameController;
+import GameController.Controllers.EndGameController;
+import GameController.Controllers.StartGameController;
 import Utils.SceneTransition;
 import java.util.List;
 

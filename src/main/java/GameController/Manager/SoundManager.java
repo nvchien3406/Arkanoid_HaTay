@@ -1,16 +1,16 @@
-package GameController;
+package GameController.Manager;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class SoundManager implements ISoundService {
-    private static MediaPlayer soundBackground ;
+    private  MediaPlayer soundBackground ;
 
-    private static AudioClip breakClip;
-    private static AudioClip hitClip;
-    private static AudioClip explosionClip;
-    private  static AudioClip soundLosing;
+    private  AudioClip breakClip;
+    private  AudioClip hitClip;
+    private  AudioClip explosionClip;
+    private   AudioClip soundLosing;
     //private  static AudioClip mouseClick;
 
     public SoundManager() {
@@ -18,7 +18,7 @@ public class SoundManager implements ISoundService {
     }
 
 
-    public static void LoadSound() {
+    public  void LoadSound() {
         try {
             //Sound BackGround
             String path = SoundManager.class.getResource("/sounds/S31-Night-Prowler.mp3").toExternalForm();

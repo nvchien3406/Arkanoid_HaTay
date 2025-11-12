@@ -1,6 +1,5 @@
 package GameController.Manager;
 
-import GameController.StartGameController;
 import Models.Ball.Ball;
 import javafx.scene.Scene;
 

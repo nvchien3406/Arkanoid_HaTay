@@ -1,7 +1,7 @@
 package GameController.Manager;
 
-import GameController.GameConstant;
-import GameController.StartGameController;
+import GameController.GameConstants.GameConstant;
+import GameController.Controllers.StartGameController;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 import Models.Ball.PierceBall;

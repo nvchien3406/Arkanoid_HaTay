@@ -1,8 +1,8 @@
 package Models.Ball;
 
-import GameController.GameConstant;
+import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
-import GameController.StartGameController;
+import GameController.Controllers.StartGameController;
 import Models.Brick.Brick;
 import Models.Interface.BounceOff;
 import Models.Object.GameObject;

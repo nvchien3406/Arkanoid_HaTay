@@ -1,4 +1,4 @@
-package GameController;
+package GameController.GameConstants;
 
 import javafx.util.Pair;
 
