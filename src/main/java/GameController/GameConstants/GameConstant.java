@@ -14,7 +14,16 @@ public final class GameConstant {
     public static final double PADDLE_WIDTH = 80;
     public static final double PADDLE_HEIGHT = 16;
     public static final double PADDLE_SPEED = 3;
+    public static final int FRAME_WIDTH_PADDLE = 80;
+    public static final int FRAME_HEIGHT_PADDLE  = 16;
+    public static final int TOTAL_FRAME_PADDLE = 8;
 
+    public static final int  TOTAL_FRAME_PIERCE_BALL = 4;
+    public static final int FRAME_WIDTH_PIERCE_BALL = 80;
+    public static final int FRAME_HEIGHT_PIERCE_BALL = 32;
+    public static final int FRAME_WIDTH_NORMAL_BALL = 16;
+    public static final int FRAME_HEIGHT_NORMAL_BALL = 16;
+    public static final int TOTAL_FRAME_NORMAL_BALL = 8;
     public static final double BALL_SIZE = 20;
     public static final double BALL_SPEED = 3;
     public static final int addScore = 10;

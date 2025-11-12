@@ -58,11 +58,11 @@ public abstract class PowerUp extends MovableObject {
 
     public void update(Paddle paddle) {
         if (!collected) {
-            y += 0.5;
-            imageView.setLayoutY(y);
+            setY(getY() + 0.5);
+            getImageView().setLayoutY(getY());
 
             // Nếu rơi quá đáy màn hình → đánh dấu hết hạn
-            if (y > 800) {
+            if (getY() > 800) {
                 expired = true;
                 return;
             }

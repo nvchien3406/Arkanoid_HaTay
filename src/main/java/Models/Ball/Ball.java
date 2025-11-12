@@ -15,35 +15,28 @@ import java.util.List;
 
 
 public abstract class Ball extends MovableObject {
-    protected double speed, directionX, directionY;
+    protected double directionX, directionY;
     protected boolean isStanding = true;
-    protected final int frameWidth = 16;
-    protected final int frameHeight = 16;
-    private final int totalFrames = 8;
-    private int currentFrame = 0;
-    private AnimationTimer animation;
+
 
     public Ball() {
         super();
-        this.speed = 0;
+
         this.directionX = 0;
         this.directionY = 0;
     }
 
-    public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
-        super(x , y , width , height, path, 0 , 0);
-        this.speed = speed;
+    public Ball(double x, double y, double speed, double width, double height , String path, double directionX, double directionY) {
+        super(x , y , speed, width , height, path, 0 , 0);
         this.directionX = directionX;
         this.directionY = directionY;
-        this.dx = directionX * speed;
-        this.dy = directionY * speed;
     }
 
     public void moveBall() {
-        x += directionX * speed;
-        y += directionY * speed;
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
+        setX(getX() + directionX * getSpeed());
+        setY(getY() + directionY * getSpeed());
+        getImageView().setLayoutX(getX());
+        getImageView().setLayoutY(getY());
     }
 
     public abstract void checkWallCollision();
@@ -62,26 +55,19 @@ public abstract class Ball extends MovableObject {
                             brick.getY() + brick.getHeight() / 2,
                             GameConstant.addScore
                     );
+            if (brick.isDestroyed()) {
+                playBallMusic();
+                GameManager.getInstance().getObjectManager().spawnPowerUps(brick, controller);
+            }
         }
-
-        if (brick.isDestroyed()) playBallMusic();
-        GameManager.getInstance().getObjectManager().spawnPowerUps(brick, controller);
     }
 
     public void resetBall(Paddle paddle) {
-        x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
-        y = paddle.getY() - height;
+        setX(paddle.getX() + paddle.getWidth() / 2 - getWidth() / 2);
+        setY( paddle.getY() - getHeight());
         directionY = -1;
         directionX = 0.7;
         isStanding = true;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
     }
 
     public double getDirectionX() {
@@ -110,34 +96,14 @@ public abstract class Ball extends MovableObject {
 
     public void moveBallWithPaddle(Paddle paddle) {
         if (isStanding) {
-            x = paddle.getX() + paddle.getWidth() / 2 - width / 2;
-            y = paddle.getY() - height;
-            imageView.setLayoutX(x);
-            imageView.setLayoutY(y);
+            setX(paddle.getX() + paddle.getWidth() / 2 - getWidth() / 2);
+            setY(paddle.getY() - getHeight());
+            getImageView().setLayoutX(getX());
+            getImageView().setLayoutY(getY());
         } else {
             moveBall();
         }
     }
 
-    public void startAnimation() {
-        if (animation != null) return; // tránh tạo lại
-
-        animation = new AnimationTimer() {
-            private long lastFrameTime = 0;
-            private final long frameDelay = 50_000_000; // 0.2 giây / frame
-
-            @Override
-            public void handle(long now) {
-                if (now - lastFrameTime < frameDelay) return;
-                lastFrameTime = now;
-
-                currentFrame = (currentFrame + 1) % totalFrames;
-                imageView.setViewport(new Rectangle2D(
-                        currentFrame * frameWidth, 0, frameWidth, frameHeight
-                ));
-            }
-        };
-        animation.start();
-    }
 
 }

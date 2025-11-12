@@ -31,11 +31,11 @@ public abstract class Brick extends GameObject {
         this.hitPoints = hitPoints;
         this.type = type;
 
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        imageView.setLayoutX(x);
-        imageView.setLayoutY(y);
-        imageView.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
+        getImageView().setFitWidth(width);
+        getImageView().setFitHeight(height);
+        getImageView().setLayoutX(x);
+        getImageView().setLayoutY(y);
+        getImageView().setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
 
     public boolean isDestroyed() {
@@ -46,40 +46,8 @@ public abstract class Brick extends GameObject {
     public void update() {
         if (currentFrame < totalFrames - 2) {
             currentFrame++;
-            imageView.setViewport(new Rectangle2D(currentFrame * frameWidth, 0, frameWidth, frameHeight));
+            getImageView().setViewport(new Rectangle2D(currentFrame * frameWidth, 0, frameWidth, frameHeight));
         }
-    }
-
-    protected void startBreakAnimation() {
-        breaking = true;
-        currentFrame++;
-
-        // 70ms / frame
-        AnimationTimer breakAnimation = new AnimationTimer() {
-            private long lastFrameTime = 0;
-            private final long frameDelay = 50_000_000; // 70ms / frame
-
-            @Override
-            public void handle(long now) {
-                // 70ms / frame
-                long frameDelay = 70_000_000;
-                if (now - lastFrameTime < frameDelay) return;
-                lastFrameTime = now;
-
-                if (currentFrame < totalFrames) {
-                    imageView.setViewport(new Rectangle2D(currentFrame * frameWidth, 0, frameWidth, frameHeight));
-                    currentFrame++;
-                } else {
-                    imageView.setVisible(false);
-                    stop();
-                }
-            }
-        };
-        breakAnimation.start();
-    }
-
-    public ImageView getImageView() {
-        return imageView;
     }
 
     public boolean isBreaking() {

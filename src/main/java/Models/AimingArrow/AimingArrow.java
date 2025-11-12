@@ -18,15 +18,15 @@ public class AimingArrow extends GameObject {
 
     public AimingArrow(double x, double y, double width, double height, String path) {
         super(x, y, width, height, path);
-        imageView.setPreserveRatio(true);
-        imageView.setOpacity(0.9);
-        imageView.setVisible(false);
+        getImageView().setPreserveRatio(true);
+        getImageView().setOpacity(0.9);
+        getImageView().setVisible(false);
     }
 
     /** Cập nhật góc xoay của mũi tên (theo độ) */
     public void setAngle(double angle) {
         this.angle = angle;
-        imageView.setRotate(angle);
+        getImageView().setRotate(angle);
     }
 
     public double getAngle() {
@@ -35,24 +35,24 @@ public class AimingArrow extends GameObject {
 
     /** Cho phép mũi tên bám theo vị trí của bóng */
     public void followBall(Ball ball) {
-        double newX = ball.getX() + ball.getWidth() / 2 - width / 2;
-        double newY = ball.getY() - height + 5; // Dịch nhẹ cho cân đối
+        double newX = ball.getX() + ball.getWidth() / 2 - getWidth() / 2;
+        double newY = ball.getY() - getHeight() + 5; // Dịch nhẹ cho cân đối
         setX(newX);
         setY(newY);
-        imageView.setLayoutX(newX);
-        imageView.setLayoutY(newY);
+        getImageView().setLayoutX(newX);
+        getImageView().setLayoutY(newY);
     }
 
     /** Hiển thị mũi tên */
     public void show() {
         visible = true;
-        imageView.setVisible(true);
+        getImageView().setVisible(true);
     }
 
     /** Ẩn mũi tên */
     public void hide() {
         visible = false;
-        imageView.setVisible(false);
+        getImageView().setVisible(false);
     }
 
     public boolean isVisible() {

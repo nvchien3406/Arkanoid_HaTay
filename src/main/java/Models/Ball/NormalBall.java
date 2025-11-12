@@ -14,7 +14,10 @@ import java.util.List;
 public class NormalBall extends Ball implements BounceOff {
     public NormalBall(double x, double y, double width, double height , String path,
                       double speed, double directionX, double directionY) {
-        super(x , y , width , height, path, speed , directionX, directionY);
+        super(x , y ,speed, width , height, path , directionX, directionY);
+        setFrameWidth(GameConstant.FRAME_WIDTH_NORMAL_BALL);
+        setFrameHeight(GameConstant.FRAME_HEIGHT_NORMAL_BALL);
+        setTotalFrames(GameConstant.TOTAL_FRAME_NORMAL_BALL);
     }
 
     public void naturalBounceOff(GameObject other) {
@@ -37,7 +40,7 @@ public class NormalBall extends Ball implements BounceOff {
         if (overlapX < overlapY) {
             // Va chạm theo trục X → đổi hướng X
             directionX *= -1;
-            setDx(directionX * speed);
+            setDx(directionX * getSpeed());
 
             // Đẩy ra khỏi vật để tránh dính
             if (dxDistance > 0) {
@@ -48,7 +51,7 @@ public class NormalBall extends Ball implements BounceOff {
         } else {
             // Va chạm theo trục Y → đổi hướng Y
             directionY *= -1;
-            setDy(directionY * speed);
+            setDy(directionY * getSpeed());
 
             // Đẩy ra khỏi vật để tránh dính
             if (dyDistance > 0) {
@@ -60,7 +63,6 @@ public class NormalBall extends Ball implements BounceOff {
     }
 
     public void controlledBounceOff(Paddle paddle) {
-        if (dy == 0) return;                // Fix bug bóng đập ngang không đi lên trên
         if (checkCollision(paddle)) {
             GameManager.getInstance().getSoundService().playHit();
             if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
@@ -78,19 +80,20 @@ public class NormalBall extends Ball implements BounceOff {
     }
 
     public void checkWallCollision() {
-        if (x <= 0 || x + width >= GameConstant.PANE_WIDTH) {
+        if (getX() <= 0 || getX() + getWidth() >= GameConstant.PANE_WIDTH) {
             GameManager.getInstance().getSoundService().playHit();
             setDirectionX(directionX * -1);
         }
-        if (y <= 0) {
+        if (getY() <= 0) {
             GameManager.getInstance().getSoundService().playHit();
             setDirectionY(directionY * -1);
         }
-        if (y + height >= GameConstant.PANE_HEIGHT) {
+        if (getY() + getHeight() >= GameConstant.PANE_HEIGHT) {
             GameManager.getInstance().getSoundService().playHit();
             // 🔹 Bóng rơi ra khỏi màn hình -> ẩn ảnh
-            if (imageView != null) {
-                imageView.setVisible(false);
+            if (getImageView() != null) {
+
+                getImageView().setVisible(false);
             }
 
             // 🔹 Đánh dấu bóng này để GameManager dọn sau khi vòng lặp xong

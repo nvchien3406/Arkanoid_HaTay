@@ -1,5 +1,6 @@
 package Models.Object;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -7,9 +8,9 @@ import java.util.Objects;
 
 
 public abstract class GameObject {
-    protected double x, y, width, height;
-    protected Image image;
-    protected ImageView imageView;
+    private double x, y, width, height;
+    private Image image;
+    private ImageView imageView;
 
     public GameObject() {
         x = 0;
@@ -78,6 +79,12 @@ public abstract class GameObject {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+
 
     public abstract void update();
 

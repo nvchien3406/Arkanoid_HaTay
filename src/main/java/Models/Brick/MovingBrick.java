@@ -22,15 +22,15 @@ public class MovingBrick extends BreakableBrick {
     }
 
     public void moveBrick() {
-        if (imageView == null || isDestroyed()) return;
-        x += direction * speed;
-        if (x <= startX) {
-            x = startX;
+        if (getImageView() == null || isDestroyed()) return;
+        setX( getX() + direction * speed);
+        if (getX() <= startX) {
+            setX(startX);
             direction *= -1;
-        } else if (x >= endX) {
-            x = endX;
+        } else if (getX() >= endX) {
+            setX(endX);
             direction *= -1;
         }
-        imageView.setLayoutX(x);
+        getImageView().setLayoutX(getX());
     }
 }
