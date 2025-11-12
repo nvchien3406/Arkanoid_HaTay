@@ -30,13 +30,6 @@ public abstract class Ball extends MovableObject {
         this.directionY = 0;
     }
 
-    public Ball(double speed, double directionX, double directionY, boolean isStanding) {
-        this.speed = speed;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.isStanding = isStanding;
-    }
-
     public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
         super(x , y , width , height, path, 0 , 0);
         this.speed = speed;
@@ -57,7 +50,7 @@ public abstract class Ball extends MovableObject {
     public abstract void playBallMusic();
     public abstract void handleBrickCollision(List<Brick> bricks , Player player, StartGameController controller);
 
-    protected void processBrickHit(Brick brick, Player player, StartGameController controller) {
+    public void processBrickHit(Brick brick, Player player, StartGameController controller) {
         if (!(brick instanceof SpecialBrick)) {
             ((BreakableBrick)brick).takeHit();
                 player.addScore();

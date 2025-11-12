@@ -95,6 +95,9 @@ public class GameManager {
         controller.LoadBall();
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
 
+        //load background
+        controller.loadBackground(currentLevel.getLevelNumber());
+
         startGameLoop(controller);
     }
 

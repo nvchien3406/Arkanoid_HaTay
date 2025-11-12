@@ -1,6 +1,7 @@
 package GameController.Manager;
 
 import GameController.Controllers.StartGameController;
+import GameController.GameConstants.GameConstant;
 import Models.Brick.Brick;
 import Models.Level.LevelGame;   // ⚠️ thêm dòng này
 
@@ -44,6 +45,7 @@ public class LevelManager {
         objectManager.setListBricks(controller.LoadBrick(level));
         objectManager.setPaddle(controller.LoadPaddle());
         controller.LoadBall();
+        controller.loadBackground(level.getLevelNumber());
 
         gameUIManager.showLevelIntro(controller, level.getLevelNumber());
 

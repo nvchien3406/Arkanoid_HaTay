@@ -62,6 +62,7 @@ public class NormalBall extends Ball implements BounceOff {
     public void controlledBounceOff(Paddle paddle) {
         if (dy == 0) return;                // Fix bug bóng đập ngang không đi lên trên
         if (checkCollision(paddle)) {
+            GameManager.getInstance().getSoundService().playHit();
             if (directionY > 0 && this.getY() + this.getHeight() <= paddle.getY() + 10){
                 double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
                 double hitPos = (getX() + getWidth() / 2 - paddleCenter) / (paddle.getWidth() / 2);
@@ -78,12 +79,15 @@ public class NormalBall extends Ball implements BounceOff {
 
     public void checkWallCollision() {
         if (x <= 0 || x + width >= GameConstant.PANE_WIDTH) {
+            GameManager.getInstance().getSoundService().playHit();
             setDirectionX(directionX * -1);
         }
         if (y <= 0) {
+            GameManager.getInstance().getSoundService().playHit();
             setDirectionY(directionY * -1);
         }
         if (y + height >= GameConstant.PANE_HEIGHT) {
+            GameManager.getInstance().getSoundService().playHit();
             // 🔹 Bóng rơi ra khỏi màn hình -> ẩn ảnh
             if (imageView != null) {
                 imageView.setVisible(false);
