@@ -12,15 +12,14 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class GameUIManager {
-    private Line aimingArrow;
-    private AimingArrow aimingArrow1;
+    private AimingArrow aimingArrow;
 
-    public AimingArrow getAimingArrow1() {
-        return aimingArrow1;
+    public AimingArrow getAimingArrow() {
+        return aimingArrow;
     }
 
-    public void setAimingArrow1(AimingArrow aimingArrow1) {
-        this.aimingArrow1 = aimingArrow1;
+    public void setAimingArrow(AimingArrow aimingArrow) {
+        this.aimingArrow = aimingArrow;
     }
 
     public void showScorePopup(StartGameController controller , double x, double y, int score) {
@@ -49,14 +48,6 @@ public class GameUIManager {
         ParallelTransition anim = new ParallelTransition(scale, fade, moveUp);
         anim.setOnFinished(e -> controller.getStartGamePane().getChildren().remove(scoreText));
         anim.play();
-    }
-
-    public Line getAimingArrow() {
-        return aimingArrow;
-    }
-
-    public void setAimingArrow(Line aimingArrow) {
-        this.aimingArrow = aimingArrow;
     }
 
     public void showLevelIntro(StartGameController controller, int levelNumber) {
@@ -111,54 +102,5 @@ public class GameUIManager {
         } else {
             playAnimation.run();
         }
-    }
-    /**
-     * Cập nhật vị trí cuối của mũi tên dựa trên vị trí chuột,
-     * nhưng giữ nguyên độ dài cố định (AIMING_ARROW_LENGTH).
-     */
-    public void updateAimingArrow(double mouseX, double mouseY) {
-        // Lấy điểm bắt đầu (tâm quả bóng)
-        double startX = aimingArrow.getStartX();
-        double startY = aimingArrow.getStartY();
-
-        // 1. Tính vector thô
-        double deltaX = mouseX - startX;
-        double deltaY = mouseY - startY;
-
-        // 2. Ép mũi tên luôn hướng lên
-        if (deltaY >= 0) {
-            deltaY = -0.1; // Một giá trị âm nhỏ để tránh lỗi chia cho 0
-            if (deltaX == 0) deltaX = 0.01; // Tránh trường hợp click ngay bên dưới
-        }
-
-        // 3. Tính độ dài (magnitude)
-        double magnitude = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        // 4. Chuẩn hóa vector (lấy hướng)
-        double normX, normY;
-        if (magnitude == 0) {
-            normX = 0;
-            normY = -1; // Nếu không di chuyển, mặc định hướng thẳng lên
-        } else {
-            normX = deltaX / magnitude;
-            normY = deltaY / magnitude;
-        }
-
-        // 5. Tính điểm cuối mới dựa trên độ dài cố định
-        double endX = startX + normX * GameConstant.AIMING_ARROW_LENGTH;
-        double endY = startY + normY * GameConstant.AIMING_ARROW_LENGTH;
-
-        // 6. Cập nhật đường thẳng
-        aimingArrow.setEndX(endX);
-        aimingArrow.setEndY(endY);
-    }
-
-    public Line createAimingArrow(StartGameController controller) {
-        aimingArrow = new Line();
-        aimingArrow.setStrokeWidth(3);
-        aimingArrow.setStroke(Color.CYAN);
-        aimingArrow.setVisible(false);
-        controller.getStartGamePane().getChildren().add(aimingArrow);
-        return aimingArrow;
     }
 }

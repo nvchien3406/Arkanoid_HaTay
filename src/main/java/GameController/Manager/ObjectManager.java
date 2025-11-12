@@ -25,7 +25,6 @@ public class ObjectManager {
     private List<Brick> listBricks = new ArrayList<>();
     private List<PowerUp> listPowerUps = new ArrayList<>();
     private Player player;
-    private Line aimingArrow;
 
     // === Deferred removal lists ===
     private final List<Ball> ballsToRemove = new ArrayList<>();
@@ -47,9 +46,6 @@ public class ObjectManager {
 
     public Player getPlayer() { return player; }
     public void setPlayer(Player player) { this.player = player; }
-
-    public Line getAimingArrow() { return aimingArrow; }
-    //public void setAimingArrow(Line aimingArrow) { this.aimingArrow = aimingArrow; }
 
     /* ---------------- CLEAR & MARK ---------------- */
     public void clearCollections() {

@@ -47,7 +47,7 @@ public class InputManager {
             for (Ball ball : objectManager.getListBalls()) {
                 if (ball.isStanding()) {
                     // Lấy arrow ra từ UI Manager
-                    AimingArrow arrow = uiManager.getAimingArrow1();
+                    AimingArrow arrow = uiManager.getAimingArrow();
 
                     // Cập nhật vị trí ban đầu (theo bóng)
                     arrow.followBall(ball);
@@ -58,7 +58,7 @@ public class InputManager {
         });
 
         scene.setOnMouseDragged(event -> {
-            AimingArrow arrow = uiManager.getAimingArrow1();
+            AimingArrow arrow = uiManager.getAimingArrow();
             if (arrow.isVisible()) {
                 for (Ball ball : objectManager.getListBalls()) {
                     if (ball.isStanding()) {
@@ -70,7 +70,7 @@ public class InputManager {
         });
 
         scene.setOnMouseReleased(event -> {
-            AimingArrow arrow = uiManager.getAimingArrow1();
+            AimingArrow arrow = uiManager.getAimingArrow();
             if (arrow.isVisible()) {
                 arrow.hide();
 

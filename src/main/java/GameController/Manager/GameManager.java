@@ -94,11 +94,10 @@ public class GameManager {
 
         // load objects via controller + current level (LevelManager có thể cung cấp currentLevel)
         objectManager.setListBricks(controller.LoadBrick(currentLevel));
-        objectManager.setPaddle(controller.LoadPaddle());
-        gameUIManager.setAimingArrow(gameUIManager.createAimingArrow(controller)); // GameUIManager tạo arrow
+        objectManager.setPaddle(controller.LoadPaddle()); // GameUIManager tạo arrow
         controller.LoadBall();
         Ball mainBall = objectManager.getListBalls().get(0);
-        gameUIManager.setAimingArrow1(controller.LoadAimingArrow(mainBall));
+        gameUIManager.setAimingArrow(controller.LoadAimingArrow(mainBall));
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
         controller.animateLevelUp(currentLevel.getLevelNumber());
 
