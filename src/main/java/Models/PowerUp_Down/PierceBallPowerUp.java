@@ -23,7 +23,7 @@ public class PierceBallPowerUp extends PowerUp{
     public PierceBallPowerUp(double x, double y) {
         super(x, y, 32, 32,
                 GameConstant.powerUpImages[1],
-                0, 3, "Pierce Ball", 12,
+                0, 0,GameConstant.POWER_UP_SPEED, "Pierce Ball", 12,
                 false, false, 0.0);
     }
 

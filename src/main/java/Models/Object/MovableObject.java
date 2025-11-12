@@ -19,12 +19,6 @@ public abstract class MovableObject extends GameObject implements FrameAnimatabl
         this.dy = 0;
     }
 
-    public MovableObject(double x, double y, double width, double height, String path, double dy, double dx) {
-        super(x, y, width, height, path);
-        this.dy = dy;
-        this.dx = dx;
-    }
-
     public MovableObject(double x, double y, double speed, double width, double height, String path, double dx, double dy) {
         super(x, y, width, height, path);
         this.speed = speed;

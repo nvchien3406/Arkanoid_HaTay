@@ -11,7 +11,7 @@ import java.util.Objects;
 public class ShrinkPaddlePowerDown extends PowerUp{
 
     public ShrinkPaddlePowerDown(double x, double y) {
-        super(x, y, 32, 32, GameConstant.powerUpImages[2], 0, 3,
+        super(x, y, 32, 32, GameConstant.powerUpImages[2], 0, 0,GameConstant.POWER_UP_SPEED,
                 "Shrink Paddle", 10.0, false, false, 0.0);
     }
 

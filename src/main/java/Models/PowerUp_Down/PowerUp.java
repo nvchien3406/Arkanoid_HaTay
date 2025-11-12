@@ -21,9 +21,9 @@ public abstract class PowerUp extends MovableObject {
 
     // Constructor đầy đủ
     public PowerUp(double x, double y, double width, double height, String path,
-                   double dx, double dy, String type, double duration,
+                   double dx, double dy, double speed, String type, double duration,
                    boolean active, boolean collected, double elapsedTime) {
-        super(x, y, width, height, path, dx, dy);
+        super(x, y, speed, width, height, path, dx, dy);
         this.type = type;
         this.duration = duration;
         this.active = active;
@@ -58,7 +58,7 @@ public abstract class PowerUp extends MovableObject {
 
     public void update(Paddle paddle) {
         if (!collected) {
-            setY(getY() + 0.5);
+            setY(getY() + getSpeed());
             getImageView().setLayoutY(getY());
 
             // Nếu rơi quá đáy màn hình → đánh dấu hết hạn

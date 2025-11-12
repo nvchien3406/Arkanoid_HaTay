@@ -14,7 +14,7 @@ public class ThreeBallPowerUp extends PowerUp {
 
     public ThreeBallPowerUp(double x, double y) {
         super(x, y, 32, 32, GameConstant.powerUpImages[3],
-                0, 3, "ThreeBall", 0, false, false, 0);
+                0, 0,GameConstant.POWER_UP_SPEED, "ThreeBall", 0, false, false, 0);
     }
 
     @Override
