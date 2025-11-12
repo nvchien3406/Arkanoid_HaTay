@@ -8,6 +8,8 @@ import Models.Brick.*;
 import Models.Object.MovableObject;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
 
 import java.util.List;
 
@@ -15,19 +17,17 @@ import java.util.List;
 public abstract class Ball extends MovableObject {
     protected double speed, directionX, directionY;
     protected boolean isStanding = true;
+    protected final int frameWidth = 16;
+    protected final int frameHeight = 16;
+    private final int totalFrames = 8;
+    private int currentFrame = 0;
+    private AnimationTimer animation;
 
     public Ball() {
         super();
         this.speed = 0;
         this.directionX = 0;
         this.directionY = 0;
-    }
-
-    public Ball(double speed, double directionX, double directionY, boolean isStanding) {
-        this.speed = speed;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.isStanding = isStanding;
     }
 
     public Ball(double x, double y, double width, double height , String path, double speed, double directionX, double directionY) {
@@ -50,7 +50,7 @@ public abstract class Ball extends MovableObject {
     public abstract void playBallMusic();
     public abstract void handleBrickCollision(List<Brick> bricks , Player player, StartGameController controller);
 
-    protected void processBrickHit(Brick brick, Player player, StartGameController controller) {
+    public void processBrickHit(Brick brick, Player player, StartGameController controller) {
         if (!(brick instanceof SpecialBrick)) {
             ((BreakableBrick)brick).takeHit();
                 player.addScore();
@@ -117,6 +117,27 @@ public abstract class Ball extends MovableObject {
         } else {
             moveBall();
         }
+    }
+
+    public void startAnimation() {
+        if (animation != null) return; // tránh tạo lại
+
+        animation = new AnimationTimer() {
+            private long lastFrameTime = 0;
+            private final long frameDelay = 50_000_000; // 0.2 giây / frame
+
+            @Override
+            public void handle(long now) {
+                if (now - lastFrameTime < frameDelay) return;
+                lastFrameTime = now;
+
+                currentFrame = (currentFrame + 1) % totalFrames;
+                imageView.setViewport(new Rectangle2D(
+                        currentFrame * frameWidth, 0, frameWidth, frameHeight
+                ));
+            }
+        };
+        animation.start();
     }
 
 }

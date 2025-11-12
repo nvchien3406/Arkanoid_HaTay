@@ -101,6 +101,10 @@ public class GameManager {
         gameUIManager.setAimingArrow1(controller.LoadAimingArrow(mainBall));
         gameUIManager.showLevelIntro(controller, currentLevel.getLevelNumber());
         controller.animateLevelUp(currentLevel.getLevelNumber());
+
+        //load background
+        controller.loadBackground(currentLevel.getLevelNumber());
+
         startGameLoop(controller);
     }
 

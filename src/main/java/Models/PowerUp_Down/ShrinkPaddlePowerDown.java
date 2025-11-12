@@ -11,7 +11,7 @@ import java.util.Objects;
 public class ShrinkPaddlePowerDown extends PowerUp{
 
     public ShrinkPaddlePowerDown(double x, double y) {
-        super(x, y, 32, 32, "/image/ShrinkPaddlePowerDown.png", 0, 3,
+        super(x, y, 32, 32, GameConstant.powerUpImages[2], 0, 3,
                 "Shrink Paddle", 10.0, false, false, 0.0);
     }
 
@@ -33,7 +33,7 @@ public class ShrinkPaddlePowerDown extends PowerUp{
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }
@@ -57,7 +57,7 @@ public class ShrinkPaddlePowerDown extends PowerUp{
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }

@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import Models.Ball.*;
@@ -49,6 +50,7 @@ public class StartGameController{
     @FXML private Button setting;
     @FXML private Line aimingArrow;
     @FXML private HBox livesHBox;
+    @FXML private ImageView backgroundImage;
 
     private final List<ImageView> heartViews = new ArrayList<>();
     private Image heartImage;
@@ -143,6 +145,17 @@ public class StartGameController{
         Player player = GameManager.getInstance().getObjectManager().getPlayer();
         if (player != null) {
             updateLives(player.getLives());
+        }
+
+    }
+
+    public void loadBackground(int level){
+        try {
+            String path = GameConstant.backgroundImages + String.valueOf(level % 2) + ".gif";
+            Image gif = new Image(getClass().getResource(path).toExternalForm());
+            backgroundImage.setImage(gif);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -267,7 +280,7 @@ public class StartGameController{
 
     private void exitToMenu() {
         hidePauseMenu();
-        GameManager.getInstance().getSoundService().pauseSoundBackground();
+        GameManager.getInstance().getSoundService().stopBackground();
         GameManager.getInstance().resetGameManager(this, false);
         Stage stage = getStage();
         SceneTransition.switchScene(stage, "menuGame/menuGame.fxml");
@@ -287,7 +300,7 @@ public class StartGameController{
         double height = GameConstant.PADDLE_HEIGHT;
         double startX = GameConstant.PANE_WIDTH / 2 - GameConstant.PADDLE_WIDTH / 2;
         double startY = 600;
-        Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages, 0, 0,
+        Paddle paddle = new Paddle(startX, startY, width, height, GameConstant.paddleImages[0], 0, 0,
                 GameConstant.PADDLE_SPEED, false, false);
 
         startGamePane.getChildren().add(paddle.getImageView());

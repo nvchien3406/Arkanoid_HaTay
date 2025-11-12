@@ -1,29 +1,65 @@
-.root{
-    -fx-background-color: linear-gradient(to bottom , #000000 ,#061b2c);
-    -fx-text-fill: while;
+/* ========== NỀN TOÀN MÀN ========== */
+.background {
+    -fx-background-color: linear-gradient(to bottom, #040014, #0c012a);
+    -fx-background-repeat: repeat-y;
+    -fx-background-size: cover;
+    -fx-border-color: #ff0000;
 }
 
-.title-label {
-    -fx-font-size: 60px;
-    -fx-text-fill: cyan;
-    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.5, 0, 0);
-    -fx-font-weight: bold;
+/* ========== HỘP LOGIN ========== */
+.login-box {
+    -fx-background-color: rgba(50, 14, 34, 0.9);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #ff0000;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, #ff003b, 20, 0.8, 0, 0);
 }
 
-.label{
-    -fx-text-fill: #e0faff;
+/* ========== CHỮ TIÊU ĐỀ ========== */
+.title1 {
     -fx-font-size: 16px;
+    -fx-text-fill: linear-gradient(to bottom, #00ffff, #ffffff);
+    -fx-effect: dropshadow(gaussian, #00ffff, 15, 0.5, 0, 0);
 }
 
-.button {
-    -fx-background-color: linear-gradient(to bottom, #1e3d59, #f5f0e1);
-    -fx-text-fill: black;
+.title2 {
+    -fx-font-size: 25px;
+    -fx-text-fill: linear-gradient(to bottom, #00ffff, #ffffff);
+    -fx-effect: dropshadow(gaussian, #00ffff, 15, 0.5, 0, 0);
+}
+
+.title3 {
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
+    -fx-text-fill: #ff0000;
+    //-fx-effect: dropshadow(gaussian, #ff0000, 15, 0.5, 0, 0);
 }
 
-.text-field, .password-field {
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-border-color: gray;
+/* ========== Ô NHẬP ========== */
+.input-field {
+    -fx-background-color: #0d0221;
+    -fx-border-color: #ff0000;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #8888ff;
+    -fx-font-size: 16px;
+    -fx-padding: 10 15 10 15;
+    -fx-effect: dropshadow(gaussian, #ff0000, 15, 0.6, 0, 0);
+}
+
+/* ========== NÚT START GAME ========== */
+.start-btn {
+    -fx-background-color: linear-gradient(to right, #8c1a38, #ff0080, #930c3c);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, #ff0026, 15, 0.5, 0, 0);
+    -fx-cursor: hand;
+}
+
+.start-btn:hover {
+    -fx-background-color: linear-gradient(to right, #8a1624, #ef0a0a);
+    -fx-effect: dropshadow(gaussian, #00ffff, 20, 0.7, 0, 0);
 }

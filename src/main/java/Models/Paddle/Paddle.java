@@ -2,6 +2,8 @@ package Models.Paddle;
 
 import GameController.Controllers.StartGameController;
 import Models.Object.MovableObject;
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
 
 
 public class Paddle extends MovableObject {
@@ -9,6 +11,11 @@ public class Paddle extends MovableObject {
     private double baseWidth;
     private boolean moveL = false;
     private boolean moveR = false;
+    protected final int frameWidth = 80;
+    protected final int frameHeight = 16;
+    private final int totalFrames = 8;
+    private int currentFrame = 0;
+    private AnimationTimer animation;
 
     public Paddle() {
         super();
@@ -61,7 +68,7 @@ public class Paddle extends MovableObject {
         return baseWidth;
     }
 
-    public void moveLeft(StartGameController controller) {
+        public void moveLeft(StartGameController controller) {
         setX(Math.max(0, getX() - getSpeed()));
         this.setDy(0);
         imageView.setLayoutX(getX());
@@ -83,5 +90,28 @@ public class Paddle extends MovableObject {
         if (moveR) {
             moveRight(controller);
         }
+        startAnimation();
     }
+
+    protected void startAnimation() {
+        if (animation != null) return; // tránh tạo lại
+
+        animation = new AnimationTimer() {
+            private long lastFrameTime = 0;
+            private final long frameDelay = 50_000_000; // 0.2 giây / frame
+
+            @Override
+            public void handle(long now) {
+                if (now - lastFrameTime < frameDelay) return;
+                lastFrameTime = now;
+
+                currentFrame = (currentFrame + 1) % totalFrames;
+                imageView.setViewport(new Rectangle2D(
+                        currentFrame * frameWidth, 0, frameWidth, frameHeight
+                ));
+            }
+        };
+        animation.start();
+    }
+
 }

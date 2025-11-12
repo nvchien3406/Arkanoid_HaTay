@@ -9,6 +9,7 @@ import GameController.Manager.SoundManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Main extends Application {
             IScoreRepository repo = new SQLiteScoreRepository("data/scores.db");
             ISoundService soundService = new SoundManager();
 
+            Font.loadFont(getClass().getResourceAsStream("/fonts/cyber31.ttf"), 20);
             GameManager.initialize(repo ,soundService);
 
             SettingsController.LoadSettings();

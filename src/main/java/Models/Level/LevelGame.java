@@ -73,7 +73,7 @@ public class LevelGame {
             }
     };
 
-    private int levelIndex = 5;
+    private int levelIndex = 0;
     private int currentLevel;
 
     public LevelGame() {

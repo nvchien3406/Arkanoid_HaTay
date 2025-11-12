@@ -1,9 +1,11 @@
 package Models.PowerUp_Down;
 
+import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
 import Models.Object.GameObject;
+import Models.Paddle.Paddle;
 import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +13,22 @@ import java.util.List;
 public class ThreeBallPowerUp extends PowerUp {
 
     public ThreeBallPowerUp(double x, double y) {
-        super(x, y, 32, 32, "/image/ThreeBallsPowerUp.png",
+        super(x, y, 32, 32, GameConstant.powerUpImages[3],
                 0, 3, "ThreeBall", 0, false, false, 0);
     }
 
     @Override
-    public void applyEffect(GameObject gameObject) {
-        AnchorPane pane = (AnchorPane) GameManager.getInstance().getObjectManager().getPaddle().getImageView().getParent();
+    public void applyEffect(GameObject obj) {
+        if (obj instanceof Paddle p) {
+            AnchorPane pane = (AnchorPane) GameManager.getInstance().getObjectManager().getPaddle().getImageView().getParent();
 
-        List<Ball> newBalls = createExtraBalls(GameManager.getInstance().getObjectManager().getListBalls());
-        addBallsToGame(GameManager.getInstance(), pane, newBalls);
+            List<Ball> newBalls = createExtraBalls(GameManager.getInstance().getObjectManager().getListBalls());
+            addBallsToGame(GameManager.getInstance(), pane, newBalls);
+        }
     }
 
     @Override
-    public void removeEffect(GameObject gameObject) {
+    public void removeEffect(GameObject obj) {
         // Không cần xử lý khi hết hiệu lực
     }
 
@@ -55,7 +59,7 @@ public class ThreeBallPowerUp extends PowerUp {
                 baseBall.getY(),
                 baseBall.getWidth(),
                 baseBall.getHeight(),
-                "/image/NormalBall.png",
+                GameConstant.BallImages[0],
                 4,
                 baseBall.getDirectionX() + offsetX,
                 baseBall.getDirectionY()
