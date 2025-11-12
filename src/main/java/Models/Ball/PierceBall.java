@@ -23,10 +23,10 @@ public class PierceBall extends Ball {
     private AnimationTimer animationTimer;
 
     public PierceBall(double x, double y, double speed, double dirX, double dirY) {
-        super(x, y, 80, 32, "/image/PierceBallPowerUp1.png", speed, dirX, dirY);
+        super(x, y, 80, 32, GameConstant.BallImages[1], speed, dirX, dirY);
 
         Image img = new Image(Objects.requireNonNull(
-                getClass().getResource("/image/PierceBallPowerUp1.png")
+                getClass().getResource(GameConstant.BallImages[1])
         ).toExternalForm());
 
         imageView = new ImageView(img);
