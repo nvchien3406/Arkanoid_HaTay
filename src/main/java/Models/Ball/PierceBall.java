@@ -45,7 +45,7 @@ public class PierceBall extends Ball {
     }
 
 
-    private void startAnimation() {
+    public void startAnimation() {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {

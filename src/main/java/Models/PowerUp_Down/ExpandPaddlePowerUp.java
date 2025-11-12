@@ -34,7 +34,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }
@@ -55,7 +55,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }

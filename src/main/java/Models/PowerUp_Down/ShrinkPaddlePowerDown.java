@@ -33,7 +33,7 @@ public class ShrinkPaddlePowerDown extends PowerUp{
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }
@@ -57,7 +57,7 @@ public class ShrinkPaddlePowerDown extends PowerUp{
 
             p.getImageView().setImage(
                     new Image(Objects.requireNonNull(
-                            getClass().getResource(GameConstant.paddleImages)
+                            getClass().getResource(GameConstant.paddleImages[0])
                     ).toExternalForm())
             );
         }

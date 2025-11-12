@@ -1,6 +1,6 @@
 package Models.PowerUp_Down;
 
-import GameController.GameConstant;
+import GameController.GameConstants.GameConstant;
 import GameController.Manager.GameManager;
 import Models.Ball.Ball;
 import Models.Ball.NormalBall;
@@ -123,5 +123,6 @@ public class PierceBallPowerUp extends PowerUp{
 
         restoreNormalBalls(gm, pane);
         setActive(false);
+
     }
 }

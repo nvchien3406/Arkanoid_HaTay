@@ -79,6 +79,7 @@ public class ObjectManager {
     public void updateBall() {
         for (Ball ball : new ArrayList<>(listBalls)) {
             ball.moveBallWithPaddle(paddle);
+            ball.startAnimation();
         }
     }
 

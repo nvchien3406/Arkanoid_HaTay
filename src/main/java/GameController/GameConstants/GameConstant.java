@@ -11,8 +11,8 @@ public final class GameConstant {
     public static final int PANE_WIDTH = 700;
     public static final int PANE_HEIGHT = 700;
 
-    public static final double PADDLE_WIDTH = 100;
-    public static final double PADDLE_HEIGHT = 20;
+    public static final double PADDLE_WIDTH = 80;
+    public static final double PADDLE_HEIGHT = 16;
     public static final double PADDLE_SPEED = 3;
 
     public static final double BALL_SIZE = 20;
@@ -29,17 +29,23 @@ public final class GameConstant {
             new Pair<>("/image/YellowBrick.png", "StrongBrick"),
             new Pair<>("/image/SpecialBrick.png", "SpecialBrick")
     };
-    public static final String paddleImages = "/image/Paddle.png";
+    public static final String[] paddleImages = {
+            "/image/Paddle.png",
+            "/image/ExpandPaddle.png",
+            "/image/FirePaddle.png",
+            "/image/ShrinkPaddle.png",
+            "/image/ThreeBallsPaddle.png"
+    };
 
     public static final String[] BallImages = {
-            "/image/NormalBall.png",
+            "/image/Ball.png",
             "/image/PierceBall.png"
     };
     public static final String[] powerUpImages = {
             "/image/ExpandPaddlePowerUp.png",
             "/image/PierceBallPowerUp.png",
-            "image/ShrinkPaddlePowerDown.png",
-            "image/ThreeBallPowerUp.png"
+            "/image/ShrinkPaddlePowerDown.png",
+            "/image/ThreeBallPowerUp.png"
     };
 
     public static final String heartImages = "/image/Heart.png";

@@ -18,8 +18,6 @@ public abstract class Brick extends GameObject {
     private int currentFrame = 0;
     protected boolean breaking = false;
 
-    private AnimationTimer breakAnimation;
-
     public Brick() {
         super();
         this.hitPoints = 0;
@@ -54,12 +52,14 @@ public abstract class Brick extends GameObject {
         breaking = true;
         currentFrame++;
 
-        breakAnimation = new AnimationTimer() {
+        // 70ms / frame
+        AnimationTimer breakAnimation = new AnimationTimer() {
             private long lastFrameTime = 0;
-            private final long frameDelay = 70_000_000; // 70ms / frame
 
             @Override
             public void handle(long now) {
+                // 70ms / frame
+                long frameDelay = 70_000_000;
                 if (now - lastFrameTime < frameDelay) return;
                 lastFrameTime = now;
 

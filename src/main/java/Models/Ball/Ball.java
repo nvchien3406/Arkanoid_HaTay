@@ -8,6 +8,8 @@ import Models.Brick.*;
 import Models.Object.MovableObject;
 import Models.Paddle.Paddle;
 import Models.Player.Player;
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
 
 import java.util.List;
 
@@ -15,6 +17,11 @@ import java.util.List;
 public abstract class Ball extends MovableObject {
     protected double speed, directionX, directionY;
     protected boolean isStanding = true;
+    protected final int frameWidth = 16;
+    protected final int frameHeight = 16;
+    private final int totalFrames = 8;
+    private int currentFrame = 0;
+    private AnimationTimer animation;
 
     public Ball() {
         super();
@@ -117,6 +124,27 @@ public abstract class Ball extends MovableObject {
         } else {
             moveBall();
         }
+    }
+
+    public void startAnimation() {
+        if (animation != null) return; // tránh tạo lại
+
+        animation = new AnimationTimer() {
+            private long lastFrameTime = 0;
+            private final long frameDelay = 50_000_000; // 0.2 giây / frame
+
+            @Override
+            public void handle(long now) {
+                if (now - lastFrameTime < frameDelay) return;
+                lastFrameTime = now;
+
+                currentFrame = (currentFrame + 1) % totalFrames;
+                imageView.setViewport(new Rectangle2D(
+                        currentFrame * frameWidth, 0, frameWidth, frameHeight
+                ));
+            }
+        };
+        animation.start();
     }
 
 }
