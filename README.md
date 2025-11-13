@@ -63,6 +63,16 @@
 
 ---
 
+## Design Pattern
+**1. Singleton Pattern<br>**
+**Được sử dụng trong: GameManager<br>**
+**Mục đích: Đảm bảo chỉ có duy nhất một thể hiện (instance) của lớp được tạo ra trong toàn bộ ứng dụng.**
+
+**2. Factory Method<br>**
+**Được sử dụng trong: ExpandPowerUpFactory, PierceBallPowerUpFactory, PowerUpFactory, PowerUpFactoryProducer, ShrinkPowerDownFactory, ThreeBallPowerUpFactory<br>**
+**Mục đích: Định nghĩa một phương thức để tạo đối tượng, cho phép các lớp dẫn xuất quyết định kiểu đối tượng cụ thể sẽ được khởi tạo.**
+
+---
 
 ## 🧰 Công nghệ sử dụng
 | Công nghệ | Phiên bản | Mục đích |
